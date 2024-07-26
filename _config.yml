@@ -283,6 +283,7 @@ permalink: /:categories/:title/
 # paginate_path: /page:num/
 timezone: America/Los_Angeles # http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
 
+remote_theme: jekyll/minima
 
 # Plugins
 plugins:
@@ -291,6 +292,7 @@ plugins:
   - jekyll-gist
   - jekyll-feed
   - jekyll-redirect-from
+  - jekyll-remote-theme
 # mimic GitHub Pages with --safe
 whitelist:
   - jekyll-paginate
@@ -298,6 +300,9 @@ whitelist:
   - jekyll-gist
   - jekyll-feed
   - jemoji
+
+minima:
+  skin: dark
 
 
 # Archives
