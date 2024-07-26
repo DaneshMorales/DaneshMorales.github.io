@@ -1,6 +1,6 @@
 ---
 layout: archive
-title: "AMATH 445: Scientific Machine Learning"
+title: "AMATH 445 - Scientific Machine Learning"
 permalink: /courses/amath445/
 author_profile: true
 ---

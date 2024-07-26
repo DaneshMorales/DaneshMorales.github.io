@@ -1,10 +1,10 @@
 ---
 layout: archive
-title: "AMATH 445: Scientific Machine Learning"
+title: "AMATH 473 - Quantum Theory 2"
 permalink: /courses/amath473/
 author_profile: true
 ---
 
 ## Description
 
-The course provides an in-depth exploration of how deep learning techniques are applied in various scientific and medical domains. The course introduces basic concepts of deep learning, explores different deep learning architectures and algorithms, and focuses on their applications in scientific and biomedical research. The integration of scientific knowledge with machine learning techniques is emphasized throughout the course. Students will gain hands-on experience by executing the acquired concepts using Python.
+The Hilbert space of states, observables, and time evolution. Feynman path integral and Greens functions. Approximation methods. Co-ordinate transformations, angular momentum, and spin. The relation between symmetries and conservation laws. Density matrix, Ehrenfest theorem, and decoherence. Multiparticle quantum mechanics. Bell inequality and basics of quantum computing.
