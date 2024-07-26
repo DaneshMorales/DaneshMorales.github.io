@@ -8,7 +8,7 @@
 
 # Basic Site Settings
 locale                   : "en-US"
-title                    : "Home"
+title                    : "Danesh's Personal Website"
 title_separator          : "-"
 name                     : &name "Danesh Morales Hashemi"
 description              : &description "Mathematical Physics Student at the University of Waterloo"
