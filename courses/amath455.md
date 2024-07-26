@@ -1,7 +1,7 @@
 ---
 layout: archive
 title: "AMATH 455:"
-permalink: /amath455/
+permalink: /courses/amath455/
 author_profile: true
 ---
 
