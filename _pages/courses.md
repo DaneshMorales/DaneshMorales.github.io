@@ -9,5 +9,5 @@ author_profile: true
 
 ## Fall 2024:
 
-* [AMATH 455: Scientific Machine](/courses/amath455.md) 
+* [AMATH 455: Scientific Machine](/courses/amath445.md) 
 * [AMATH 473: Quantum Theory 2](https://uwaterloo.ca/academic-calendar/undergraduate-studies/catalog#/courses/B1QdwX6iT?bc=true&bcCurrent=AMATH445%20-%20Scientific%20Machine%20Learning&bcGroup=Applied%20Mathematics%20(AMATH)&bcItemType=courses)
