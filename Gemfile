@@ -15,7 +15,7 @@ gem "github-pages", group: :jekyll_plugins
 
 # gem "jekyll"
 
-gem "minimal-mistakes-jekyll"
+gem 'minimal-mistakes-jekyll', '~> 4.26', '>= 4.26.2'
 gem "wdm", "~> 0.1.0" if Gem.win_platform?
 
 # If you have any plugins, put them here!
