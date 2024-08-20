@@ -17,7 +17,7 @@ Throughout my academic journey, I have had the opportunity to take the following
 
 ## Spring 2024:
 
-* AMATH 900 - Open Quantum Systems(/courses/amath900) 
+* AMATH 876 - Open Quantum Systems(/courses/amath900) 
 
 ## Winter 2024:
 
