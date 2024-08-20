@@ -5,7 +5,7 @@ permalink: /courses/
 author_profile: true
 ---
 
-Throughout my academic journey, I have had the opportunity to take the following courses. You can learn more about the course contents in the (UWFlow)[https://uwflow.com/] website.
+Throughout my academic journey, I have had the opportunity to take the following courses. You can learn more about the course contents in the [UWFlow](https://uwflow.com/) website.
 
 ## Fall 2024 (next term):
 
