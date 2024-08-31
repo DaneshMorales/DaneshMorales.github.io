@@ -21,7 +21,7 @@ repository               : "DaneshMorales/daneshmorales.github.io"
 #               Additional customization can be done by editing /_includes/author-profile.html
 author:
   # Biographic information
-  avatar           : "bio-photo.png"
+  avatar           : "bio.png"
   name             : "Danesh Morales Hashemi"
   pronouns         : # example: "she/her"  
   bio              : "Mathematical Physics Student at the University of Waterloo"
