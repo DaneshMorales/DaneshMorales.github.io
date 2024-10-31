@@ -7,11 +7,21 @@ author_profile: true
 
 Throughout my academic journey, I have had the opportunity to take the following courses. You can learn more about the course contents in the [UWFlow](https://uwflow.com/) website.
 
-## Fall 2024 (next term):
+## Winter 2025 (next term):
 
-* AMATH 473 - Quantum Theory 2
+* AMATH 361 - Continuum Mechanics
+* AMATH 474 - Phase Space Quantum Mechanics
+* AMATH 475 - Introduction to General Relativity
+* PHYS 437B - Research Project 2
+* PMATH 445 - Representation of Finite Groups
+* CLAS 202 - Love, Life, and Death in Rome
+
+
+## Fall 2024 (currently):
+
+* AMATH 473 - Advanced Quantum Theory
 * PHYS 363 - Intermediate Classical Mechanics
-* PHYS 437A - Research Project
+* PHYS 437A - Research Project 1
 * PHYS 468 - Introduction to the Implementation of Quantum Information Processing
 * QIC 710 - Quantum Information Processing
 
