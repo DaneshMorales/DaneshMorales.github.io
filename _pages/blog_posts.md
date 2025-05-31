@@ -8,6 +8,8 @@ author_profile: true
 
 Hola
 
+Inline equation: $equation$
+
 $\mathcal{F}$
 
 $\begin{equation}
