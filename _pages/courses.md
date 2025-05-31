@@ -25,7 +25,7 @@ Throughout my academic journey, I have had the opportunity to take the following
 * AMATH 473 - Advanced Quantum Theory
 * PHYS 363 - Intermediate Classical Mechanics
 * PHYS 437A - Research Project 1
-* PHYS 468 - Introduction to the Implementation of Quantum Information Processing
+* PHYS 468 - Quantum Devices
 * QIC 710 - Quantum Information Processing
 
 ## Spring 2024:
