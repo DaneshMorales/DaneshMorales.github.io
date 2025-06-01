@@ -22,3 +22,35 @@ layout: default
     {{ content }}
   </div>
 </div>
+
+<!-- _layouts/archive.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{{ page.title }}</title>
+
+  <!-- (Any CSS or other <link>/ <script> tags you already had) -->
+
+  <!-- === M A T H J A X === -->
+  {% include mathjax.html %}
+  <!-- ====================== -->
+
+</head>
+<body>
+
+  <header>
+    <!-- (Your site’s header/navigation, etc.) -->
+  </header>
+
+  <main>
+    {{ content }}
+  </main>
+
+  <footer>
+    <!-- (Your site’s footer, etc.) -->
+  </footer>
+
+</body>
+</html>
