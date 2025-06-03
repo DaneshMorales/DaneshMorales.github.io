@@ -178,27 +178,32 @@ encoding: "utf-8"
 markdown_ext: "markdown,mkdown,mkdn,mkd,md"
 
 
-# Conversion
-markdown: kramdown
-kramdown:
-  math_engine: mathjax
-highlighter: rouge
-lsi: false
-excerpt_separator: "\n\n"
-incremental: false
+# _config.yml
 
+markdown: kramdown # Specifies kramdown as the Markdown processor
 
-# Markdown Processing
 kramdown:
-  input: GFM
-  math_engine: mathjax
+  # General Markdown Processing Settings
+  input: GFM # GitHub Flavored Markdown for better compatibility
   hard_wrap: false
   auto_ids: true
   footnote_nr: 1
   entity_output: as_char
   toc_levels: 1..6
   smart_quotes: lsquo,rsquo,ldquo,rdquo
-  enable_coderay: false
+  enable_coderay: false # Assuming you don't want CodeRay for syntax highlighting
+
+  # MathJax Specific Settings
+  math_engine: mathjax # Tells kramdown to prepare math for MathJax
+
+  # Crucial settings to prevent kramdown from escaping single dollar signs ($)
+  # This ensures that MathJax can process them.
+  syntax_highlighter_opts:
+    block:
+      disable_explicit_delimiter: true
+      wrap_code: false
+    span:
+      disable_explicit_delimiter: true
 
 
 # Collections
