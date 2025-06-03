@@ -8,13 +8,13 @@ author_profile: true
 
 Hola
 
-Inline equation: $equation$
+Inline equation: \\(equation\\)
 
-$\mathcal{F}$
+\\(\mathcal{F}\\)
 
-$\begin{equation}
+\begin{equation}
 A\vec{x} = \vec{b}
-\end{equation}$
+\end{equation}
 
 $$ \epsilon > 0 $$
 
