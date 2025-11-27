@@ -8,15 +8,15 @@
 
 # Basic Site Settings
 locale                   : "en-US"
+site_theme               : "air" # Currently available options are "default", "air"
 title                    : "Danesh's Personal Website"
 title_separator          : "-"
 name                     : &name "Danesh Morales Hashemi"
 description              : &description "Master of Applied Mathematics Student at the University of Waterloo"
-url                      : https://daneshmorales.github.io # the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
+url                      : https://daneshmorales.github.io # the base hostname & protocol for your site e.g. "https://[your GitHub username].github.io",
+                                                           # or if you already have some other page hosted on Github then use "https://[your GitHub username].github.io/[Your Repo Name]"
 baseurl                  : "" # the subpath of your site, e.g. "/blog"
 repository               : "DaneshMorales/daneshmorales.github.io"
-
-site_theme: dark
 
 
 # Site Author - The following control what appear as part of the author content on the side bar.
@@ -34,13 +34,18 @@ author:
   email            : "d2morale@uwaterloo.ca" 
 
   # Academic websites
+  academia         : # URL
   arxiv            : # URL - Update with the correct link to your profile
   googlescholar    : #
+  inspire-hep      : # URL
   impactstory      : # URL
   orcid            : #
   semantic         : # URL
+  ssrn             : # URL
   pubmed           : #
   researchgate     : # URL
+  scopus           : # URL
+  zotero           : # URL
 
   # Repositories and software development
   bitbucket        : # Username - Update with your username on the site
@@ -51,6 +56,7 @@ author:
   stackoverflow    : # User number or user number and name (i.e., use "1" or "1/jeff-atwood")    
 
   # Social media
+  artstation       : # Username
   bluesky          : # Replace this with you Bluesky username
   facebook         : # Username
   flickr           : # Username
@@ -75,6 +81,15 @@ author:
   xing             : # Username
   youtube          : # Username
   zhihu            : # URL
+
+# Publication Category - The following the list of publication categories and their headings
+publication_category:
+  books:
+    title: 'Books'
+  manuscripts:
+    title: 'Journal Articles'    
+  conferences:
+    title: 'Conference Papers'
 
 
 # Site Settings
@@ -130,6 +145,7 @@ facebook:
   app_id                 :
   publisher              :
 og_image                 :  # Open Graph/Twitter default site image
+og_description           :  # Social media default site image description
 # For specifying social profiles
 # - https://developers.google.com/structured-data/customize/social-profiles
 social:
@@ -155,23 +171,29 @@ exclude:
   - "*.sublime-workspace"
   - .asset-cache
   - .bundle
+  - .github
   - .jekyll-assets-cache
   - .sass-cache
-  - CHANGELOG
-  - Capfile
-  - Gemfile
-  - Gruntfile.js
-  - LICENSE
-  - README
-  - Rakefile
   - assets/js/_main.js
   - assets/js/plugins
   - assets/js/vendor
+  - CHANGELOG
+  - Capfile
   - config
+  - Dockerfile
+  - Gemfile
+  - Gruntfile.js
+  - LICENSE
+  - local
+  - assets/js/_main.js
+  - assets/js/plugins
+  - assets/js/vendor
   - gulpfile.js
   - log
   - node_modules
-  - package.json
+  - package.json*
+  - Rakefile
+  - README
   - tmp
   - vendor
 keep_files:
@@ -181,35 +203,26 @@ encoding: "utf-8"
 markdown_ext: "markdown,mkdown,mkdn,mkd,md"
 
 
-# _config.yml
+markdown: kramdown
+highlighter: rouge
+lsi: false
+excerpt_separator: "\n\n"
+incremental: false
 
-markdown: kramdown # Specifies kramdown as the Markdown processor
 
+# Markdown Processing
 kramdown:
-  # General Markdown Processing Settings
-  input: GFM # GitHub Flavored Markdown for better compatibility
+  input: GFM
   hard_wrap: false
   auto_ids: true
   footnote_nr: 1
   entity_output: as_char
   toc_levels: 1..6
   smart_quotes: lsquo,rsquo,ldquo,rdquo
-  enable_coderay: false # Assuming you don't want CodeRay for syntax highlighting
-
-  # MathJax Specific Settings
-  math_engine: mathjax # Tells kramdown to prepare math for MathJax
-
-  # Crucial settings to prevent kramdown from escaping single dollar signs ($)
-  # This ensures that MathJax can process them.
-  syntax_highlighter_opts:
-    block:
-      disable_explicit_delimiter: true
-      wrap_code: false
-    span:
-      disable_explicit_delimiter: true
+  enable_coderay: false
 
 
-# Collections
+# These settings control the types of collections used by the template
 collections:
   teaching:
     output: true
@@ -225,7 +238,7 @@ collections:
     permalink: /:collection/:path/
 
 
-# Defaults
+# These settings control how pages and collections are included in the site
 defaults:
   # _posts
   - scope:
@@ -285,7 +298,7 @@ defaults:
 # Sass/SCSS
 sass:
   sass_dir: _sass
-  style: compressed # http://sass-lang.com/documentation/file.SASS_REFERENCE.html#output_style
+  style: compressed # https://sass-lang.com/documentation/file.SASS_REFERENCE.html#output_style
 
 
 # Outputting
@@ -297,18 +310,20 @@ timezone: America/Los_Angeles # http://en.wikipedia.org/wiki/List_of_tz_database
 
 # Plugins
 plugins:
+  - jekyll-feed
+  - jekyll-gist
   - jekyll-paginate
   - jekyll-sitemap
-  - jekyll-gist
-  - jekyll-feed
   - jekyll-redirect-from
-  - jekyll-remote-theme
-# mimic GitHub Pages with --safe
+  - jemoji
+
+# Mimic GitHub Pages with --safe
 whitelist:
+  - jekyll-feed
+  - jekyll-gist
   - jekyll-paginate
   - jekyll-sitemap
-  - jekyll-gist
-  - jekyll-feed
+  - jekyll-redirect-from
   - jemoji
 
 
@@ -342,7 +357,7 @@ tag_archive:
 
 
 # HTML Compression
-# - http://jch.penibelst.de/
+# - https://jch.penibelst.de/
 compress_html:
   clippings: all
   ignore:
