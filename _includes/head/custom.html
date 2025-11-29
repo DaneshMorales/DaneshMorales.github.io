@@ -6,24 +6,24 @@
 <link rel="stylesheet" href="{{ base_path }}/assets/css/academicons.css"/>
 
 <!-- favicon from https://commons.wikimedia.org/wiki/File:OOjs_UI_icon_academic-progressive.svg -->
-<link rel="apple-touch-icon" sizes="180x180" href="{{ base_path }}/images/apple-touch-icon-180x180.png"/>
-<link rel="icon" type="image/svg+xml" href="{{ base_path }}/images/favicon.svg"/>
-<link rel="icon" type="image/png" href="{{ base_path }}/images/favicon-32x32.png" sizes="32x32"/>
-<link rel="icon" type="image/png" href="{{ base_path }}/images/favicon-192x192.png" sizes="192x192"/>
+<link rel="apple-touch-icon" sizes="180x180"
+      href="{{ base_path }}/images/apple-touch-icon-180x180.png"/>
+<link rel="icon" type="image/svg+xml"
+      href="{{ base_path }}/images/favicon.svg"/>
+<link rel="icon" type="image/png" sizes="32x32"
+      href="{{ base_path }}/images/favicon-32x32.png"/>
+<link rel="icon" type="image/png" sizes="192x192"
+      href="{{ base_path }}/images/favicon-192x192.png"/>
 <link rel="manifest" href="{{ base_path }}/images/manifest.json"/>
-<link rel="icon" href="/images/favicon.ico"/>
+<link rel="icon" href="{{ base_path }}/images/favicon.ico"/>
 <meta name="theme-color" content="#ffffff"/>
 
-<!-- end custom head snippets -->
-
-<!-- start custom head snippets -->
-
-<!-- MathJax configuration -->
+<!-- MathJax v2 configuration -->
 <script type="text/x-mathjax-config">
   MathJax.Hub.Config({
     tex2jax: {
-      // Inline math: \( ... \)  or  $ ... $
-      inlineMath: [['\\(','\\)'], ['$', '$']],
+      // Inline math: \( ... \)
+      inlineMath: [['\\(','\\)']],
       // Display math: $$ ... $$  or  \[ ... \]
       displayMath: [['$$','$$'], ['\\[','\\]']],
       processEscapes: true,
@@ -35,7 +35,7 @@
 
 <!-- Load MathJax from CDN -->
 <script async
-  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-MML-AM_CHTML">
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML">
 </script>
 
 <!-- end custom head snippets -->
