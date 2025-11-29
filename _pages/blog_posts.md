@@ -1,5 +1,5 @@
 ---
-title: "Reconciling Equations from the Randomized Compiling and Cycle Error Reconstuction Papers"
+title: "Reconciling Equations from the Randomized Compiling (RC) and Cycle Error Reconstuction (CER) Papers"
 layout: archive      # or 'page' depending on your setup
 permalink: /blog_posts/
 author_profile: true
@@ -29,8 +29,6 @@ We will refer as the noisy representation of the threefold product as
 
 where $T\_i^c:= H\_i^\dagger T\_i^\dagger H\_i$.
 
-I will now show that, even in the case where the easy gates have a gate dependent error model, the effective dressed cycle is equivalent to a cycle in which the noise in between the hard and easy cycles is going to be a Pauli twirled noise where the noise from the easy gates is going to be given by Equation \ref{avg_noise}, which is a gate-independent.
-
 ## Comparing Gate Dependent/Independent noise
 
 Let $\Lambda(E\_i') = \nu(E'\_i)\phi(E\_i')^\dagger$ be the noise associated with the cycle $\nu(E'\_i) = \nu(T\_i^cE\_iT\_{i-1})$ which can be gate dependent. We will compare this noise model with its correspondent gate independent noise defined as follows:
@@ -43,6 +41,8 @@ Let $\Lambda(E\_i') = \nu(E'\_i)\phi(E\_i')^\dagger$ be the noise associated wit
 \begin{equation}
     \nu_{\text{drs.}}^{\text{eff.}}(H_i,E_i):= \left \langle \phi(T_i) \nu(H_i)\nu(E'\_i)\phi^\dagger(T_{i-1})\right \rangle_{T_i,T_{i-1}}
 \end{equation}
+
+I will now show that, even in the case where the easy gates have a gate dependent error model, the effective dressed cycle is equivalent to a cycle in which the noise in between the hard and easy cycles is going to be a Pauli twirled noise where the noise from the easy gates is going to be given by Equation \ref{avg_noise}, which is a gate-independent.
 
 $$
 \begin{aligned}
@@ -63,7 +63,7 @@ where $S_i$ is a stochastic Pauli channel.
 
 A circuit with gate-dependent noise on the easy gates in the RC paper is defined as $\mathcal{C}\_\text{GD}$. In the CER paper, a circuit with any arbitrary noise model is described as $\left \langle \mathcal{C}\_\text{RC}(\vec{T})\right \rangle\_{\vec{T}}$. Therefore, in our case, we have that $\mathcal{C}\_\text{GD} \equiv \left \langle \mathcal{C}\_\text{RC}(\vec{T})\right \rangle\_\vec{T}$.
 
-This is the cool part. A circuit with gate-independent noise is defined in the RC paper as $\mathcal{C}\_\text{GI}$ and its gate-independent error model on the easy gates is given by equation \ref{avg_noise}. Since the noise on the easy gates is gate-independent, then from the proof of Lemma 1 of the CER paper, this circuit exactly factorizes as the product of effective dressed cycles; that is,
+A circuit with gate-independent noise is defined in the RC paper as $\mathcal{C}\_\text{GI}$ and its gate-independent error model on the easy gates is given by equation \ref{avg_noise}. Since the noise on the easy gates is gate-independent, then from the proof of Lemma 1 of the CER paper, this circuit exactly factorizes as the product of effective dressed cycles; that is,
 
 $$
 \begin{aligned}
@@ -73,7 +73,7 @@ $$
 \end{aligned}
 $$
 
-And recall that!
+And recall that,
 
 $$
 \begin{aligned}
@@ -85,7 +85,7 @@ $$
 \end{aligned}
 $$
 
-Therefore
+Therefore,
 
 $$
 \begin{aligned}
@@ -119,14 +119,4 @@ $$
 \end{aligned}
 $$
 
-So essentially I have translated Theorem 2 from the RC paper in terms of the definitions from the CER paper. Clearly there is an upper bound in the perturbation terms of the CER paper; the higher the variance in the error rates of the easy gates the looser the bound is. But the only conclusion is that more variance $\implies$ looser upper bound.
-
-\begin{equation}
-a=b
-\end{equation}
-
-$$
-\begin{equation}
-a=b
-\end{equation}
-$$
+So essentially, I have translated Theorem 2 from the RC paper in terms of the definitions from the CER paper. Clearly there is an upper bound in the perturbation terms of the CER paper; the higher the variance in the error rates of the easy gates the looser the bound is. But the only conclusion is that more variance $\implies$ looser upper bound.
