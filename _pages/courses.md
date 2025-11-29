@@ -8,34 +8,39 @@ author_profile: true
 Throughout my academic journey, I have had the opportunity to take the following courses. You can learn more about the course contents in the [UWFlow](https://uwflow.com/) website.
 
 
-## Fall 2025 (Next Term):
+## Winter 2026:
 
-* AMATH 731: Applied Functional Analysis
+* AMATH 645 - Scientific Machine Learning
+
+## Fall 2025:
+
+* [QIC 820 - Theory of Quantum Information](https://www.math.uwaterloo.ca/~wcleung/qic820-f2025.html) (Taught by [Debbie Leung](https://scholar.google.com/citations?user=U8igvVgAAAAJ&hl=en))
+* QIC 890 - Quantum Machine Learning (Taught by [Na Young Kim](https://scholar.google.com/citations?user=4FbfIogAAAAJ&hl=en))
 
 ## Winter 2025 (End of Undergraduate Program):
 
 * AMATH 361 - Continuum Mechanics
-* AMATH 474 - Phase Space Quantum Mechanics
-* AMATH 475 - Introduction to General Relativity
-* PHYS 437B - Research Project 2
+* AMATH 474 - Phase Space Quantum Mechanics (Taught by [Eduardo Martín-Martínez](https://scholar.google.com/citations?user=AhUfKjkAAAAJ&hl=en))
+* AMATH 475 - Introduction to General Relativity (Taught by [Eduardo Martín-Martínez](https://scholar.google.com/citations?user=AhUfKjkAAAAJ&hl=en))
+* PHYS 437B - Research Project 2 (Under the supervision of [Joseph Emerson]https://scholar.google.com/citations?user=IwI8JL8AAAAJ&hl=en)
 
 
 ## Fall 2024:
 
-* AMATH 473 - Advanced Quantum Theory
+* [AMATH 473 - Advanced Quantum Theory](https://uwaterloo.ca/physics-of-information-lab/teaching/advanced-quantum-theory-amath-473673-phys454-fall-2024) (Taught by [Achim Kempf](https://scholar.google.com/citations?user=lLmEHOAAAAAJ&hl=en))
 * PHYS 363 - Intermediate Classical Mechanics
-* PHYS 437A - Research Project 1
-* PHYS 468 - Quantum Devices
-* QIC 710 - Quantum Information Processing
+* PHYS 437A - Research Project 1 (Under the supervision of [Joseph Emerson]https://scholar.google.com/citations?user=IwI8JL8AAAAJ&hl=en)
+* PHYS 468 - Quantum Devices (Taught by [Raymond Laflamme](https://scholar.google.ca/citations?hl=en&user=UBusZfYAAAAJ&view_op=list_works))
+* [QIC 710 - Quantum Information Processing](https://cleve.iqc.uwaterloo.ca/qic710/index.html) (Taught by Richard Cleve)
 
 ## Spring 2024:
 
-* AMATH 876 - Open Quantum Systems
+* AMATH 876 - Open Quantum Systems (Taught by [Joseph Emerson]https://scholar.google.com/citations?user=IwI8JL8AAAAJ&hl=en)
 
 ## Winter 2024:
 
 * AMATH 342 - Computational Methods for Differential Equations
-* AMATH 373 - Quantum Theory 1
+* AMATH 373 - Quantum Theory 1 (Taught by [Graeme Smith](https://scholar.google.com/citations?user=vftOAdoAAAAJ&hl=en))
 * AMATH 451 - Introduction to Dynamical Systems
 * PMATH 348 - Fields and Galois Theory
 * PMATH 365 - Differential Geometry
