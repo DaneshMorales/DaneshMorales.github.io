@@ -29,7 +29,7 @@ Throughout my academic journey, I have had the opportunity to take the following
 
 * [AMATH 473 - Advanced Quantum Theory](https://uwaterloo.ca/physics-of-information-lab/teaching/advanced-quantum-theory-amath-473673-phys454-fall-2024) (Taught by [Achim Kempf](https://scholar.google.com/citations?user=lLmEHOAAAAAJ&hl=en))
 * PHYS 363 - Intermediate Classical Mechanics
-* PHYS 437A - Research Project 1 (Under the supervision of [Joseph Emerson]https://scholar.google.com/citations?user=IwI8JL8AAAAJ&hl=en)
+* PHYS 437A - Research Project 1 (Under the supervision of [Joseph Emerson](https://scholar.google.com/citations?user=IwI8JL8AAAAJ&hl=en))
 * PHYS 468 - Quantum Devices (Taught by [Raymond Laflamme](https://scholar.google.ca/citations?hl=en&user=UBusZfYAAAAJ&view_op=list_works))
 * [QIC 710 - Quantum Information Processing](https://cleve.iqc.uwaterloo.ca/qic710/index.html) (Taught by Richard Cleve)
 
