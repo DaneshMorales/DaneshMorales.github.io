@@ -22,7 +22,7 @@ Throughout my academic journey, I have had the opportunity to take the following
 * AMATH 361 - Continuum Mechanics
 * AMATH 474 - Phase Space Quantum Mechanics (Taught by [Eduardo Martín-Martínez](https://scholar.google.com/citations?user=AhUfKjkAAAAJ&hl=en))
 * AMATH 475 - Introduction to General Relativity (Taught by [Eduardo Martín-Martínez](https://scholar.google.com/citations?user=AhUfKjkAAAAJ&hl=en))
-* PHYS 437B - Research Project 2 (Under the supervision of [Joseph Emerson]https://scholar.google.com/citations?user=IwI8JL8AAAAJ&hl=en)
+* PHYS 437B - Research Project 2 (Under the supervision of [Joseph Emerson](https://scholar.google.com/citations?user=IwI8JL8AAAAJ&hl=en))
 
 
 ## Fall 2024:
