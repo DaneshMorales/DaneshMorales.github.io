@@ -8,7 +8,7 @@ author_profile: true
 
 # My Page
 
-Here is an equation:
+Here is an equation: $hello$
 
 \[
 E = mc^2
