@@ -23,7 +23,7 @@ $$
 \end{aligned}
 $$
 
-where \(S_i\) is a stochastic Pauli channel.
+where $S_i\$ is a stochastic Pauli channel.
 
 A circuit with gate-dependent noise on the easy gates in the RC paper is defined as \\(\mathcal{C}_\text{GD}\\) . In the CER paper, a circuit with any arbitrary noise model is described as \\(\left \langle \mathcal{C}_\text{RC}(\vec{T})\right \rangle_{\vec{T}}\\) . Therefore, in our case, we have that \\(\mathcal{C}_\text{GD} \equiv \left \langle \mathcal{C}_\text{RC}(\vec{T})\right \rangle_\vec{T}\\).
 
