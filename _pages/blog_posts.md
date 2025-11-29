@@ -41,7 +41,7 @@ Let $\Lambda(E\_i') = \nu(E'\_i)\phi(E\_i')^\dagger$ be the noise associated wit
 ## Effective Dressed Cycle
 
 \begin{equation}
-    \nu_{\text{drs.}}^{\text{eff.}}(H_i,E_i):= \left \langle \phi(T_i) \nu(H_i)\nu(E'_i)\phi^\dagger(T_{i-1})\right \rangle_{T_i,T_{i-1}}
+    \nu_{\text{drs.}}^{\text{eff.}}(H_i,E_i):= \left \langle \phi(T_i) \nu(H_i)\nu(E'\_i)\phi^\dagger(T_{i-1})\right \rangle_{T_i,T_{i-1}}
 \end{equation}
 
 $$
