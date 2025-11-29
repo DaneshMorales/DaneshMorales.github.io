@@ -1,18 +1,48 @@
 ---
-title: "Blog Posts"
+title: "Reconciling Equations from the Randomized Compiling and Cycle Error Reconstuction Papers"
 layout: archive      # or 'page' depending on your setup
 permalink: /blog_posts/
 author_profile: true
 ---
 
-\begin{definition}[Diamond Distance]
-    \begin{equation}
-        \epsilon(\mathcal{E}) = \frac{1}{2}||\mathcal{E}- \mathcal{I}||_\diamond = \sup_\psi ||(\mathcal{E}\otimes \mathcal{I}_d) - \mathcal{I}_{d^2}||_1
-    \end{equation}
-\end{definition}
+## Diamond Distance
 
+\begin{equation}
+    \epsilon(\mathcal{E}) = \frac{1}{2}||\mathcal{E}- \mathcal{I}||\_\diamond = \sup_\psi ||(\mathcal{E}\otimes \mathcal{I}\_d) - \mathcal{I}\_{d^2}||_1
+\end{equation}
+
+## Diamond Distance Bounds
+
+Let $r = 1-F(\mathcal{E})$ be the process infidelity  of a map $\mathcal{E}$ with respect to the identity.
+
+\begin{equation}
+    r(\mathcal{E}) \leq \epsilon(\mathcal{E}) \leq d\sqrt{r(\mathcal{E})}
+\end{equation}
+
+## Threefold Product of Correction/Easy/Randomizing Cycle
+
+We will refer as the noisy representation of the threefold product as 
+
+\begin{equation}
+    \nu(E'\_i) =  \nu(T\_i^cE\_iT\_{i-1})
+\end{equation}
+
+where $T\_i^c:= H\_i^\dagger T\_i^\dagger H\_i$.
 
 I will now show that, even in the case where the easy gates have a gate dependent error model, the effective dressed cycle is equivalent to a cycle in which the noise in between the hard and easy cycles is going to be a Pauli twirled noise where the noise from the easy gates is going to be given by Equation \ref{avg_noise}, which is a gate-independent.
+
+## Comparing Gate Dependent/Independent noise
+
+Let $\Lambda(E\_i') = \nu(E'\_i)\phi(E\_i')^\dagger$ be the noise associated with the cycle $\nu(E'\_i) = \nu(T\_i^cE\_iT\_{i-1})$ which can be gate dependent. We will compare this noise model with its correspondent gate independent noise defined as follows:
+    \begin{equation}\label{avg_noise}
+        \Lambda\_i^\textbf{T} = \langle \Lambda(E'\_i) \rangle_{E'\_i} = \langle \Lambda(T\_i^cE_iT\_{i-1}) \rangle_{T\_{i-1}}
+    \end{equation}
+
+## Effective Dressed Cycle
+
+\begin{equation}
+    \nu_{\text{drs.}}^{\text{eff.}}(H_i,E_i):= \left \langle \phi(T_i) \nu(H_i)\nu(E'_i)\phi^\dagger(T_{i-1})\right \rangle_{T_i,T_{i-1}}
+\end{equation}
 
 $$
 \begin{aligned}
