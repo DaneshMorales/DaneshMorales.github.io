@@ -4,11 +4,14 @@ layout: archive      # or 'page' depending on your setup
 permalink: /blog_posts/
 author_profile: true
 ---
-
 <script>
 window.MathJax = {
+  loader: {
+    load: ['[tex]/physics']   // load the physics extension
+  },
   tex: {
-    tags: 'ams'   // automatic equation numbering
+    packages: {'[+]': ['physics']}, // add physics to the list of TeX packages
+    tags: 'ams'                    // automatic equation numbering (AMS style)
   }
 };
 </script>
