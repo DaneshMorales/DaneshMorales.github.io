@@ -4,6 +4,27 @@ layout: archive      # or 'page' depending on your setup
 permalink: /blog_posts/
 author_profile: true
 ---
+
+<script>
+window.MathJax = {
+  tex: {
+    tags: 'ams'   // automatic equation numbering
+  }
+};
+</script>
+
+<script id="MathJax-script" async
+        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+
+# My Page
+
+Here is an equation:
+
+\[
+E = mc^2
+\]
+
 I am testing some things
 $$
 this is a test
@@ -14,6 +35,11 @@ $$
 a = b+C
 \end{equation}
 $$
+
+\begin{equation}
+hello
+\end{equation}
+
 
 $$
 \begin{aligned}
