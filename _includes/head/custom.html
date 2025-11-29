@@ -21,7 +21,8 @@ window.MathJax = {
   tex: {
     inlineMath: [['$', '$'], ['\\(', '\\)']],
     displayMath: [['$$', '$$'], ['\\[', '\\]']],
-    processEscapes: true
+    processEscapes: true,
+    tags: 'ams'   // 'none' | 'ams' | 'all'
   },
   options: {
     skipHtmlTags: ['script','noscript','style','textarea','pre','code']
