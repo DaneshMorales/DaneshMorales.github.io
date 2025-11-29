@@ -27,7 +27,7 @@ where \(S_i\) is a stochastic Pauli channel.
 
 A circuit with gate-dependent noise on the easy gates in the RC paper is defined as \(\mathcal{C}_\text{GD}\). In the CER paper, a circuit with any arbitrary noise model is described as \(\left \langle \mathcal{C}_\text{RC}(\vec{T})\right \rangle_{\vec{T}}\). Therefore, in our case, we have that \(\mathcal{C}_\text{GD} \equiv \left \langle \mathcal{C}_\text{RC}(\vec{T})\right \rangle_\vec{T}\).
 
-This is the cool part. A circuit with gate-independent noise is defined in the RC paper as \(\mathcal{C}_\text{GI}\) and its gate-independent error model on the easy gates is given by equation \ref{avg_noise}. Since the noise on the easy gates is gate-independent, then from the proof of Lemma 1 of the CER paper, this circuit exactly factorizes as the product of effective dressed cycles; that is,
+This is the cool part. A circuit with gate-independent noise is defined in the RC paper as \\(\mathcal{C}_\text{GI}\\) and its gate-independent error model on the easy gates is given by equation \ref{avg_noise}. Since the noise on the easy gates is gate-independent, then from the proof of Lemma 1 of the CER paper, this circuit exactly factorizes as the product of effective dressed cycles; that is,
 
 $$
 \begin{aligned}
