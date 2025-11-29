@@ -32,7 +32,7 @@ $$
 
 $$
 \begin{equation}
-a = b+C
+a = b+C \bra{a} \mel{a}{a}{C}
 \end{equation}
 $$
 
