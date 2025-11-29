@@ -21,25 +21,27 @@ $$
 
 $$
 \begin{equation}
-a = b+C \bra{a} \mln{a}{a}{C}
+a = b+C \bra{a} \mel{a}{a}{C}
 \end{equation}
 $$
-
+$$
 \begin{equation}
 hello
 \end{equation}
-
+$$
+$$
 \begin{equation}
   \vb{v} = \dv{\vb{r}}{t}   % uses physics macros
 \end{equation}
+$$
 
 Some text…
-
+$$
 \begin{align}
   F &= ma \\
   E &= mc^2
 \end{align}
-
+$$
 
 $$
 \begin{aligned}
