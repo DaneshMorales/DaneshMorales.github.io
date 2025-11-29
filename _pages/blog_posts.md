@@ -6,10 +6,9 @@ author_profile: true
 ---
 
 $a$ idk what im doing
-$$
-a
-$$
-
+b
+$$a$$
+b
 $$
 \begin{aligned}
     \nu_{\text{drs.}}^{\text{eff.}}(H_i,E_i)
