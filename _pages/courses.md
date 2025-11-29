@@ -12,7 +12,7 @@ Throughout my academic journey, I have had the opportunity to take the following
 
 * AMATH 645 - Scientific Machine Learning
 
-## Fall 2025:
+## Fall 2025 (Beginning of Masters Program):
 
 * [QIC 820 - Theory of Quantum Information](https://www.math.uwaterloo.ca/~wcleung/qic820-f2025.html) (Taught by [Debbie Leung](https://scholar.google.com/citations?user=U8igvVgAAAAJ&hl=en))
 * QIC 890 - Quantum Machine Learning (Taught by [Na Young Kim](https://scholar.google.com/citations?user=4FbfIogAAAAJ&hl=en))
@@ -35,7 +35,7 @@ Throughout my academic journey, I have had the opportunity to take the following
 
 ## Spring 2024:
 
-* AMATH 876 - Open Quantum Systems (Taught by [Joseph Emerson]https://scholar.google.com/citations?user=IwI8JL8AAAAJ&hl=en)
+* AMATH 876 - Open Quantum Systems (Taught by [Joseph Emerson](https://scholar.google.com/citations?user=IwI8JL8AAAAJ&hl=en))
 
 ## Winter 2024:
 
