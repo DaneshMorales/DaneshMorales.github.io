@@ -15,3 +15,27 @@
 <meta name="theme-color" content="#ffffff"/>
 
 <!-- end custom head snippets -->
+
+<!-- start custom head snippets -->
+
+<!-- MathJax configuration -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      // Inline math: \( ... \)  or  $ ... $
+      inlineMath: [['\\(','\\)'], ['$', '$']],
+      // Display math: $$ ... $$  or  \[ ... \]
+      displayMath: [['$$','$$'], ['\\[','\\]']],
+      processEscapes: true,
+      processEnvironments: true,
+      skipTags: ['script','noscript','style','textarea','pre','code']
+    }
+  });
+</script>
+
+<!-- Load MathJax from CDN -->
+<script async
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-MML-AM_CHTML">
+</script>
+
+<!-- end custom head snippets -->

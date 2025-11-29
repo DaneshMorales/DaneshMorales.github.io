@@ -1,6 +1,6 @@
 ---
-title: "Math Rendering Test"
-layout: post      # or 'page' depending on your setup
+title: "Blog Posts"
+layout: archive      # or 'page' depending on your setup
 permalink: /blog_posts/
 author_profile: true
 ---
