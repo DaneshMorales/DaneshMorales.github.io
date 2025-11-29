@@ -4,52 +4,57 @@ layout: archive      # or 'page' depending on your setup
 permalink: /blog_posts/
 author_profile: true
 ---
-Below are some different ways of writing math.
-If MathJax is working you should **not** see any backslashes in the formulas.
 
----
 
-## 1. Inline math
+$$ {X}_{0} $$ (works)
+$$ X_0 $$ (works)
 
-HTML block so Kramdown doesn’t interfere:
+\begin{equation}
+\begin{aligned}
+  {X}_{0} (does not always work)
+  {X}\_{0} (works)
+  X_0 (works)
+  \hat{a}_{b} (does not always work)
+  \hat{a}_b (works)
+  \hat{a}_{b+c} (works)
+\end{aligned}
+\end{equation}
 
-<p>
-Inline Pythagoras: \(a^2 + b^2 = c^2\).
-</p>
+\begin{equation}
+\begin{aligned}
+  {\sigma}_{1} =  
+  \begin{pmatrix}
+    0 & 1 \\\\\\\\
+    1 & 0
+  \end{pmatrix} 
+\end{aligned}
+\end{equation}
 
----
 
-## 2. Display math with $$ ... $$
-
-This one uses `$$`:
-
-$$
-\int_0^1 x^2\,dx = \frac{1}{3}
-$$
-
----
-
-## 3. Another display example with \[ ... \]
-
-\[
-\nabla \cdot \vec{E} = \frac{\rho}{\varepsilon_0}
-\]
-
----
-
-## 4. Inline math inside a list
-
-1. First item: \(f(x) = x^2\)  
-2. Second item: \(e^{i\pi} + 1 = 0\)
-
----
-
-## 5. Check that code blocks do *not* render math
-
-```tex
-This is a code block, so it should NOT render:
-
-\(a^2 + b^2 = c^2\)
-\[
-\int_0^1 x^2\,dx = \frac{1}{3}
-\]
+\begin{equation}
+\begin{aligned}
+  X_0 \otimes X_1 =  
+  \begin{pmatrix}
+    0\begin{pmatrix} 
+      0 & 1 \\\\\\\\
+      1 & 0
+    \end{pmatrix} & 1\begin{pmatrix}
+                      0 & 1 \\\\\\\\
+                      1 & 0
+                     \end{pmatrix} \\\\\\\\
+    1\begin{pmatrix} 
+      0 & 1 \\\\\\\\
+      1 & 0
+     \end{pmatrix} & 0\begin{pmatrix}
+                       0 & 1 \\\\\\\\
+                       1 & 0
+                      \end{pmatrix} 
+  \end{pmatrix} = 
+  \begin{pmatrix}
+    0 & 0 & 0 & 1 \\\\\\\\
+    0 & 0 & 1 & 0 \\\\\\\\
+    0 & 1 & 0 & 0 \\\\\\\\
+    1 & 0 & 0 & 0 
+  \end{pmatrix}
+\end{aligned}
+\end{equation}
