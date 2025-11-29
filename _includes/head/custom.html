@@ -16,8 +16,21 @@
 
 <script>
 MathJax = {
+  loader: {
+    // load the physics extension
+    load: ['[tex]/physics']
+  },
   tex: {
-    inlineMath: {'[+]': [['$', '$']]}
+    // keep $...$ as inline math
+    inlineMath: {'[+]': [['$', '$']]},
+
+    // turn on automatic equation numbering:
+    //  - 'ams' = only AMS environments like equation, align, etc.
+    //  - 'all' = every display equation gets a number
+    tags: 'ams',
+
+    // enable the physics package
+    packages: {'[+]': ['physics']}
   }
 };
 </script>

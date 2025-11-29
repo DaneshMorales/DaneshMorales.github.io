@@ -4,21 +4,7 @@ layout: archive      # or 'page' depending on your setup
 permalink: /blog_posts/
 author_profile: true
 ---
-<script>
-window.MathJax = {
-  loader: {
-    load: ['[tex]/physics']   // load the physics extension
-  },
-  tex: {
-    packages: {'[+]': ['physics']}, // add physics to the list of TeX packages
-    tags: 'ams'                    // automatic equation numbering (AMS style)
-  }
-};
-</script>
 
-<script id="MathJax-script" async
-        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
-</script>
 
 # My Page
 
@@ -35,7 +21,7 @@ $$
 
 $$
 \begin{equation}
-a = b+C \bra{a} \mel{a}{a}{C}
+a = b+C \bra{a} \mln{a}{a}{C}
 \end{equation}
 $$
 
