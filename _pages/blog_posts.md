@@ -83,4 +83,14 @@ $$
 \end{aligned}
 $$
 
-So essentially I have translated Theorem 2 from the RC paper in terms of the definitions from the CER paper. Clearly there is an upper bound in the perturbation terms of the CER paper; the higher the variance in the error rates of the easy gates the looser the bound is. But the only conclusion is that more variance \(\implies\) looser upper bound.
+So essentially I have translated Theorem 2 from the RC paper in terms of the definitions from the CER paper. Clearly there is an upper bound in the perturbation terms of the CER paper; the higher the variance in the error rates of the easy gates the looser the bound is. But the only conclusion is that more variance $\implies$ looser upper bound.
+
+\begin{equation}
+a=b
+\end{equation}
+
+$$
+\begin{equation}
+a=b
+\end{equation}
+$$
