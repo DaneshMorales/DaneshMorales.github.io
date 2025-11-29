@@ -4,11 +4,17 @@ layout: archive      # or 'page' depending on your setup
 permalink: /blog_posts/
 author_profile: true
 ---
+I am testing some things
+$$
+this is a test
+$$
 
-$a$ idk what im doing
-b
-$$a$$
-b
+$$
+\begin{equation}
+a = b+C
+\end{equation}
+$$
+
 $$
 \begin{aligned}
     \nu_{\text{drs.}}^{\text{eff.}}(H_i,E_i)
