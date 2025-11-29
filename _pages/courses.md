@@ -31,7 +31,7 @@ Throughout my academic journey, I have had the opportunity to take the following
 * PHYS 363 - Intermediate Classical Mechanics
 * PHYS 437A - Research Project 1 (Under the supervision of [Joseph Emerson](https://scholar.google.com/citations?user=IwI8JL8AAAAJ&hl=en))
 * PHYS 468 - Quantum Devices (Taught by [Raymond Laflamme](https://scholar.google.ca/citations?hl=en&user=UBusZfYAAAAJ&view_op=list_works))
-* [QIC 710 - Quantum Information Processing](https://cleve.iqc.uwaterloo.ca/qic710/index.html) (Taught by Richard Cleve)
+* [QIC 710 - Quantum Information Processing](https://cleve.iqc.uwaterloo.ca/qic710/index.html) (Taught by [Richard Cleve](https://scholar.google.com/citations?user=dNq5mN4AAAAJ&hl=en))
 
 ## Spring 2024:
 
