@@ -29,6 +29,17 @@ $$
 hello
 \end{equation}
 
+\begin{equation}
+  \vb{v} = \dv{\vb{r}}{t}   % uses physics macros
+\end{equation}
+
+Some text…
+
+\begin{align}
+  F &= ma \\
+  E &= mc^2
+\end{align}
+
 
 $$
 \begin{aligned}
