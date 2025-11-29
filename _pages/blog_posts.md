@@ -5,6 +5,12 @@ permalink: /blog_posts/
 author_profile: true
 ---
 
+\begin{definition}[Diamond Distance]
+    \begin{equation}
+        \epsilon(\mathcal{E}) = \frac{1}{2}||\mathcal{E}- \mathcal{I}||_\diamond = \sup_\psi ||(\mathcal{E}\otimes \mathcal{I}_d) - \mathcal{I}_{d^2}||_1
+    \end{equation}
+\end{definition}
+
 
 I will now show that, even in the case where the easy gates have a gate dependent error model, the effective dressed cycle is equivalent to a cycle in which the noise in between the hard and easy cycles is going to be a Pauli twirled noise where the noise from the easy gates is going to be given by Equation \ref{avg_noise}, which is a gate-independent.
 
