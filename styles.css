@@ -734,17 +734,18 @@ h1, h2, h3, h4 { line-height: 1.25; color: var(--text); }
   /* Hide desktop-only theme toggle */
   .theme-toggle-desk { display: none; }
 
-  /* Full-width dropdown menu */
+  /* Full-width dropdown menu — fully opaque so content beneath doesn't bleed through */
   .nav-menu {
     display: none;
     position: absolute;
     top: 64px;
     left: 0;
     right: 0;
-    background: var(--nav-bg);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    background: var(--bg);          /* solid background, not the translucent nav-bg */
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
     border-bottom: 1px solid var(--border);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
     flex-direction: column;
     align-items: stretch;
     padding: 1rem 1.25rem;
@@ -770,8 +771,9 @@ h1, h2, h3, h4 { line-height: 1.25; color: var(--text); }
     justify-content: center;
   }
 
-  /* About */
+  /* About — center photo/name/title but left-align bio text */
   .about-grid { grid-template-columns: 1fr; gap: 1.5rem; text-align: center; }
+  .about-bio { text-align: left; }
   .about-affiliation { justify-content: center; }
   .interest-tags { justify-content: center; }
 
@@ -936,10 +938,49 @@ h1, h2, h3, h4 { line-height: 1.25; color: var(--text); }
 @media (max-width: 1024px) {
   .post-layout {
     grid-template-columns: 1fr;
+    gap: 0;
   }
-  .post-toc { display: none; }
+
+  /* Show TOC as a compact "Contents" box above the article */
+  .post-toc {
+    position: static;
+    max-height: none;
+    overflow-y: visible;
+    padding: 1rem 1.25rem;
+    margin: 1.5rem 0 0;
+    background: var(--bg-alt);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+  }
+  .toc-label {
+    font-size: 0.78rem;
+    margin-bottom: 0.5rem;
+    padding-left: 0;
+  }
+  /* Lay TOC links out as a flat list without the left-border treatment */
+  #toc-nav { gap: 0; }
+  .toc-link {
+    border-left: none;
+    border-radius: 4px;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.85rem;
+  }
+  .toc-link.active { background: var(--accent-bg); }
+  .toc-h3 { padding-left: 1rem; }
+
   .post-layout .post-body {
     max-width: 720px;
     margin: 0 auto;
+    /* Prevent wide math/code from breaking layout */
+    overflow-wrap: break-word;
+    word-break: break-word;
+    min-width: 0;
   }
+}
+
+/* Clip overflowing MathJax display math on small screens */
+@media (max-width: 640px) {
+  .post-layout { padding: 0 1rem; }
+  .MathJax { overflow-x: auto; overflow-y: hidden; max-width: 100%; }
+  mjx-container { overflow-x: auto; display: block !important; }
 }
