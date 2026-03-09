@@ -771,9 +771,8 @@ h1, h2, h3, h4 { line-height: 1.25; color: var(--text); }
     justify-content: center;
   }
 
-  /* About — center photo/name/title but left-align bio text */
+  /* About */
   .about-grid { grid-template-columns: 1fr; gap: 1.5rem; text-align: center; }
-  .about-bio { text-align: left; }
   .about-affiliation { justify-content: center; }
   .interest-tags { justify-content: center; }
 
@@ -981,6 +980,6 @@ h1, h2, h3, h4 { line-height: 1.25; color: var(--text); }
 /* Clip overflowing MathJax display math on small screens */
 @media (max-width: 640px) {
   .post-layout { padding: 0 1rem; }
-  .MathJax { overflow-x: auto; overflow-y: hidden; max-width: 100%; }
-  mjx-container { overflow-x: auto; display: block !important; }
+  /* Only target display-mode MathJax containers, not inline ones */
+  mjx-container[display="true"] { overflow-x: auto; max-width: 100%; }
 }
