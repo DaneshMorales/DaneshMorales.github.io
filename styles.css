@@ -1,3 +1,6 @@
+/* Load Academicons (arXiv, Google Scholar, ORCID, etc.) */
+@import url('https://cdnjs.cloudflare.com/ajax/libs/academicons/1.9.4/css/academicons.min.css');
+
 /* ==============================================
    CSS Variables – Light & Dark Themes
    ============================================== */
@@ -354,8 +357,10 @@ h1, h2, h3, h4 { line-height: 1.25; color: var(--text); }
 }
 .badge-preprint { background: #fef3c7; color: #92400e; }
 .badge-pub      { background: #d1fae5; color: #065f46; }
+.badge-project  { background: #ede9fe; color: #5b21b6; }
 [data-theme="dark"] .badge-preprint { background: #451a03; color: #fcd34d; }
 [data-theme="dark"] .badge-pub      { background: #022c22; color: #6ee7b7; }
+[data-theme="dark"] .badge-project  { background: #2e1065; color: #c4b5fd; }
 
 .paper-title { font-size: 1.05rem; font-weight: 600; margin-bottom: 0.35rem; }
 
@@ -381,6 +386,16 @@ h1, h2, h3, h4 { line-height: 1.25; color: var(--text); }
   transition: color var(--transition), background var(--transition), border-color var(--transition);
 }
 .paper-link:hover { color: var(--accent) !important; border-color: var(--accent); background: var(--accent-bg); }
+
+/* SciRate inline badge text */
+.scirate-badge {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  color: currentColor;
+}
 
 /* ==============================================
    Blog Section
@@ -794,41 +809,115 @@ h1, h2, h3, h4 { line-height: 1.25; color: var(--text); }
   margin: 0;
   display: flex;
   flex-direction: column;
-  gap: 0.65rem;
-  counter-reset: ref-counter;
+  gap: 0.5rem;
 }
 
 .ref-item {
-  display: flex;
-  gap: 0.75rem;
+  position: relative;
+  padding: 0.35rem 0.5rem 0.35rem 3rem;
   font-size: 0.875rem;
-  line-height: 1.65;
+  line-height: 1.75;
   color: var(--text-muted);
   scroll-margin-top: 80px;
-  padding: 0.5rem 0.75rem;
   border-radius: 6px;
   transition: background var(--transition);
 }
-.ref-item:target { background: var(--accent-bg); color: var(--text); }
+.ref-item:target { background: var(--accent-bg); }
 
-/* Number badge */
-.ref-item::before {
-  content: "[" attr(data-num) "]";
-  flex-shrink: 0;
-  font-weight: 600;
+/* [N] number — absolutely positioned so text flows freely */
+.ref-num {
+  position: absolute;
+  left: 0.5rem;
+  top: 0.35rem;
+  font-weight: 700;
+  font-size: 0.82rem;
   color: var(--accent);
-  font-size: 0.8rem;
   min-width: 2rem;
-  padding-top: 0.05rem;
+  font-family: 'Inter', sans-serif;
 }
 
-.ref-authors { color: var(--text); }
+.ref-content { display: inline; }
+.ref-authors { color: var(--text); font-weight: 500; }
 .ref-title   { font-style: italic; }
 .ref-url {
   color: var(--accent);
   text-decoration: none;
-  font-size: 0.8rem;
-  margin-left: 0.25rem;
+  font-size: 0.85rem;
+  margin-left: 0.2rem;
 }
 .ref-url:hover { text-decoration: underline; }
 .ref-note { color: var(--text-light); font-size: 0.82rem; }
+
+/* ==============================================
+   Blog Post – Sidebar TOC Layout
+   ============================================== */
+.post-layout {
+  max-width: 1140px;
+  margin: 0 auto;
+  padding: 0 1.25rem;
+  display: grid;
+  grid-template-columns: 210px 1fr;
+  gap: 4rem;
+  align-items: start;
+}
+
+/* The post-body no longer needs its own centering since the grid handles it */
+.post-layout .post-body {
+  max-width: none;
+  margin: 0;
+  min-width: 0; /* prevent overflow */
+}
+
+.post-toc {
+  position: sticky;
+  top: 80px;
+  padding-top: 3rem;
+  padding-bottom: 2rem;
+  max-height: calc(100vh - 100px);
+  overflow-y: auto;
+}
+
+.toc-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--text-light);
+  margin-bottom: 0.6rem;
+  padding-left: 0.6rem;
+}
+
+#toc-nav {
+  display: flex;
+  flex-direction: column;
+}
+
+.toc-link {
+  font-size: 0.81rem;
+  line-height: 1.45;
+  color: var(--text-muted);
+  text-decoration: none;
+  padding: 0.3rem 0.6rem;
+  border-left: 2px solid var(--border);
+  transition: color var(--transition), border-color var(--transition), background var(--transition);
+  border-radius: 0 4px 4px 0;
+}
+.toc-link:hover { color: var(--text); border-color: var(--text-muted); }
+.toc-link.active {
+  color: var(--accent);
+  border-color: var(--accent);
+  font-weight: 500;
+  background: var(--accent-bg);
+}
+.toc-h3 { padding-left: 1.25rem; font-size: 0.77rem; }
+
+@media (max-width: 1024px) {
+  .post-layout {
+    grid-template-columns: 1fr;
+  }
+  .post-toc { display: none; }
+  .post-layout .post-body {
+    max-width: 720px;
+    margin: 0 auto;
+  }
+}

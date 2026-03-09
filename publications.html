@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Publications – Danesh Morales">
-  <title>Publications – Danesh Morales</title>
+  <meta name="description" content="Publications – Danesh Morales Hashemi">
+  <title>Publications — Danesh Morales Hashemi</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
@@ -102,6 +102,16 @@
     .paper-card.expanded .toggle-abstract i { transform: rotate(180deg); }
 
     .paper-card[data-hidden="true"] { display: none; }
+
+    /* SciRate text badge */
+    .scirate-badge {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1;
+      color: currentColor;
+    }
   </style>
 </head>
 <body>
@@ -110,7 +120,7 @@
   <nav class="navbar" id="navbar">
     <div class="nav-container">
 
-      <a href="index.html" class="nav-brand">Danesh Morales</a>
+      <a href="index.html" class="nav-brand">Danesh Morales Hashemi</a>
 
       <div class="nav-controls">
         <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
@@ -123,11 +133,10 @@
 
       <div class="nav-menu" id="nav-menu">
         <div class="nav-links">
-          <a href="index.html#about"      class="nav-link">About</a>
-          <a href="index.html#research"   class="nav-link">Research</a>
-          <a href="publications.html"     class="nav-link active">Publications</a>
-          <a href="blog/index.html"       class="nav-link">Blog</a>
-          <a href="index.html#contact"    class="nav-link">Contact</a>
+          <a href="index.html#about"   class="nav-link">About</a>
+          <a href="publications.html"  class="nav-link active">Publications</a>
+          <a href="blog/index.html"    class="nav-link">Blog</a>
+          <a href="index.html#contact" class="nav-link">Contact</a>
           <a href="assets/cv.pdf" class="nav-cv" target="_blank" rel="noopener noreferrer">
             <i class="fas fa-file-alt"></i> CV
           </a>
@@ -164,8 +173,9 @@
         A complete list of my publications and preprints.
         <!-- TODO: update Google Scholar URL -->
         See also my
+        <!-- TODO: update with your Google Scholar URL -->
         <a href="#" class="pub-scholar-link">
-          <i class="fas fa-graduation-cap"></i> Google Scholar profile
+          <i class="ai ai-google-scholar"></i> Google Scholar profile
         </a>
         for citation metrics.
       </p>
@@ -176,6 +186,7 @@
         <button class="filter-btn active" data-filter="all">All</button>
         <button class="filter-btn" data-filter="preprint">Preprints</button>
         <button class="filter-btn" data-filter="publication">Publications</button>
+        <button class="filter-btn" data-filter="project">School Projects</button>
         <button class="filter-btn" data-filter="2025">2025</button>
         <button class="filter-btn" data-filter="2024">2024</button>
       </div>
@@ -199,7 +210,7 @@
             </div>
             <h3 class="paper-title">Your Paper Title Here</h3>
             <p class="paper-authors">
-              <strong>Danesh Morales</strong>, Co-author One, Co-author Two
+              <strong>Danesh Morales Hashemi</strong>, Co-author One, Co-author Two
             </p>
             <p class="paper-venue">arXiv:2501.00000 [quant-ph]</p>
             <p class="paper-abstract">
@@ -208,7 +219,8 @@
             </p>
             <div class="paper-links" style="margin-top:0.75rem;">
               <a href="#" class="paper-link"><i class="fas fa-file-pdf"></i> PDF</a>
-              <a href="#" class="paper-link"><i class="fas fa-external-link-alt"></i> arXiv</a>
+              <a href="#" class="paper-link"><i class="ai ai-arxiv"></i> arXiv</a>
+              <a href="#" class="paper-link"><span class="scirate-badge">SR</span> SciRate</a>
               <a href="#" class="paper-link"><i class="fab fa-github"></i> Code</a>
               <button class="toggle-abstract">
                 Abstract <i class="fas fa-chevron-down"></i>
@@ -231,7 +243,7 @@
             </div>
             <h3 class="paper-title">Another Paper Title</h3>
             <p class="paper-authors">
-              <strong>Danesh Morales</strong>, Advisor Name
+              <strong>Danesh Morales Hashemi</strong>, Graeme Smith
             </p>
             <p class="paper-venue">
               <em>Journal of Quantum Science and Technology</em>, vol. X, pp. 000–000, 2024
@@ -242,31 +254,32 @@
             <div class="paper-links" style="margin-top:0.75rem;">
               <a href="#" class="paper-link"><i class="fas fa-file-pdf"></i> PDF</a>
               <a href="#" class="paper-link"><i class="fas fa-external-link-alt"></i> Journal</a>
-              <a href="#" class="paper-link"><i class="fas fa-external-link-alt"></i> arXiv</a>
+              <a href="#" class="paper-link"><i class="ai ai-arxiv"></i> arXiv</a>
+              <a href="#" class="paper-link"><span class="scirate-badge">SR</span> SciRate</a>
               <button class="toggle-abstract">
                 Abstract <i class="fas fa-chevron-down"></i>
               </button>
             </div>
           </div>
 
-          <div class="paper-card compact" data-type="publication" data-year="2024">
+          <div class="paper-card compact" data-type="project" data-year="2024">
             <div class="paper-header">
               <span class="paper-year">2024</span>
-              <span class="badge badge-pub">Publication</span>
+              <span class="badge badge-project">School Project</span>
             </div>
-            <h3 class="paper-title">A Third Paper Title</h3>
+            <h3 class="paper-title">A Course Project Title</h3>
             <p class="paper-authors">
-              Co-author One, <strong>Danesh Morales</strong>, Co-author Two, Advisor Name
+              <strong>Danesh Morales Hashemi</strong>
             </p>
             <p class="paper-venue">
-              <em>Physical Review A</em>, vol. 110, 012345, 2024
+              AMATH 900 — Course Name, University of Waterloo, 2024
             </p>
             <p class="paper-abstract">
-              Abstract for your third paper. You can add as many cards as needed following this pattern.
+              A brief description of this course project. You can use this badge for term papers,
+              course projects, or any academic work that isn't a formal publication or preprint.
             </p>
             <div class="paper-links" style="margin-top:0.75rem;">
               <a href="#" class="paper-link"><i class="fas fa-file-pdf"></i> PDF</a>
-              <a href="#" class="paper-link"><i class="fas fa-external-link-alt"></i> Journal</a>
               <button class="toggle-abstract">
                 Abstract <i class="fas fa-chevron-down"></i>
               </button>

@@ -112,6 +112,12 @@ if (sections.length && navLinks.length) {
        <div id="post-references"></div>
      </section>
    ============================================= */
+/* =============================================
+   Citation renderer — IEEE style
+   Inline: <span class="cite" data-key="key1 key2"></span>
+   Data:   <script type="application/json" id="post-citations">{...}</script>
+   Target: <div id="post-references"></div>
+   ============================================= */
 function initCitations() {
   const dataEl = document.getElementById('post-citations');
   if (!dataEl) return;
@@ -123,56 +129,80 @@ function initCitations() {
   const citeSpans = document.querySelectorAll('.cite[data-key]');
   if (!citeSpans.length) return;
 
-  // Assign sequential numbers in document order (deduplicated by key)
   const keyToNum = {};
   let counter = 0;
 
+  // First pass: assign numbers in document order
+  citeSpans.forEach(span => {
+    span.dataset.key.trim().split(/\s+/).forEach(key => {
+      if (!(key in keyToNum)) keyToNum[key] = ++counter;
+    });
+  });
+
+  // Second pass: render superscripts with IEEE range compression
   citeSpans.forEach(span => {
     const keys = span.dataset.key.trim().split(/\s+/);
-    const nums = keys.map(key => {
-      if (!(key in keyToNum)) keyToNum[key] = ++counter;
-      return keyToNum[key];
-    });
+    const pairs = keys
+      .map(k => ({ key: k, num: keyToNum[k] }))
+      .sort((a, b) => a.num - b.num);
 
-    const links = nums.map((n, i) =>
-      `<a href="#ref-${keys[i]}" class="cite-link">${n}</a>`
-    ).join(',\u202F');  // narrow no-break space between numbers
+    // Group consecutive runs
+    const groups = [];
+    let run = [pairs[0]];
+    for (let i = 1; i < pairs.length; i++) {
+      if (pairs[i].num === run[run.length - 1].num + 1) {
+        run.push(pairs[i]);
+      } else {
+        groups.push(run); run = [pairs[i]];
+      }
+    }
+    groups.push(run);
+
+    const rendered = groups.map(g => {
+      const first = `<a href="#ref-${g[0].key}" class="cite-link">${g[0].num}</a>`;
+      if (g.length === 1) return first;
+      const last  = `<a href="#ref-${g[g.length-1].key}" class="cite-link">${g[g.length-1].num}</a>`;
+      if (g.length === 2) return `${first}, ${last}`;
+      return `${first}&ndash;${last}`;           // 3+ consecutive → range
+    }).join(', ');
 
     const sup = document.createElement('sup');
     sup.className = 'cite-sup';
-    sup.innerHTML = `[${links}]`;
+    sup.innerHTML = `[${rendered}]`;
     span.replaceWith(sup);
   });
 
-  // Build bibliography list
+  // Build bibliography
   const target = document.getElementById('post-references');
   if (!target) return;
 
   const ol = document.createElement('ol');
   ol.className = 'ref-list';
 
-  // Sort by assigned number
   Object.entries(keyToNum)
     .sort((a, b) => a[1] - b[1])
     .forEach(([key, num]) => {
       const c = db[key];
-      if (!c) { console.warn(`Citation key "${key}" not defined in post-citations`); return; }
+      if (!c) { console.warn(`Citation key "${key}" not in post-citations`); return; }
 
       const li = document.createElement('li');
-      li.id = `ref-${key}`;
+      li.id        = `ref-${key}`;
       li.className = 'ref-item';
       li.dataset.num = num;
 
-      let html = `<span class="ref-authors">${c.authors}.</span> `;
+      // [N] label + content wrapper keep text flowing naturally (no flex columns)
+      let html = `<span class="ref-num">[${num}]</span><span class="ref-content">`;
+      html += `<span class="ref-authors">${c.authors}.</span> `;
       html += `&ldquo;<span class="ref-title">${c.title}</span>.&rdquo; `;
       if (c.venue)  html += `<em>${c.venue}</em>`;
       if (c.volume) html += `, <strong>${c.volume}</strong>`;
       if (c.number) html += `(${c.number})`;
-      if (c.pages)  html += `, ${c.pages}`;
+      if (c.pages)  html += `, pp.&nbsp;${c.pages}`;
       if (c.year)   html += ` (${c.year})`;
       html += '.';
       if (c.note)   html += ` <span class="ref-note">${c.note}</span>`;
-      if (c.url)    html += ` <a href="${c.url}" target="_blank" rel="noopener" class="ref-url" title="Open link">&#8599;</a>`;
+      if (c.url)    html += ` <a href="${c.url}" target="_blank" rel="noopener" class="ref-url">&#8599;</a>`;
+      html += `</span>`;
 
       li.innerHTML = html;
       ol.appendChild(li);
@@ -181,7 +211,60 @@ function initCitations() {
   target.appendChild(ol);
 }
 
-document.addEventListener('DOMContentLoaded', initCitations);
+/* =============================================
+   Blog post – sidebar Table of Contents
+   Reads h2/h3 from .post-body, skips .references-section,
+   highlights active heading on scroll.
+   ============================================= */
+function initTOC() {
+  const tocNav = document.getElementById('toc-nav');
+  if (!tocNav) return;
+
+  const postBody = document.querySelector('.post-body');
+  if (!postBody) return;
+
+  const headings = [...postBody.querySelectorAll('h2, h3')]
+    .filter(h => !h.closest('.references-section'));
+  if (!headings.length) return;
+
+  headings.forEach((h, i) => {
+    if (!h.id) {
+      h.id = h.textContent
+        .toLowerCase()
+        .replace(/^\d+\.\s*/, '')   // strip leading "1. "
+        .replace(/[^a-z0-9\s]/g, '')
+        .trim()
+        .replace(/\s+/g, '-')
+        .substring(0, 60) || `section-${i}`;
+    }
+
+    const a = document.createElement('a');
+    a.href      = `#${h.id}`;
+    a.className = `toc-link toc-${h.tagName.toLowerCase()}`;
+    // Strip numeric prefix for cleaner TOC display
+    a.textContent = h.textContent.replace(/^\d+\.\s*/, '');
+    tocNav.appendChild(a);
+  });
+
+  // Highlight active section on scroll
+  const tocLinks = tocNav.querySelectorAll('.toc-link');
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        tocLinks.forEach(a => a.classList.remove('active'));
+        const active = tocNav.querySelector(`a[href="#${entry.target.id}"]`);
+        if (active) active.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-15% 0px -78% 0px' });
+
+  headings.forEach(h => obs.observe(h));
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  initCitations();
+  initTOC();
+});
 
 /* =============================================
    Navbar shadow on scroll
