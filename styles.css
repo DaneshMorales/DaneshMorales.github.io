@@ -970,10 +970,7 @@ h1, h2, h3, h4 { line-height: 1.25; color: var(--text); }
   .post-layout .post-body {
     max-width: 720px;
     margin: 0 auto;
-    /* Prevent wide math/code from breaking layout */
-    overflow-wrap: break-word;
-    word-break: break-word;
-    min-width: 0;
+    min-width: 0; /* prevent grid cell overflow */
   }
 }
 
