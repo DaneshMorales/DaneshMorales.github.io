@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quantum Entanglement &amp; Bell Inequalities – Danesh Morales</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="../../styles.css">
+
+  <!-- MathJax configuration -->
+  <script>
+    MathJax = {
+      tex: {
+        tags: 'ams',
+        inlineMath:  [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        macros: {
+          ket:    ['{\\left| #1 \\right\\rangle}', 1],
+          bra:    ['{\\left\\langle #1 \\right|}', 1],
+          braket: ['{\\left\\langle #1 \\mid #2 \\right\\rangle}', 2],
+          expect: ['{\\left\\langle #1 \\right\\rangle}', 1],
+          Tr:     '{\\operatorname{Tr}}',
+          C:      '{\\mathbb{C}}',
+          R:      '{\\mathbb{R}}',
+        }
+      },
+      options: { skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre'] }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+</head>
+<body>
+
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="../../index.html" class="nav-brand">Danesh Morales</a>
+      <div class="nav-controls">
+        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
+          <i class="fas fa-moon" id="theme-icon"></i>
+        </button>
+        <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+      <div class="nav-menu" id="nav-menu">
+        <div class="nav-links">
+          <a href="../../index.html#about"    class="nav-link">About</a>
+          <a href="../../index.html#research" class="nav-link">Research</a>
+          <a href="../../publications.html"   class="nav-link">Publications</a>
+          <a href="../../blog/index.html"     class="nav-link active">Blog</a>
+          <a href="../../index.html#contact"  class="nav-link">Contact</a>
+          <a href="../../assets/cv.pdf" class="nav-cv" target="_blank" rel="noopener noreferrer">
+            <i class="fas fa-file-alt"></i> CV
+          </a>
+        </div>
+        <div class="nav-meta">
+          <div class="nav-socials">
+            <a href="#" class="social-icon" aria-label="Google Scholar"><i class="fas fa-graduation-cap"></i></a>
+            <a href="#" class="social-icon" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+            <a href="#" class="social-icon" aria-label="GitHub"><i class="fab fa-github"></i></a>
+            <a href="mailto:your.email@university.edu" class="social-icon" aria-label="Email"><i class="fas fa-envelope"></i></a>
+          </div>
+          <button class="theme-toggle theme-toggle-desk" id="theme-toggle-desk" aria-label="Toggle dark mode">
+            <i class="fas fa-moon"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Post hero -->
+  <div class="post-hero">
+    <div class="container">
+      <a href="../index.html" class="post-back">
+        <i class="fas fa-arrow-left"></i> Back to blog
+      </a>
+      <div class="post-meta-line">
+        <time class="post-date">March 2025</time>
+        <span class="post-tag">Quantum Information</span>
+        <span class="post-tag">Foundations</span>
+      </div>
+      <h1>Introduction to Quantum Entanglement and Bell Inequalities</h1>
+      <p class="post-excerpt">
+        A gentle introduction to quantum entanglement, the EPR paradox, and Bell inequalities.
+        We derive the CHSH inequality and discuss its experimental and philosophical implications.
+      </p>
+    </div>
+  </div>
+
+  <!-- Post body -->
+  <div class="container">
+    <article class="post-body">
+
+      <h2>1. What is a Quantum State?</h2>
+
+      <p>
+        In quantum mechanics, the state of a physical system is described by a vector
+        $\ket{\psi}$ in a complex Hilbert space $\mathcal{H}$.
+        For a single qubit, $\mathcal{H} = \C^2$, and the most general (pure) state is
+      </p>
+
+      \begin{equation}
+        \ket{\psi} = \alpha \ket{0} + \beta \ket{1}, \qquad \alpha, \beta \in \C,
+        \quad |\alpha|^2 + |\beta|^2 = 1.
+        \label{eq:qubit}
+      \end{equation}
+
+      <p>
+        The computational basis $\{\ket{0}, \ket{1}\}$ corresponds to the eigenstates of the
+        Pauli $Z$ operator. Physical observables are represented by Hermitian operators, and
+        the Born rule tells us that measuring an observable $A$ yields eigenvalue $a_i$ with
+        probability $|\braket{a_i}{\psi}|^2$.
+      </p>
+
+      <h2>2. Two Qubits and the Tensor Product</h2>
+
+      <p>
+        For a composite system of two qubits $A$ and $B$, the Hilbert space is the tensor product
+        $\mathcal{H}_A \otimes \mathcal{H}_B \cong \C^4$. A general two-qubit state is
+      </p>
+
+      \begin{equation}
+        \ket{\Psi} = \sum_{i,j \in \{0,1\}} c_{ij}\, \ket{i}_A \otimes \ket{j}_B,
+        \qquad \sum_{i,j} |c_{ij}|^2 = 1.
+        \label{eq:two-qubit}
+      \end{equation}
+
+      <p>
+        A state is called <em>separable</em> if it can be written as a product
+        $\ket{\Psi} = \ket{\phi}_A \otimes \ket{\chi}_B$,
+        and <em>entangled</em> otherwise.
+      </p>
+
+      <h2>3. Bell States</h2>
+
+      <p>
+        The four <em>Bell states</em> (or EPR pairs) form a maximally entangled orthonormal
+        basis for $\C^4$:
+      </p>
+
+      \begin{align}
+        \ket{\Phi^+} &= \frac{1}{\sqrt{2}}\bigl(\ket{00} + \ket{11}\bigr), \label{eq:phi+} \\
+        \ket{\Phi^-} &= \frac{1}{\sqrt{2}}\bigl(\ket{00} - \ket{11}\bigr), \label{eq:phi-} \\
+        \ket{\Psi^+} &= \frac{1}{\sqrt{2}}\bigl(\ket{01} + \ket{10}\bigr), \label{eq:psi+} \\
+        \ket{\Psi^-} &= \frac{1}{\sqrt{2}}\bigl(\ket{01} - \ket{10}\bigr). \label{eq:psi-}
+      \end{align}
+
+      <p>
+        Consider the singlet state $\ket{\Psi^-}$ in \eqref{eq:psi-}.
+        If Alice measures her qubit in the $Z$ basis and obtains $+1$ (i.e., $\ket{0}$),
+        Bob's qubit immediately collapses to $\ket{1}$, regardless of the spatial separation
+        between them. This is the phenomenon that troubled Einstein, Podolsky, and Rosen<span class="cite" data-key="epr1935"></span>.
+      </p>
+
+      <h2>4. The EPR Argument</h2>
+
+      <p>
+        Einstein, Podolsky, and Rosen (1935) argued that quantum mechanics must be incomplete.
+        Their reasoning: if Alice's measurement can instantaneously determine Bob's outcome,
+        and if no faster-than-light signaling is allowed (<em>locality</em>), then Bob's outcome
+        must have been determined in advance by some <em>hidden variable</em> $\lambda$.
+      </p>
+
+      <blockquote>
+        "If, without in any way disturbing a system, we can predict with certainty the value
+        of a physical quantity, then there exists an element of physical reality corresponding
+        to this physical quantity." &mdash; Einstein, Podolsky, Rosen (1935)
+      </blockquote>
+
+      <p>
+        This motivated the search for <em>local hidden variable (LHV) theories</em>:
+        models where outcomes are determined by pre-existing variables $\lambda$, with Alice's
+        result depending only on her setting and $\lambda$, and similarly for Bob.
+      </p>
+
+      <h2>5. Bell's Theorem and the CHSH Inequality</h2>
+
+      <p>
+        In 1964, John Bell showed that LHV theories make experimentally distinguishable
+        predictions from quantum mechanics<span class="cite" data-key="bell1964"></span>.
+        The modern version, due to Clauser, Horne, Shimony, and Holt (CHSH)<span class="cite" data-key="chsh1969"></span>, proceeds as follows.
+      </p>
+
+      <p>
+        Alice and Bob each choose one of two measurement settings:
+        $a, a'$ for Alice and $b, b'$ for Bob. Each measurement outcome is $\pm 1$.
+        Define the CHSH correlator
+      </p>
+
+      \begin{equation}
+        S = \expect{AB} - \expect{AB'} + \expect{A'B} + \expect{A'B'},
+        \label{eq:chsh-def}
+      \end{equation}
+
+      <p>
+        where $\expect{AB}$ denotes the expectation value of the product of Alice's and Bob's
+        outcomes when Alice uses setting $a$ and Bob uses $b$.
+      </p>
+
+      <p>
+        <strong>Bell's inequality (CHSH form):</strong>
+        For any LHV theory,
+      </p>
+
+      \begin{equation}
+        |S_{\rm LHV}| \leq 2.
+        \label{eq:bell}
+      \end{equation}
+
+      <p>
+        <em>Proof sketch.</em> In any LHV model, the outcomes $A(\lambda), A'(\lambda),
+        B(\lambda), B'(\lambda) \in \{-1, +1\}$ are determined by $\lambda$. Note that
+      </p>
+
+      \begin{equation}
+        AB - AB' + A'B + A'B' = A(B - B') + A'(B + B').
+        \label{eq:chsh-algebra}
+      \end{equation}
+
+      <p>
+        Since $B, B' \in \{-1,+1\}$, we have either $B - B' = 0, B + B' = \pm 2$
+        or $B - B' = \pm 2, B + B' = 0$. In both cases the right-hand side of
+        \eqref{eq:chsh-algebra} has absolute value $2$, so averaging over $\lambda$ gives
+        $|S| \leq 2$. $\square$
+      </p>
+
+      <h2>6. The Quantum Violation</h2>
+
+      <p>
+        Quantum mechanics can <em>violate</em> the CHSH inequality \eqref{eq:bell}.
+        For the Bell state $\ket{\Phi^+}$ and the optimal measurement settings
+        (Alice: $0°$ and $45°$; Bob: $22.5°$ and $67.5°$), one obtains
+      </p>
+
+      \begin{equation}
+        S_{\rm QM} = 2\sqrt{2} \approx 2.828.
+        \label{eq:tsirelson}
+      \end{equation}
+
+      <p>
+        The value $2\sqrt{2}$ is known as the <em>Tsirelson bound</em> &mdash; the maximum
+        quantum violation. To see this, consider the state $\ket{\Phi^+}$ and define
+        Alice's observables $A = \sigma_z$, $A' = \sigma_x$, and Bob's
+        $B = -(\sigma_z + \sigma_x)/\sqrt{2}$, $B' = (\sigma_z - \sigma_x)/\sqrt{2}$.
+        A direct computation gives
+      </p>
+
+      \begin{align}
+        \expect{AB}   &= \braket{\Phi^+}{A \otimes B}{\Phi^+} = \frac{1}{\sqrt{2}}, \\
+        \expect{AB'}  &= -\frac{1}{\sqrt{2}}, \\
+        \expect{A'B}  &= \frac{1}{\sqrt{2}}, \\
+        \expect{A'B'} &= \frac{1}{\sqrt{2}},
+      \end{align}
+
+      <p>
+        which yields $S = 4/\sqrt{2} = 2\sqrt{2}$, confirming \eqref{eq:tsirelson}.
+      </p>
+
+      <h2>7. Experimental Tests</h2>
+
+      <p>
+        Experiments by Aspect et al. (1982) and, more conclusively, the <em>loophole-free</em>
+        Bell tests of Hensen et al.<span class="cite" data-key="hensen2015"></span> have firmly established
+        that nature violates Bell inequalities. The measured values of $|S|$ are consistent
+        with the quantum prediction $2\sqrt{2}$ and rule out all local hidden variable theories.
+      </p>
+
+      <p>
+        This has profound implications: quantum entanglement is a real, non-classical resource.
+        It underlies applications such as quantum key distribution, quantum teleportation, and
+        quantum computing.
+      </p>
+
+      <h2>8. Reduced Density Matrices</h2>
+
+      <p>
+        Even for a pure entangled state $\ket{\Psi^-}$, the local state of each subsystem is
+        a <em>mixed</em> state, described by a density matrix<span class="cite" data-key="nielsen2000"></span>. The reduced density matrix for
+        Alice is obtained by tracing out Bob's subsystem:
+      </p>
+
+      \begin{equation}
+        \rho_A = \Tr_B \bigl(\ket{\Psi^-}\!\bra{\Psi^-}\bigr) = \frac{I}{2},
+        \label{eq:reduced}
+      \end{equation}
+
+      <p>
+        where $I/2$ is the maximally mixed state. This confirms that local measurements on
+        an entangled pair reveal no information about the global state &mdash; all correlations are
+        nonlocal.
+      </p>
+
+      <h2>Summary</h2>
+
+      <ul>
+        <li>Quantum states of composite systems live in tensor product Hilbert spaces (Eq. \eqref{eq:two-qubit}).</li>
+        <li>Entangled states cannot be written as product states; the Bell states \eqref{eq:phi+}&ndash;\eqref{eq:psi-} are canonical examples.</li>
+        <li>The EPR argument suggests hidden variables, but Bell's theorem (CHSH form, \eqref{eq:bell}) rules out local hidden variable theories.</li>
+        <li>Quantum mechanics predicts $|S| = 2\sqrt{2}$ \eqref{eq:tsirelson}, exceeding the classical bound &mdash; confirmed by experiment.</li>
+        <li>Locally, each half of an entangled pair looks maximally mixed (Eq. \eqref{eq:reduced}).</li>
+      </ul>
+
+      <section class="references-section">
+        <h2>References</h2>
+        <div id="post-references"></div>
+      </section>
+
+    </article>
+  </div>
+
+  <!--
+    ============================================================
+    CITATION DATA — edit this block to add/remove references.
+    Keys must match the data-key attributes used in the text.
+
+    Supported fields:
+      authors  (required)  — author string, e.g. "A. Einstein, B. Podolsky"
+      title    (required)  — paper/book title
+      venue    (required)  — journal, conference, or publisher
+      volume   (optional)  — journal volume
+      number   (optional)  — issue number
+      pages    (optional)  — page range or article number
+      year     (required)  — publication year
+      url      (optional)  — DOI link or arXiv URL
+      note     (optional)  — free-form note, e.g. "arXiv:2501.00000"
+    ============================================================
+  -->
+  <script type="application/json" id="post-citations">
+  {
+    "epr1935": {
+      "authors": "A. Einstein, B. Podolsky, N. Rosen",
+      "title": "Can Quantum-Mechanical Description of Physical Reality Be Considered Complete?",
+      "venue": "Physical Review",
+      "volume": "47",
+      "pages": "777",
+      "year": 1935,
+      "url": "https://doi.org/10.1103/PhysRev.47.777"
+    },
+    "bell1964": {
+      "authors": "J.S. Bell",
+      "title": "On the Einstein Podolsky Rosen Paradox",
+      "venue": "Physics",
+      "volume": "1",
+      "pages": "195",
+      "year": 1964
+    },
+    "chsh1969": {
+      "authors": "J.F. Clauser, M.A. Horne, A. Shimony, R.A. Holt",
+      "title": "Proposed Experiment to Test Local Hidden-Variable Theories",
+      "venue": "Physical Review Letters",
+      "volume": "23",
+      "pages": "880",
+      "year": 1969,
+      "url": "https://doi.org/10.1103/PhysRevLett.23.880"
+    },
+    "hensen2015": {
+      "authors": "B. Hensen et al.",
+      "title": "Loophole-free Bell inequality violation using electron spins separated by 1.3 kilometres",
+      "venue": "Nature",
+      "volume": "526",
+      "pages": "682",
+      "year": 2015,
+      "url": "https://doi.org/10.1038/nature15759"
+    },
+    "nielsen2000": {
+      "authors": "M.A. Nielsen, I.L. Chuang",
+      "title": "Quantum Computation and Quantum Information",
+      "venue": "Cambridge University Press",
+      "year": 2000
+    }
+  }
+  </script>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <p>&copy; 2025 Danesh Morales</p>
+      <p class="footer-sub">Hosted on <a href="https://pages.github.com" target="_blank" rel="noopener">GitHub Pages</a></p>
+    </div>
+  </footer>
+
+  <script src="../../script.js"></script>
+</body>
+</html>

@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Danesh Morales – Master's student in Quantum Information">
+  <title>Danesh Morales</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- ===== NAVBAR ===== -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+
+      <a href="index.html" class="nav-brand">Danesh Morales</a>
+
+      <!-- Mobile top-right: theme toggle + hamburger -->
+      <div class="nav-controls">
+        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
+          <i class="fas fa-moon" id="theme-icon"></i>
+        </button>
+        <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+
+      <!-- Full menu (desktop inline, mobile dropdown) -->
+      <div class="nav-menu" id="nav-menu">
+        <div class="nav-links">
+          <a href="index.html#about"    class="nav-link">About</a>
+          <a href="index.html#research" class="nav-link">Research</a>
+          <a href="publications.html"  class="nav-link">Publications</a>
+          <a href="blog/index.html"    class="nav-link">Blog</a>
+          <a href="index.html#contact" class="nav-link">Contact</a>
+          <a href="assets/cv.pdf" class="nav-cv" target="_blank" rel="noopener noreferrer">
+            <i class="fas fa-file-alt"></i> CV
+          </a>
+        </div>
+
+        <div class="nav-meta">
+          <div class="nav-socials">
+            <!-- TODO: replace href="#" with your actual profile URLs -->
+            <a href="#" class="social-icon" aria-label="Google Scholar" title="Google Scholar">
+              <i class="fas fa-graduation-cap"></i>
+            </a>
+            <a href="#" class="social-icon" aria-label="LinkedIn" title="LinkedIn">
+              <i class="fab fa-linkedin-in"></i>
+            </a>
+            <a href="#" class="social-icon" aria-label="GitHub" title="GitHub">
+              <i class="fab fa-github"></i>
+            </a>
+            <!-- TODO: replace with your email -->
+            <a href="mailto:your.email@university.edu" class="social-icon" aria-label="Email" title="Email">
+              <i class="fas fa-envelope"></i>
+            </a>
+          </div>
+          <!-- Desktop-only theme toggle (inside menu row) -->
+          <button class="theme-toggle theme-toggle-desk" id="theme-toggle-desk" aria-label="Toggle dark mode">
+            <i class="fas fa-moon" id="theme-icon-desk"></i>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </nav>
+
+  <!-- ===== ABOUT ===== -->
+  <section id="about" class="section">
+    <div class="container">
+      <div class="about-grid">
+
+        <div class="about-photo-wrap">
+          <div class="about-photo">
+            <!-- TODO: replace with <img src="assets/photo.jpg" alt="Danesh Morales"> -->
+            <div class="photo-placeholder"><i class="fas fa-user"></i></div>
+          </div>
+        </div>
+
+        <div class="about-content">
+          <h1>Danesh Morales</h1>
+          <p class="about-title">Master's Student &middot; Quantum Information</p>
+          <p class="about-affiliation">
+            <i class="fas fa-university"></i>
+            <!-- TODO: your university and department -->
+            Your University &mdash; Department of Physics
+          </p>
+
+          <p class="about-bio">
+            I am a master's student in quantum information, working at the intersection of
+            quantum computing, quantum error correction, and quantum communication.
+            <!-- TODO: describe your research focus -->
+            My current research focuses on [your specific research focus].
+          </p>
+          <p class="about-bio">
+            I completed my bachelor's in [field] at [institution].
+            I am broadly interested in the theoretical and experimental underpinnings of
+            near-term quantum technologies.
+          </p>
+
+          <div class="interests">
+            <h3>Research Interests</h3>
+            <div class="interest-tags">
+              <!-- TODO: edit tags to match your actual interests -->
+              <span class="tag">Quantum Error Correction</span>
+              <span class="tag">Quantum Computing</span>
+              <span class="tag">Quantum Communication</span>
+              <span class="tag">Quantum Information Theory</span>
+              <span class="tag">Open Quantum Systems</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== RESEARCH ===== -->
+  <section id="research" class="section section-alt">
+    <div class="container">
+      <h2 class="section-title">Research</h2>
+      <p class="section-sub">Publications, preprints, and ongoing work</p>
+
+      <div class="paper-list">
+
+        <!-- TODO: replace with your actual papers -->
+        <div class="paper-card">
+          <div class="paper-header">
+            <span class="paper-year">2025</span>
+            <span class="badge badge-preprint">Preprint</span>
+          </div>
+          <h3 class="paper-title">Your Paper Title Here</h3>
+          <p class="paper-authors">
+            <strong>Danesh Morales</strong>, Co-author One, Co-author Two
+          </p>
+          <p class="paper-venue">arXiv:2501.00000 [quant-ph]</p>
+          <p class="paper-abstract">
+            A brief description of what this paper is about. Replace with your actual abstract
+            or a short summary of the main contributions and results.
+          </p>
+          <div class="paper-links">
+            <a href="#" class="paper-link"><i class="fas fa-file-pdf"></i> PDF</a>
+            <a href="#" class="paper-link"><i class="ai ai-arxiv"></i> arXiv</a>
+            <a href="#" class="paper-link"><i class="fab fa-github"></i> Code</a>
+          </div>
+        </div>
+
+        <div class="paper-card">
+          <div class="paper-header">
+            <span class="paper-year">2024</span>
+            <span class="badge badge-pub">Publication</span>
+          </div>
+          <h3 class="paper-title">Another Paper Title</h3>
+          <p class="paper-authors">
+            <strong>Danesh Morales</strong>, Advisor Name
+          </p>
+          <p class="paper-venue">Journal of Quantum Science and Technology, 2024</p>
+          <p class="paper-abstract">
+            A brief description of your published work. Include the key result or contribution.
+          </p>
+          <div class="paper-links">
+            <a href="#" class="paper-link"><i class="fas fa-file-pdf"></i> PDF</a>
+            <a href="#" class="paper-link"><i class="fas fa-external-link-alt"></i> Journal</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== BLOG PREVIEW ===== -->
+  <section id="blog" class="section">
+    <div class="container">
+      <h2 class="section-title">Blog</h2>
+      <p class="section-sub">Notes on quantum information, math, and research</p>
+
+      <div class="blog-grid">
+
+        <article class="blog-card">
+          <div class="blog-card-meta">
+            <time class="blog-date">March 2025</time>
+            <span class="blog-tag">Quantum Information</span>
+          </div>
+          <h3 class="blog-card-title">
+            <a href="blog/posts/quantum-entanglement-basics.html">
+              Introduction to Quantum Entanglement and Bell Inequalities
+            </a>
+          </h3>
+          <p class="blog-card-excerpt">
+            A gentle introduction to quantum entanglement, the EPR paradox, and Bell inequalities.
+            We derive the CHSH inequality and discuss its experimental implications.
+          </p>
+          <a href="blog/posts/quantum-entanglement-basics.html" class="read-more">
+            Read more <i class="fas fa-arrow-right"></i>
+          </a>
+        </article>
+
+        <article class="blog-card">
+          <div class="blog-card-meta">
+            <time class="blog-date">February 2025</time>
+            <span class="blog-tag">Formalism</span>
+          </div>
+          <h3 class="blog-card-title">
+            <a href="#">The Density Matrix Formalism</a>
+          </h3>
+          <p class="blog-card-excerpt">
+            Why pure states aren't always enough: introducing the density matrix and its role
+            in describing mixed states and open quantum systems.
+          </p>
+          <a href="#" class="read-more">Read more <i class="fas fa-arrow-right"></i></a>
+        </article>
+
+        <article class="blog-card">
+          <div class="blog-card-meta">
+            <time class="blog-date">January 2025</time>
+            <span class="blog-tag">Error Correction</span>
+          </div>
+          <h3 class="blog-card-title">
+            <a href="#">Quantum Error Correction: The Stabilizer Formalism</a>
+          </h3>
+          <p class="blog-card-excerpt">
+            An introduction to the stabilizer formalism and why quantum error correction
+            is fundamentally different from classical error correction.
+          </p>
+          <a href="#" class="read-more">Read more <i class="fas fa-arrow-right"></i></a>
+        </article>
+
+      </div>
+
+      <div class="section-cta">
+        <a href="blog/index.html" class="btn-primary">View all posts</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CONTACT ===== -->
+  <section id="contact" class="section section-alt">
+    <div class="container">
+      <h2 class="section-title">Contact</h2>
+      <p class="section-sub">Feel free to reach out &mdash; I'm always happy to chat about physics</p>
+
+      <div class="contact-grid">
+
+        <div class="contact-info">
+          <div class="contact-item">
+            <i class="fas fa-envelope contact-icon"></i>
+            <div>
+              <h3>Email</h3>
+              <!-- TODO: your email -->
+              <a href="mailto:your.email@university.edu">your.email@university.edu</a>
+            </div>
+          </div>
+          <div class="contact-item">
+            <i class="fas fa-map-marker-alt contact-icon"></i>
+            <div>
+              <h3>Office</h3>
+              <!-- TODO: your office/address -->
+              <p>Department of Physics<br>Your University<br>City, Country</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="contact-socials-block">
+          <h3>Find me online</h3>
+          <div class="social-links-list">
+            <!-- TODO: replace href="#" with actual URLs -->
+            <a href="#" class="social-link-row">
+              <i class="fas fa-graduation-cap"></i>
+              <span>Google Scholar</span>
+            </a>
+            <a href="#" class="social-link-row">
+              <i class="fab fa-linkedin-in"></i>
+              <span>LinkedIn</span>
+            </a>
+            <a href="#" class="social-link-row">
+              <i class="fab fa-github"></i>
+              <span>GitHub</span>
+            </a>
+            <a href="#" class="social-link-row">
+              <i class="fab fa-twitter"></i>
+              <span>Twitter / X</span>
+            </a>
+            <a href="#" class="social-link-row">
+              <i class="fab fa-orcid"></i>
+              <span>ORCID</span>
+            </a>
+            <a href="mailto:your.email@university.edu" class="social-link-row">
+              <i class="fas fa-envelope"></i>
+              <span>Email</span>
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <p>&copy; 2025 Danesh Morales</p>
+      <p class="footer-sub">
+        Hosted on <a href="https://pages.github.com" target="_blank" rel="noopener">GitHub Pages</a>
+      </p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

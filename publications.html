@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Publications – Danesh Morales">
+  <title>Publications – Danesh Morales</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* ---- Publications page extras ---- */
+    .pub-hero {
+      padding: 4rem 0 2.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .pub-hero h1 { font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem; }
+    .pub-hero p  { color: var(--text-muted); max-width: 600px; }
+
+    .pub-scholar-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      margin-top: 1rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--accent) !important;
+    }
+    .pub-scholar-link:hover { color: var(--accent-hover) !important; }
+
+    /* Filter bar */
+    .pub-filters {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      padding: 1.75rem 0 0;
+    }
+    .filter-btn {
+      padding: 0.35rem 0.85rem;
+      border: 1.5px solid var(--border);
+      border-radius: 99px;
+      background: none;
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: color var(--transition), background var(--transition), border-color var(--transition);
+    }
+    .filter-btn:hover { color: var(--accent); border-color: var(--accent); }
+    .filter-btn.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+    }
+
+    /* Publication list */
+    .pub-section { padding: 2.5rem 0 5rem; }
+    .pub-year-group { margin-bottom: 2.5rem; }
+    .pub-year-label {
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-light);
+      margin-bottom: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .pub-year-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .pub-list { display: flex; flex-direction: column; gap: 1rem; }
+
+    /* Slightly more compact card for publications page */
+    .paper-card.compact { padding: 1.25rem 1.5rem; }
+    .paper-card.compact .paper-abstract { display: none; }
+    .paper-card.compact.expanded .paper-abstract { display: block; }
+
+    .toggle-abstract {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      padding: 0;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      transition: color var(--transition);
+    }
+    .toggle-abstract:hover { color: var(--accent); }
+    .toggle-abstract i { font-size: 0.7rem; transition: transform 0.2s; }
+    .paper-card.expanded .toggle-abstract i { transform: rotate(180deg); }
+
+    .paper-card[data-hidden="true"] { display: none; }
+  </style>
+</head>
+<body>
+
+  <!-- ===== NAVBAR ===== -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+
+      <a href="index.html" class="nav-brand">Danesh Morales</a>
+
+      <div class="nav-controls">
+        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
+          <i class="fas fa-moon"></i>
+        </button>
+        <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+
+      <div class="nav-menu" id="nav-menu">
+        <div class="nav-links">
+          <a href="index.html#about"      class="nav-link">About</a>
+          <a href="index.html#research"   class="nav-link">Research</a>
+          <a href="publications.html"     class="nav-link active">Publications</a>
+          <a href="blog/index.html"       class="nav-link">Blog</a>
+          <a href="index.html#contact"    class="nav-link">Contact</a>
+          <a href="assets/cv.pdf" class="nav-cv" target="_blank" rel="noopener noreferrer">
+            <i class="fas fa-file-alt"></i> CV
+          </a>
+        </div>
+        <div class="nav-meta">
+          <div class="nav-socials">
+            <a href="#" class="social-icon" aria-label="Google Scholar" title="Google Scholar">
+              <i class="fas fa-graduation-cap"></i>
+            </a>
+            <a href="#" class="social-icon" aria-label="LinkedIn" title="LinkedIn">
+              <i class="fab fa-linkedin-in"></i>
+            </a>
+            <a href="#" class="social-icon" aria-label="GitHub" title="GitHub">
+              <i class="fab fa-github"></i>
+            </a>
+            <a href="mailto:your.email@university.edu" class="social-icon" aria-label="Email" title="Email">
+              <i class="fas fa-envelope"></i>
+            </a>
+          </div>
+          <button class="theme-toggle theme-toggle-desk" aria-label="Toggle dark mode">
+            <i class="fas fa-moon"></i>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </nav>
+
+  <!-- ===== HERO ===== -->
+  <div class="pub-hero">
+    <div class="container">
+      <h1>Publications</h1>
+      <p>
+        A complete list of my publications and preprints.
+        <!-- TODO: update Google Scholar URL -->
+        See also my
+        <a href="#" class="pub-scholar-link">
+          <i class="fas fa-graduation-cap"></i> Google Scholar profile
+        </a>
+        for citation metrics.
+      </p>
+
+      <!-- Filter buttons -->
+      <div class="pub-filters">
+        <span style="font-size:0.8rem;color:var(--text-muted);margin-right:0.25rem;">Filter:</span>
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="preprint">Preprints</button>
+        <button class="filter-btn" data-filter="publication">Publications</button>
+        <button class="filter-btn" data-filter="2025">2025</button>
+        <button class="filter-btn" data-filter="2024">2024</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== PUBLICATION LIST ===== -->
+  <div class="pub-section">
+    <div class="container">
+
+      <!-- ── 2025 ── -->
+      <div class="pub-year-group">
+        <div class="pub-year-label">2025</div>
+        <div class="pub-list">
+
+          <!-- TODO: replace with your actual papers -->
+          <div class="paper-card compact" data-type="preprint" data-year="2025">
+            <div class="paper-header">
+              <span class="paper-year">2025</span>
+              <span class="badge badge-preprint">Preprint</span>
+            </div>
+            <h3 class="paper-title">Your Paper Title Here</h3>
+            <p class="paper-authors">
+              <strong>Danesh Morales</strong>, Co-author One, Co-author Two
+            </p>
+            <p class="paper-venue">arXiv:2501.00000 [quant-ph]</p>
+            <p class="paper-abstract">
+              A full abstract of what this paper is about. Replace with your actual abstract text.
+              Describe the problem, your approach, and the key results.
+            </p>
+            <div class="paper-links" style="margin-top:0.75rem;">
+              <a href="#" class="paper-link"><i class="fas fa-file-pdf"></i> PDF</a>
+              <a href="#" class="paper-link"><i class="fas fa-external-link-alt"></i> arXiv</a>
+              <a href="#" class="paper-link"><i class="fab fa-github"></i> Code</a>
+              <button class="toggle-abstract">
+                Abstract <i class="fas fa-chevron-down"></i>
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ── 2024 ── -->
+      <div class="pub-year-group">
+        <div class="pub-year-label">2024</div>
+        <div class="pub-list">
+
+          <div class="paper-card compact" data-type="publication" data-year="2024">
+            <div class="paper-header">
+              <span class="paper-year">2024</span>
+              <span class="badge badge-pub">Publication</span>
+            </div>
+            <h3 class="paper-title">Another Paper Title</h3>
+            <p class="paper-authors">
+              <strong>Danesh Morales</strong>, Advisor Name
+            </p>
+            <p class="paper-venue">
+              <em>Journal of Quantum Science and Technology</em>, vol. X, pp. 000–000, 2024
+            </p>
+            <p class="paper-abstract">
+              A full abstract for this published paper. Describe the main contributions and results.
+            </p>
+            <div class="paper-links" style="margin-top:0.75rem;">
+              <a href="#" class="paper-link"><i class="fas fa-file-pdf"></i> PDF</a>
+              <a href="#" class="paper-link"><i class="fas fa-external-link-alt"></i> Journal</a>
+              <a href="#" class="paper-link"><i class="fas fa-external-link-alt"></i> arXiv</a>
+              <button class="toggle-abstract">
+                Abstract <i class="fas fa-chevron-down"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="paper-card compact" data-type="publication" data-year="2024">
+            <div class="paper-header">
+              <span class="paper-year">2024</span>
+              <span class="badge badge-pub">Publication</span>
+            </div>
+            <h3 class="paper-title">A Third Paper Title</h3>
+            <p class="paper-authors">
+              Co-author One, <strong>Danesh Morales</strong>, Co-author Two, Advisor Name
+            </p>
+            <p class="paper-venue">
+              <em>Physical Review A</em>, vol. 110, 012345, 2024
+            </p>
+            <p class="paper-abstract">
+              Abstract for your third paper. You can add as many cards as needed following this pattern.
+            </p>
+            <div class="paper-links" style="margin-top:0.75rem;">
+              <a href="#" class="paper-link"><i class="fas fa-file-pdf"></i> PDF</a>
+              <a href="#" class="paper-link"><i class="fas fa-external-link-alt"></i> Journal</a>
+              <button class="toggle-abstract">
+                Abstract <i class="fas fa-chevron-down"></i>
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <p>&copy; 2025 Danesh Morales</p>
+      <p class="footer-sub">Hosted on <a href="https://pages.github.com" target="_blank" rel="noopener">GitHub Pages</a></p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+  <script>
+    /* ── Filter logic ── */
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const papers = document.querySelectorAll('.paper-card[data-type]');
+
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        const filter = btn.dataset.filter;
+
+        papers.forEach(card => {
+          const matchAll  = filter === 'all';
+          const matchType = card.dataset.type === filter;
+          const matchYear = card.dataset.year === filter;
+          card.dataset.hidden = (!matchAll && !matchType && !matchYear).toString();
+        });
+
+        // Hide year headings that have no visible cards
+        document.querySelectorAll('.pub-year-group').forEach(group => {
+          const anyVisible = [...group.querySelectorAll('.paper-card')]
+            .some(c => c.dataset.hidden !== 'true');
+          group.style.display = anyVisible ? '' : 'none';
+        });
+      });
+    });
+
+    /* ── Toggle abstract ── */
+    document.querySelectorAll('.toggle-abstract').forEach(btn => {
+      btn.addEventListener('click', () => {
+        btn.closest('.paper-card').classList.toggle('expanded');
+        btn.querySelector('span') && (btn.querySelector('span').textContent =
+          btn.closest('.paper-card').classList.contains('expanded') ? 'Hide' : 'Abstract');
+      });
+    });
+  </script>
+</body>
+</html>

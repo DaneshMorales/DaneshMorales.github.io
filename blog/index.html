@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blog – Danesh Morales</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="../index.html" class="nav-brand">Danesh Morales</a>
+      <div class="nav-controls">
+        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
+          <i class="fas fa-moon" id="theme-icon"></i>
+        </button>
+        <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+      <div class="nav-menu" id="nav-menu">
+        <div class="nav-links">
+          <a href="../index.html#about"    class="nav-link">About</a>
+          <a href="../index.html#research" class="nav-link">Research</a>
+          <a href="../publications.html"   class="nav-link">Publications</a>
+          <a href="../blog/index.html"     class="nav-link active">Blog</a>
+          <a href="../index.html#contact"  class="nav-link">Contact</a>
+          <a href="../assets/cv.pdf" class="nav-cv" target="_blank" rel="noopener noreferrer">
+            <i class="fas fa-file-alt"></i> CV
+          </a>
+        </div>
+        <div class="nav-meta">
+          <div class="nav-socials">
+            <a href="#" class="social-icon" aria-label="Google Scholar"><i class="fas fa-graduation-cap"></i></a>
+            <a href="#" class="social-icon" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+            <a href="#" class="social-icon" aria-label="GitHub"><i class="fab fa-github"></i></a>
+            <a href="mailto:your.email@university.edu" class="social-icon" aria-label="Email"><i class="fas fa-envelope"></i></a>
+          </div>
+          <button class="theme-toggle theme-toggle-desk" id="theme-toggle-desk" aria-label="Toggle dark mode">
+            <i class="fas fa-moon"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="blog-hero">
+      <h1>Blog</h1>
+      <p>Notes on quantum information, mathematics, and research.</p>
+    </div>
+
+    <div class="blog-list">
+
+      <div class="blog-list-item">
+        <div class="blog-list-date">Mar 2025</div>
+        <div class="blog-list-content">
+          <h2><a href="posts/quantum-entanglement-basics.html">Introduction to Quantum Entanglement and Bell Inequalities</a></h2>
+          <p>A gentle introduction to quantum entanglement, the EPR paradox, and Bell inequalities. We derive the CHSH inequality and discuss experimental implications.</p>
+          <div style="margin-top:0.5rem">
+            <span class="blog-tag">Quantum Information</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="blog-list-item">
+        <div class="blog-list-date">Feb 2025</div>
+        <div class="blog-list-content">
+          <h2><a href="#">The Density Matrix Formalism</a></h2>
+          <p>Why pure states aren't always enough: introducing the density matrix and its role in describing mixed states and open quantum systems.</p>
+          <div style="margin-top:0.5rem">
+            <span class="blog-tag">Formalism</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="blog-list-item">
+        <div class="blog-list-date">Jan 2025</div>
+        <div class="blog-list-content">
+          <h2><a href="#">Quantum Error Correction: The Stabilizer Formalism</a></h2>
+          <p>An introduction to the stabilizer formalism and why quantum error correction is fundamentally different from classical error correction.</p>
+          <div style="margin-top:0.5rem">
+            <span class="blog-tag">Error Correction</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <p>&copy; 2025 Danesh Morales</p>
+      <p class="footer-sub">Hosted on <a href="https://pages.github.com" target="_blank" rel="noopener">GitHub Pages</a></p>
+    </div>
+  </footer>
+
+  <script src="../script.js"></script>
+</body>
+</html>
