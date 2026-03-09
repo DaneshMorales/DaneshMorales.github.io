@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Introduction to Cycle Benchmarking — Danesh Morales Hashemi</title>
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="../../styles.css">
+
+  <!-- MathJax configuration -->
+  <script>
+    MathJax = {
+      tex: {
+        tags: 'ams',
+        inlineMath:  [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        macros: {
+          /* Paper-specific macros */
+          C:      '{\\mathcal{C}}',
+          R:      '{\\mathcal{R}}',
+          G:      '{\\mathcal{G}}',
+          /* Physics-package equivalents */
+          ket:    ['{\\left| #1 \\right\\rangle}', 1],
+          bra:    ['{\\left\\langle #1 \\right|}', 1],
+          braket: ['{\\left\\langle #1 \\mid #2 \\right\\rangle}', 2],
+          mel:    ['{\\left\\langle #1 \\right| #2 \\left| #3 \\right\\rangle}', 3],
+          ketbra: ['{\\left| #1 \\right\\rangle\\!\\left\\langle #1 \\right|}', 1],
+          expect: ['{\\left\\langle #1 \\right\\rangle}', 1],
+          Tr:     '{\\operatorname{Tr}}',
+          Vec:    ['{\\vec{#1}}', 1],
+        }
+      },
+      options: { skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre'] }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+</head>
+<body>
+
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="../../index.html" class="nav-brand">Danesh Morales Hashemi</a>
+      <div class="nav-controls">
+        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
+          <i class="fas fa-moon"></i>
+        </button>
+        <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+      <div class="nav-menu" id="nav-menu">
+        <div class="nav-links">
+          <a href="../../index.html#about"   class="nav-link">About</a>
+          <a href="../../publications.html"  class="nav-link">Publications</a>
+          <a href="../../blog/index.html"    class="nav-link active">Blog</a>
+          <a href="../../index.html#contact" class="nav-link">Contact</a>
+          <a href="../../assets/cv.pdf" class="nav-cv" target="_blank" rel="noopener noreferrer">
+            <i class="fas fa-file-alt"></i> CV
+          </a>
+        </div>
+        <div class="nav-meta">
+          <div class="nav-socials">
+            <a href="#" class="social-icon" aria-label="Google Scholar"><i class="fas fa-graduation-cap"></i></a>
+            <a href="#" class="social-icon" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+            <a href="#" class="social-icon" aria-label="GitHub"><i class="fab fa-github"></i></a>
+            <a href="mailto:your.email@university.edu" class="social-icon" aria-label="Email"><i class="fas fa-envelope"></i></a>
+          </div>
+          <button class="theme-toggle theme-toggle-desk" aria-label="Toggle dark mode">
+            <i class="fas fa-moon"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Post hero -->
+  <div class="post-hero">
+    <div class="container">
+      <a href="../index.html" class="post-back">
+        <i class="fas fa-arrow-left"></i> Back to blog
+      </a>
+      <div class="post-meta-line">
+        <time class="post-date">December 2025</time>
+        <span class="post-tag">Quantum Computing</span>
+        <span class="post-tag">Benchmarking</span>
+        <span class="post-tag">Error Characterization</span>
+      </div>
+      <h1>Introduction to Cycle Benchmarking for Quantum Error Diagnostics</h1>
+      <p class="post-excerpt">
+        Cycle benchmarking is a scalable, SPAM-robust protocol for estimating the process fidelity
+        of a fixed cycle of parallel quantum gates. We introduce the protocol, explain how randomized
+        compiling tailors noise into Pauli channels, and discuss when the gate-independence assumption
+        can be relaxed without sacrificing accuracy.
+      </p>
+    </div>
+  </div>
+
+  <!-- Post body + sidebar TOC -->
+  <div class="post-layout">
+
+    <aside class="post-toc" id="post-toc" aria-label="Table of contents">
+      <p class="toc-label">On this page</p>
+      <nav id="toc-nav"></nav>
+    </aside>
+
+    <article class="post-body">
+
+      <blockquote>
+        <strong>Abstract.</strong>
+        Cycle benchmarking is a scalable protocol used to measure the error rate of a specific cycle
+        of quantum gates implemented in parallel. We introduce the cycle benchmarking protocol, explain
+        how it works, and numerically illustrate its effectiveness. We demonstrate that relaxing the
+        assumptions required to accurately estimate the process fidelity can lead to inaccurate results;
+        in particular, allowing gate-dependent noise on the twirling gates can cause a misestimation of
+        the process fidelity. However, we also show that highly gate-dependent errors can still yield
+        accurate results in certain regimes. Finally, when the gate-independence condition is relaxed,
+        we show that it is possible to reconcile the estimated and theoretical fidelities by measuring
+        in a different basis via a unitary transformation which depends on both the chosen error model
+        on the twirling gates and the targeted gateset.
+      </blockquote>
+
+      <h2>1. Introduction</h2>
+
+      <p>
+        Randomized benchmarking (RB)<span class="cite" data-key="magesan_robust_2011"></span> is
+        arguably the most influential experimental protocol for quantifying the performance of a quantum
+        information device. In essence, RB-like protocols<span class="cite" data-key="magesan_robust_2011 gambetta_characterization_2012 carignan-dugas_characterizing_2015 helsen_new_2019 magesan_efficient_2012"></span>
+        aim to measure a set of parameters $\{p_\lambda\}$ that characterize the quality of the
+        implemented gates from a target gateset $\mathbb{G}$. In the standard RB
+        protocol<span class="cite" data-key="magesan_robust_2011"></span>, the chosen gateset is the
+        $n$-qubit Clifford group, for which there is a single quality parameter $p$. Magesan et
+        al.<span class="cite" data-key="magesan_robust_2011"></span> showed that, under the assumption
+        of gate-independent noise on the gateset (i.e., $\tilde{G} = G \circ \Phi$ for all $G$ in the
+        $n$-qubit Clifford group $\mathbb{G}$), the parameter $p$ coincides with the depolarizing
+        probability of the depolarizing channel $\Phi_{\text{dep}}$. Using the fact that the average
+        gate fidelity is invariant under twirling<span class="cite" data-key="nielsen_simple_2002"></span>,
+        and that the $n$-qubit Clifford group forms a unitary
+        2-design<span class="cite" data-key="dankert_exact_2009"></span>, one can then estimate the
+        average gate infidelity (or average error rate) of the noise model
+        $\Phi$<span class="cite" data-key="silva_hands-introduction_2025"></span>:
+      </p>
+
+      \begin{equation}
+        r_{\text{avg}}(\Phi, \mathcal{I})
+        = 1 - \underbrace{\int d\ket{\psi}\, \mel{\psi}{\Phi(\ketbra{\psi})}{\psi}}_{\text{average gate fidelity}}
+        = 1 - \int d\ket{\psi}\, \mel{\psi}{\Phi_{\text{dep}}(\ketbra{\psi})}{\psi}
+        = \frac{(1-p)(4^n - 1)}{4^n}.
+        \label{eq:avg_infidelity}
+      \end{equation}
+
+      <p>
+        Wallman<span class="cite" data-key="wallman_randomized_2018"></span> showed that standard RB
+        works almost the same even in the presence of gate-dependent noise
+        ($\tilde{G} = G \circ \Phi_G$), and that the extracted decay parameter $p$ still reliably
+        quantifies the average gate (or gateset circuit) fidelity, as in the ideal gate-independent
+        case. Furthermore, RB-like protocols<span class="cite" data-key="magesan_robust_2011 gambetta_characterization_2012 carignan-dugas_characterizing_2015 helsen_new_2019 magesan_efficient_2012"></span>
+        primarily assess the quality of an <em>entire gateset</em>, rather than the process fidelity
+        of a single gate or a specific layer of gates. Cycle
+        benchmarking<span class="cite" data-key="erhard_characterizing_2019"></span> addresses this
+        limitation by providing a scalable, SPAM-robust protocol for estimating the process fidelity
+        of a fixed cycle of gates implemented in parallel.
+      </p>
+
+      <h2>2. Randomized Compiling (RC)</h2>
+
+      <p>
+        Randomized compiling<span class="cite" data-key="wallman_noise_2016 hashim_randomized_2021"></span>
+        is an error-suppression protocol that works by tailoring the noise acting on different cycles
+        into Pauli channels via Pauli twirling. Pauli channels are particularly convenient to analyze
+        because they are stochastic channels, and therefore their diamond distance from the identity
+        (the worst-case error rate) is tightly related to the process infidelity: in general, the
+        process infidelity is a lower bound on the diamond distance for arbitrary
+        channels<span class="cite" data-key="wallman_noise_2016"></span>, but for any stochastic
+        channel this bound is saturated, so the process infidelity equals the diamond
+        distance<span class="cite" data-key="graydon_designing_2022"></span>.
+      </p>
+
+      <p>
+        Moreover, a Pauli channel $\Phi_{\mathbb{P}}$ with Kraus operators
+        $\{\sqrt{p(\mathcal{P})}\,\mathcal{P}\}$ can be expressed in the natural
+        representation $K$<span class="cite" data-key="watrous_theory_2018"></span> in the Pauli
+        basis (also known as the Pauli transfer
+        matrix<span class="cite" data-key="helsen_spectral_2019"></span>) as
+        $K_\mathbb{P}(\Phi_\mathbb{P}) = \operatorname{diag}(\vec{\lambda}_\mathbb{P})$,
+        which will be useful for the cycle benchmarking analysis. The components $\lambda_\mathcal{P}$
+        are linear combinations of the Pauli probabilities $\{p(\mathcal{P})\}$:
+      </p>
+
+      \begin{equation}
+        \lambda_\mathcal{P}
+        = \sum_{\mathcal{Q} \in \mathbb{P}^{\otimes n}} (-1)^{\omega(\mathcal{P},\mathcal{Q})}\, p(\mathcal{Q}),
+        \qquad
+        \omega(\mathcal{P}, \mathcal{P}')
+        = \begin{cases}
+            0 & \text{if } \mathcal{P} \text{ and } \mathcal{P}' \text{ commute,} \\
+            1 & \text{if } \mathcal{P} \text{ and } \mathcal{P}' \text{ anti-commute.}
+          \end{cases}
+        \label{eq:pauli_eigenvalues}
+      \end{equation}
+
+      <h2>3. Cycle Benchmarking (CB)</h2>
+
+      <p>
+        Let $\mathcal{G}$ be a cycle of interest on $n$ qubits, composed of one or more Clifford
+        gates. Assume the noise is Markovian, the local Pauli gates are affected by a gate-independent
+        noise model such that $\tilde{\mathcal{P}} = \mathcal{E} \circ \mathcal{P}$ for all
+        $\mathcal{P} \in \mathbb{P}^{\otimes n}$, and
+        $\tilde{\mathcal{G}} = \mathcal{G} \circ \Lambda$. The quantity estimated by CB is
+      </p>
+
+      \begin{equation}
+        F_{\text{CB}}(\tilde{\mathcal{G}}, \mathcal{G})
+        = \frac{1}{|\mathbb{P}^{\otimes n}|} \sum_{\mathcal{P} \in \mathbb{P}^{\otimes n}}
+          \mathcal{F}(\tilde{\mathcal{G}} \circ \tilde{\mathcal{P}},\, \mathcal{G} \circ \mathcal{P})
+        = \frac{1}{|\mathbb{P}^{\otimes n}|} \sum_{\mathcal{P} \in \mathbb{P}^{\otimes n}}
+          \mathcal{F}(\Lambda \circ \mathcal{E},\, \mathcal{I})
+        = \frac{1}{|\mathbb{P}^{\otimes n}|} \sum_{\mathcal{P} \in \mathbb{P}^{\otimes n}}
+          \lambda_\mathcal{P},
+        \label{eq:F_CB}
+      \end{equation}
+
+      <p>
+        where $\mathbb{P}^{\otimes n}$ is the $n$-qubit Pauli group, $\lambda_\mathcal{P}$ are the
+        Pauli eigenvalues (defined in $\eqref{eq:pauli_eigenvalues}$) of the Pauli twirled noise
+        channel $\mathcal{T}_\mathbb{P}(\Lambda \circ \mathcal{E})$, and $\mathcal{F}$ is the process
+        fidelity (also known as entanglement fidelity), represented in the natural representation
+        picture $K$<span class="cite" data-key="watrous_theory_2018"></span> as
+      </p>
+
+      \begin{equation}
+        \mathcal{F}(\Phi, \Xi)
+        = \frac{1}{4^n} \langle K(\Phi), K(\Xi) \rangle,
+        \qquad
+        \mathcal{F}(\Psi, \mathcal{I})
+        = \frac{1}{4^n} \langle K(\Psi), K(\mathcal{I}) \rangle
+        = \frac{1}{4^n} \Tr(K(\Psi)).
+        \label{eq:process_fidelity}
+      \end{equation}
+
+      <p>
+        The final equality in $\eqref{eq:F_CB}$ follows from the fact that the trace is
+        preserved under a unitary change of basis, and that Pauli twirling preserves the diagonal
+        elements of the Pauli transfer matrix<span class="cite" data-key="hashim_randomized_2021"></span>.
+        Therefore,
+      </p>
+
+      \begin{equation}
+        \Tr(K(\Lambda \circ \mathcal{E}))
+        = \Tr(K_\mathbb{P}(\Lambda \circ \mathcal{E}))
+        = \Tr(K_\mathbb{P}(\mathcal{T}_\mathbb{P}(\Lambda \circ \mathcal{E})))
+        = \Tr(\operatorname{diag}(\vec{\lambda}_\mathbb{P}))
+        = \sum_{\mathcal{P} \in \mathbb{P}^{\otimes n}} \lambda_\mathcal{P}.
+      \end{equation}
+
+      <p>We now briefly summarize how the cycle benchmarking protocol works<span class="cite" data-key="erhard_characterizing_2019"></span>:</p>
+
+      <ol>
+        <li>
+          Choose $m_1, m_2$ so that $\mathcal{G}^{m_1} = \mathcal{G}^{m_2} = \mathcal{I}$ and a
+          subset $\mathbb{P}'^{\otimes n} \subseteq \mathbb{P}^{\otimes n}$.
+        </li>
+        <li>
+          Pick a Pauli $\mathcal{P} \in \mathbb{P}'^{\otimes n}$ and prepare the $+1$ eigenstate of
+          $\mathcal{P}$, denoted $\ket{\psi_\mathcal{P}}$, such that
+          $\mathcal{P}\ket{\psi_\mathcal{P}} = \ket{\psi_\mathcal{P}}$.
+        </li>
+        <li>
+          For each $m \in \{m_1, m_2\}$ and $l \in \{1, \ldots, L\}$, where $L$ is the number of
+          randomizations:
+          <ol type="a" style="margin-top:0.5rem;">
+            <li>
+              Select a vector
+              $\vec{\mathcal{R}}(m, l) = (\mathcal{R}_0(l), \mathcal{R}_1(l), \ldots, \mathcal{R}_m(l))$
+              of random $n$-qubit Paulis and run the cycle benchmarking circuit
+              \begin{equation}
+                \mathcal{C}(\mathcal{P}, \vec{\mathcal{R}}(m,l))\,\ket{\psi_\mathcal{P}}
+                = \mathcal{R}_m(l)\,\mathcal{G}\,\mathcal{R}_{m-1}(l)\,\mathcal{G}\,\cdots\,
+                  \mathcal{R}_1(l)\,\mathcal{G}\,\mathcal{R}_0(l)\,\ket{\psi_\mathcal{P}}.
+              \end{equation}
+            </li>
+            <li>Apply an appropriate change of basis to measure in the computational basis.</li>
+            <li>
+              Measure in the computational basis to estimate the expectation value $f_{\mathcal{P},m,l}$
+              for all randomizing circuits $\{\mathcal{C}(\mathcal{P}, \vec{\mathcal{R}}(m,l))\}_{l=1}^L$.
+            </li>
+          </ol>
+        </li>
+        <li>Repeat steps 2 and 3 for all $\mathcal{P} \in \mathbb{P}'^{\otimes n}$.</li>
+        <li>
+          The estimator of $F_{\text{CB}}$ is given by
+          \begin{equation}
+            \hat{F}_{\text{CB}}
+            = \frac{1}{|\mathbb{P}'^{\otimes n}|} \sum_{\mathcal{P} \in \mathbb{P}'^{\otimes n}}
+              \left(\frac{\sum_{l=1}^L f_{\mathcal{P},m_2,l}}{\sum_{l=1}^L f_{\mathcal{P},m_1,l}}\right)^{\!\frac{1}{m_2 - m_1}}
+            = \frac{1}{|\mathbb{P}'^{\otimes n}|} \sum_{\mathcal{P} \in \mathbb{P}'^{\otimes n}} \hat{\lambda}_\mathcal{P}.
+            \label{eq:F_hat_CB}
+          \end{equation}
+        </li>
+      </ol>
+
+      <h3>Key properties of the CB protocol</h3>
+
+      <p>We highlight several important aspects of CB:</p>
+
+      <ol>
+        <li>
+          As the number of qubits increases, the required values of $m_1$ and $m_2$ generally become
+          larger, increasing the computational resources
+          needed<span class="cite" data-key="fan_calibrating_2025"></span>.
+        </li>
+        <li>
+          Ideally, we would choose $\mathbb{P}'^{\otimes n} = \mathbb{P}^{\otimes n}$, but this is
+          infeasible because the number of Paulis grows exponentially with qubit number. Erhard et
+          al.<span class="cite" data-key="erhard_characterizing_2019"></span> showed that the fidelity
+          can instead be accurately estimated using a fixed number of Paulis, independent of system
+          size. In practice, choosing $\min(40, 4^n - 1)$ Paulis is typically
+          sufficient<span class="cite" data-key="beale_2020_3945250"></span>.
+        </li>
+        <li>
+          The insertion of random Paulis around the target cycle $\mathcal{G}$ effectively implements
+          Pauli twirling of the noise between gates, mimicking the effect of the randomized compiling
+          protocol<span class="cite" data-key="wallman_noise_2016"></span>. In the limit as $L \to \infty$,
+          the resulting noise channels converge to fully stochastic Pauli channels.
+        </li>
+        <li>
+          <p>When $\mathcal{P}$ commutes with $\mathcal{G}$, we have $\hat{\lambda}_\mathcal{P} = \lambda_\mathcal{P}$. Otherwise,</p>
+          \begin{equation}
+            \hat{\lambda}_\mathcal{P}
+            = \left(\prod_{\mathcal{Q} \in \mathcal{P}^{\circlearrowright \mathcal{G}}} \lambda_\mathcal{Q}\right)^{1/\left|\mathcal{P}^{\circlearrowright \mathcal{G}}\right|},
+          \end{equation}
+          <p>
+            where $\mathcal{P}^{\circlearrowright \mathcal{G}}$ is a $\mathcal{G}$-orbit<span class="cite" data-key="carignan-dugas_error_2023"></span>, defined as
+          </p>
+          \begin{equation}
+            \mathcal{P}^{\circlearrowright \mathcal{G}}
+            = \bigl\{\mathcal{G}^j \mathcal{P} \mathcal{G}^{-j} \mid j \in \mathbb{N}\bigr\}.
+          \end{equation}
+          <p>By the AM–GM inequality,</p>
+          \begin{equation}
+            \hat{\lambda}_\mathcal{P}
+            = \left(\prod_{\mathcal{Q} \in \mathcal{P}^{\circlearrowright \mathcal{G}}} \lambda_\mathcal{Q}\right)^{1/\left|\mathcal{P}^{\circlearrowright \mathcal{G}}\right|}
+            \leq \frac{1}{\left|\mathcal{P}^{\circlearrowright \mathcal{G}}\right|}
+              \sum_{\mathcal{Q} \in \mathcal{P}^{\circlearrowright \mathcal{G}}} \lambda_\mathcal{Q}.
+          \end{equation}
+          <p>
+            The set of $\mathcal{G}$-orbits $(\mathbb{P}^{\otimes n})^{\circlearrowright \mathcal{G}}$
+            forms a partition over $\mathbb{P}^{\otimes n}$. Therefore, when
+            $\mathbb{P}'^{\otimes n} = \mathbb{P}^{\otimes n}$,
+          </p>
+          \begin{equation}
+            \hat{F}_{\text{CB}}
+            \leq \frac{1}{|\mathbb{P}^{\otimes n}|}
+              \sum_{\mathcal{P} \in \mathbb{P}^{\otimes n}}
+              \frac{1}{\left|\mathcal{P}^{\circlearrowright \mathcal{G}}\right|}
+              \sum_{\mathcal{Q} \in \mathcal{P}^{\circlearrowright \mathcal{G}}} \lambda_\mathcal{Q}
+            = \frac{1}{|\mathbb{P}^{\otimes n}|}
+              \sum_{\mathcal{P} \in \mathbb{P}^{\otimes n}} \lambda_\mathcal{P}
+            = F_{\text{CB}}.
+            \label{eq:cb_inequality}
+          \end{equation}
+          <p>
+            Thus, in the limit of infinite resources, $\hat{F}_{\text{CB}} \leq F_{\text{CB}}$
+            (Theorem 3 of<span class="cite" data-key="erhard_characterizing_2019"></span>).
+            Furthermore, $\hat{F}_{\text{CB}} - F_{\text{CB}} = \mathcal{O}\!\left([1 - F_{\text{CB}}]^2\right)$<span class="cite" data-key="erhard_characterizing_2019"></span>,
+            so CB is highly accurate at low infidelity rates.
+          </p>
+        </li>
+        <li>
+          Since $\hat{\lambda}_\mathcal{P}$ is not necessarily equal to $\lambda_\mathcal{P}$ for all
+          $\mathcal{P} \in \mathbb{P}^{\otimes n}$, it is not possible to "learn" the contribution of
+          each individual Pauli eigenvalue to the process
+          fidelity<span class="cite" data-key="chen_learnability_2023"></span>.
+        </li>
+        <li>
+          It is possible to benchmark the $T$ gate by twirling over the dihedral group of order 8,
+          $D_8 \cong \langle X, \sqrt{Z} \rangle$, on qubits that have $T$ gates, instead of twirling
+          over the Pauli group<span class="cite" data-key="wallman_noise_2016"></span>.
+        </li>
+        <li>
+          There are other CB-like protocols, such as character cycle benchmarking
+          (CCB)<span class="cite" data-key="zhang_scalable_2023"></span>, where one may choose any
+          arbitrary $\mathcal{G}$ and $m$-values rather than restricting to Clifford cycles satisfying
+          $\mathcal{G}^m = \mathcal{I}$, and character average benchmarking
+          (CAB)<span class="cite" data-key="zhang_scalable_2023"></span>, which reduces resource
+          requirements by partially depolarizing the noise via local Clifford twirling.
+        </li>
+      </ol>
+
+      <h2>4. Results</h2>
+
+      <p>
+        We ran cycle benchmarking in a
+        simulator<span class="cite" data-key="beale_2020_3945250"></span> for three noisy gates of
+        interest — $H$, $T$, and CNOT — and an idling cycle, under three different noise models on
+        the twirling gates:
+      </p>
+
+      <ol>
+        <li>a small $X$-rotation (gate-independent),</li>
+        <li>a gate-dependent over-rotation error model ($\tilde{U} = U^{1+\epsilon}$),</li>
+        <li>
+          a model where the twirling gates are decomposed into $ZX$
+          form<span class="cite" data-key="mckay_efficient_2017"></span> and a small $X$-rotation
+          is applied to the $\sqrt{X}$ gates.
+        </li>
+      </ol>
+
+      <p>
+        We observed that, up to numerical precision, the inequality in $\eqref{eq:cb_inequality}$ was
+        satisfied for each error model. However, the gap between $\hat{F}_{\text{CB}}$ and
+        $F_{\text{CB}}$ was extremely large for the gate-dependent over-rotation error model, while
+        it remained very tight for both the gate-independent and $ZX$-decomposition error models.
+        Interestingly, the $ZX$-decomposition error on the twirling gates yielded the highest variance
+        in infidelity (i.e., was highly gate-dependent), yet the estimation of $F_{\text{CB}}$ was
+        still very accurate.
+      </p>
+
+      <p>
+        We were able to reconcile the underestimation of $F_{\text{CB}}$ for the Clifford gates under
+        the over-rotation error model by comparing the estimator $\hat{F}_{\text{CB}}$ to a different
+        figure of merit, namely $F_{\text{CB}}^{\mathcal{U}}$, defined as
+      </p>
+
+      \begin{equation}
+        F_{\text{CB}}^{\mathcal{U}}
+        = \frac{1}{|\mathbb{P}^{\otimes n}|}
+          \sum_{\mathcal{P} \in \mathbb{P}^{\otimes n}}
+          \mathcal{F}\!\left(\tilde{\mathcal{G}} \circ \tilde{\mathcal{P}},\;
+            \mathcal{U}(\mathcal{G} \circ \mathcal{P})\mathcal{U}^\dagger\right),
+      \end{equation}
+
+      <p>
+        where $\mathcal{U}$ can be numerically obtained via Equation 17 of<span class="cite" data-key="carignan-dugas_randomized_2018"></span>
+        and depends on the chosen noise model. Note that if $\mathcal{U} = \mathcal{I}$, which holds
+        when the twirling gates are subject to gate-independent noise, then
+        $F_{\text{CB}}^{\mathcal{U}} = F_{\text{CB}}$. In the case of the $T$ gate, we find that
+        $\hat{F}_{\text{CB}} - F_{\text{CB}}^{\mathcal{U}} < \hat{F}_{\text{CB}} - F_{\text{CB}}$,
+        although the gap remains noticeable.<span class="cite" data-key="hashim_randomized_2021"></span>
+      </p>
+
+      <section class="references-section">
+        <h2>References</h2>
+        <div id="post-references"></div>
+      </section>
+
+    </article>
+  </div>
+
+  <!--
+    ============================================================
+    CITATION DATA
+    ============================================================
+  -->
+  <script type="application/json" id="post-citations">
+  {
+    "magesan_robust_2011": {
+      "authors": "E. Magesan, J.M. Gambetta, J. Emerson",
+      "title": "Robust randomized benchmarking of quantum processes",
+      "venue": "Physical Review Letters",
+      "volume": "106",
+      "pages": "180504",
+      "year": 2011,
+      "url": "https://doi.org/10.1103/PhysRevLett.106.180504",
+      "note": "arXiv:1009.3639 [quant-ph]"
+    },
+    "gambetta_characterization_2012": {
+      "authors": "J.M. Gambetta, A.D. Córcoles, S.T. Merkel, B.R. Johnson, J.A. Smolin, J.M. Chow, C.A. Ryan, C. Rigetti, S. Poletto, T.A. Ohki, M.B. Ketchen, M. Steffen",
+      "title": "Characterization of addressability by simultaneous randomized benchmarking",
+      "venue": "Physical Review Letters",
+      "volume": "109",
+      "pages": "240504",
+      "year": 2012,
+      "url": "https://doi.org/10.1103/PhysRevLett.109.240504"
+    },
+    "carignan-dugas_characterizing_2015": {
+      "authors": "A. Carignan-Dugas, J.J. Wallman, J. Emerson",
+      "title": "Characterizing universal gate sets via dihedral benchmarking",
+      "venue": "Physical Review A",
+      "volume": "92",
+      "pages": "060302",
+      "year": 2015,
+      "url": "https://doi.org/10.1103/PhysRevA.92.060302",
+      "note": "arXiv:1508.06312 [quant-ph]"
+    },
+    "helsen_new_2019": {
+      "authors": "J. Helsen, X. Xue, L.M.K. Vandersypen, S. Wehner",
+      "title": "A new class of efficient randomized benchmarking protocols",
+      "venue": "npj Quantum Information",
+      "volume": "5",
+      "pages": "71",
+      "year": 2019,
+      "url": "https://doi.org/10.1038/s41534-019-0182-7"
+    },
+    "magesan_efficient_2012": {
+      "authors": "E. Magesan, J.M. Gambetta, B.R. Johnson, C.A. Ryan, J.M. Chow, S.T. Merkel, M.P. da Silva, G.A. Keefe, M.B. Rothwell, T.A. Ohki, M.B. Ketchen, M. Steffen",
+      "title": "Efficient measurement of quantum gate error by interleaved randomized benchmarking",
+      "venue": "Physical Review Letters",
+      "volume": "109",
+      "pages": "080505",
+      "year": 2012,
+      "url": "https://doi.org/10.1103/PhysRevLett.109.080505",
+      "note": "arXiv:1203.4550 [quant-ph]"
+    },
+    "nielsen_simple_2002": {
+      "authors": "M.A. Nielsen",
+      "title": "A simple formula for the average gate fidelity of a quantum dynamical operation",
+      "venue": "Physics Letters A",
+      "volume": "303",
+      "pages": "249–252",
+      "year": 2002,
+      "url": "https://doi.org/10.1016/S0375-9601(02)01272-0",
+      "note": "arXiv:quant-ph/0205035"
+    },
+    "dankert_exact_2009": {
+      "authors": "C. Dankert, R. Cleve, J. Emerson, E. Livine",
+      "title": "Exact and approximate unitary 2-designs: constructions and applications",
+      "venue": "Physical Review A",
+      "volume": "80",
+      "pages": "012304",
+      "year": 2009,
+      "url": "https://doi.org/10.1103/PhysRevA.80.012304",
+      "note": "arXiv:quant-ph/0606161"
+    },
+    "silva_hands-introduction_2025": {
+      "authors": "A. Silva, E. Greplova",
+      "title": "Hands-on introduction to randomized benchmarking",
+      "venue": "SciPost Physics Lecture Notes",
+      "pages": "97",
+      "year": 2025,
+      "url": "https://doi.org/10.21468/SciPostPhysLectNotes.97",
+      "note": "arXiv:2410.08683 [quant-ph]"
+    },
+    "wallman_randomized_2018": {
+      "authors": "J.J. Wallman",
+      "title": "Randomized benchmarking with gate-dependent noise",
+      "venue": "Quantum",
+      "volume": "2",
+      "pages": "47",
+      "year": 2018,
+      "url": "https://doi.org/10.22331/q-2018-01-29-47",
+      "note": "arXiv:1703.09835 [quant-ph]"
+    },
+    "erhard_characterizing_2019": {
+      "authors": "A. Erhard, J.J. Wallman, L. Postler, M. Meth, R. Stricker, E.A. Martinez, P. Schindler, T. Monz, J. Emerson, R. Blatt",
+      "title": "Characterizing large-scale quantum computers via cycle benchmarking",
+      "venue": "Nature Communications",
+      "volume": "10",
+      "pages": "5347",
+      "year": 2019,
+      "url": "https://doi.org/10.1038/s41467-019-13068-7",
+      "note": "arXiv:1902.08543 [quant-ph]"
+    },
+    "wallman_noise_2016": {
+      "authors": "J.J. Wallman, J. Emerson",
+      "title": "Noise tailoring for scalable quantum computation via randomized compiling",
+      "venue": "Physical Review A",
+      "volume": "94",
+      "pages": "052325",
+      "year": 2016,
+      "url": "https://doi.org/10.1103/PhysRevA.94.052325",
+      "note": "arXiv:1512.01098 [quant-ph]"
+    },
+    "hashim_randomized_2021": {
+      "authors": "A. Hashim, R.K. Naik, A. Morvan, J.-L. Ville, B. Mitchell, J.M. Kreikebaum, M. Davis, E. Smith, C. Iancu, K.P. O'Brien, I. Hincks, J.J. Wallman, J. Emerson, I. Siddiqi",
+      "title": "Randomized compiling for scalable quantum computing on a noisy superconducting quantum processor",
+      "venue": "Physical Review X",
+      "volume": "11",
+      "pages": "041039",
+      "year": 2021,
+      "url": "https://doi.org/10.1103/PhysRevX.11.041039",
+      "note": "arXiv:2010.00215 [quant-ph]"
+    },
+    "graydon_designing_2022": {
+      "authors": "M.A. Graydon, J. Skanes-Norman, J.J. Wallman",
+      "title": "Designing stochastic channels",
+      "venue": "arXiv",
+      "year": 2022,
+      "url": "https://doi.org/10.48550/arXiv.2201.07156",
+      "note": "arXiv:2201.07156 [quant-ph]"
+    },
+    "watrous_theory_2018": {
+      "authors": "J. Watrous",
+      "title": "The Theory of Quantum Information",
+      "venue": "Cambridge University Press",
+      "year": 2018,
+      "url": "https://doi.org/10.1017/9781316848142"
+    },
+    "helsen_spectral_2019": {
+      "authors": "J. Helsen, F. Battistel, B.M. Terhal",
+      "title": "Spectral quantum tomography",
+      "venue": "npj Quantum Information",
+      "volume": "5",
+      "pages": "74",
+      "year": 2019,
+      "url": "https://doi.org/10.1038/s41534-019-0189-0"
+    },
+    "beale_2020_3945250": {
+      "authors": "S.J. Beale, K. Boone, A. Carignan-Dugas, et al.",
+      "title": "True-Q",
+      "venue": "Zenodo",
+      "year": 2020,
+      "url": "https://doi.org/10.5281/zenodo.3945250"
+    },
+    "carignan-dugas_error_2023": {
+      "authors": "A. Carignan-Dugas, D. Dahlen, I. Hincks, E. Ospadov, S.J. Beale, S. Ferracin, J. Skanes-Norman, J. Emerson, J.J. Wallman",
+      "title": "The error reconstruction and compiled calibration of quantum computing cycles",
+      "venue": "arXiv",
+      "year": 2023,
+      "url": "https://doi.org/10.48550/arXiv.2303.17714",
+      "note": "arXiv:2303.17714 [quant-ph]"
+    },
+    "chen_learnability_2023": {
+      "authors": "S. Chen, Y. Liu, M. Otten, A. Seif, B. Fefferman, L. Jiang",
+      "title": "The learnability of Pauli noise",
+      "venue": "Nature Communications",
+      "volume": "14",
+      "pages": "52",
+      "year": 2023,
+      "url": "https://doi.org/10.1038/s41467-022-35759-4",
+      "note": "arXiv:2206.06362 [quant-ph]"
+    },
+    "zhang_scalable_2023": {
+      "authors": "Y. Zhang, W. Yu, P. Zeng, G. Liu, X. Ma",
+      "title": "Scalable fast benchmarking for individual quantum gates with local twirling",
+      "venue": "Photonics Research",
+      "volume": "11",
+      "pages": "81",
+      "year": 2023,
+      "url": "https://doi.org/10.1364/PRJ.473970",
+      "note": "arXiv:2203.10320 [quant-ph]"
+    },
+    "mckay_efficient_2017": {
+      "authors": "D.C. McKay, C.J. Wood, S. Sheldon, J.M. Chow, J.M. Gambetta",
+      "title": "Efficient Z-gates for quantum computing",
+      "venue": "Physical Review A",
+      "volume": "96",
+      "pages": "022330",
+      "year": 2017,
+      "url": "https://doi.org/10.1103/PhysRevA.96.022330",
+      "note": "arXiv:1612.00858 [quant-ph]"
+    },
+    "carignan-dugas_randomized_2018": {
+      "authors": "A. Carignan-Dugas, K. Boone, J.J. Wallman, J. Emerson",
+      "title": "From randomized benchmarking experiments to gateset circuit fidelity: how to interpret randomized benchmarking decay parameters",
+      "venue": "New Journal of Physics",
+      "volume": "20",
+      "pages": "092001",
+      "year": 2018,
+      "url": "https://doi.org/10.1088/1367-2630/aadcc7",
+      "note": "arXiv:1804.01122 [quant-ph]"
+    },
+    "fan_calibrating_2025": {
+      "authors": "D. Fan, G. Liu, S. Li, M. Gong, D. Wu, Y. Zhang, et al.",
+      "title": "Calibrating quantum gates up to 52 qubits in a superconducting processor",
+      "venue": "npj Quantum Information",
+      "volume": "11",
+      "pages": "33",
+      "year": 2025,
+      "url": "https://doi.org/10.1038/s41534-025-00983-5",
+      "note": "arXiv:2505.22390 [quant-ph]"
+    }
+  }
+  </script>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <p>&copy; 2025 Danesh Morales</p>
+      <p class="footer-sub">Hosted on <a href="https://pages.github.com" target="_blank" rel="noopener">GitHub Pages</a></p>
+    </div>
+  </footer>
+
+  <script src="../../script.js"></script>
+</body>
+</html>
