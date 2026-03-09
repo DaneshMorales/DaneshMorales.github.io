@@ -166,7 +166,7 @@ function initCitations() {
       return `${first}&ndash;${last}`;           // 3+ consecutive → range
     }).join(', ');
 
-    const sup = document.createElement('sup');
+    const sup = document.createElement('span');
     sup.className = 'cite-sup';
     sup.innerHTML = `[${rendered}]`;
     span.replaceWith(sup);
