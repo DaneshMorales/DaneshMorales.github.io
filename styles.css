@@ -338,6 +338,28 @@ h1, h2, h3, h4 { line-height: 1.25; color: var(--text); }
 }
 .paper-card:hover { box-shadow: var(--shadow-md); border-color: var(--accent); }
 
+/* Compact card: abstract hidden until toggled */
+.paper-card.compact { padding: 1.25rem 1.5rem; }
+.paper-card.compact .paper-abstract { display: none; }
+.paper-card.compact.expanded .paper-abstract { display: block; }
+
+.toggle-abstract {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  transition: color var(--transition);
+}
+.toggle-abstract:hover { color: var(--accent); }
+.toggle-abstract i { font-size: 0.7rem; transition: transform 0.2s; }
+.paper-card.expanded .toggle-abstract i { transform: rotate(180deg); }
+
 .paper-header {
   display: flex;
   align-items: center;

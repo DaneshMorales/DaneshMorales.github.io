@@ -1,16 +1,12 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-  <style>
-    .bg { fill: #2563eb; }
-    @media (prefers-color-scheme: dark) {
-      .bg { fill: #3b82f6; }
-    }
-  </style>
-  <rect class="bg" width="32" height="32" rx="7"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200">
+  <!-- Blue rounded rectangle background -->
+  <rect width="200" height="200" rx="44" ry="44" fill="#3B82F6"/>
+  <!-- Psi symbol centered -->
   <text
-    x="16"
-    y="16"
-    font-family="Georgia, 'Times New Roman', serif"
-    font-size="20"
+    x="100"
+    y="80"
+    font-family="Georgia, serif"
+    font-size="120"
     fill="white"
     text-anchor="middle"
     dominant-baseline="central"

@@ -261,9 +261,22 @@ function initTOC() {
   headings.forEach(h => obs.observe(h));
 }
 
+/* =============================================
+   Abstract toggle — works on any page with
+   .paper-card.compact + .toggle-abstract buttons
+   ============================================= */
+function initAbstractToggles() {
+  document.querySelectorAll('.toggle-abstract').forEach(btn => {
+    btn.addEventListener('click', () => {
+      btn.closest('.paper-card').classList.toggle('expanded');
+    });
+  });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   initCitations();
   initTOC();
+  initAbstractToggles();
 });
 
 /* =============================================
