@@ -16,7 +16,7 @@ function applyTheme(theme) {
 
   // Update both toggle icons (mobile top-bar + desktop in menu)
   document.querySelectorAll('.theme-toggle i').forEach(icon => {
-    icon.className = theme === 'dark' ? 'fas fa-moon' : 'far fa-sun';
+    icon.className = theme === 'dark' ? 'fas fa-moon' : 'fas fa-sun';
   });
 }
 
