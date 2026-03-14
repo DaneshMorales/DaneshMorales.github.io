@@ -759,7 +759,15 @@ h1, h2, h3, h4 { line-height: 1.25; color: var(--text); }
    ============================================== */
 @media (max-width: 768px) {
   /* Show mobile controls */
-  .nav-controls { display: flex; }
+  .nav-controls { display: flex; align-items: center; }
+
+  /* Mobile toggle: match hamburger height and center vertically */
+  .nav-controls .theme-toggle {
+    padding: 4px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+  }
 
   /* Hide desktop-only theme toggle */
   .theme-toggle-desk { display: none; }
