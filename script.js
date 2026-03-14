@@ -168,7 +168,7 @@ function initCitations() {
 
     const sup = document.createElement('span');
     sup.className = 'cite-sup';
-    sup.innerHTML = `[${rendered}]`;
+    sup.innerHTML = ` [${rendered}]`;
     span.replaceWith(sup);
   });
 

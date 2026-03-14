@@ -192,22 +192,51 @@ h1, h2, h3, h4 { line-height: 1.25; color: var(--text); }
 }
 .social-icon:hover { color: var(--accent) !important; background: var(--accent-bg); }
 
-/* Dark mode toggle button */
+/* Dark mode toggle — pill switch */
 .theme-toggle {
   background: none;
   border: none;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
-  justify-content: center;
-  width: 32px;
-  height: 32px;
-  border-radius: 6px;
-  font-size: 0.9rem;
-  color: var(--text-muted);
-  transition: color var(--transition), background var(--transition);
+  padding: 2px;
+  border-radius: 99px;
+  transition: background var(--transition);
 }
-.theme-toggle:hover { color: var(--accent); background: var(--accent-bg); }
+.theme-toggle:hover { background: var(--accent-bg); }
+
+.toggle-track {
+  display: inline-flex;
+  align-items: center;
+  width: 44px;
+  height: 24px;
+  background: var(--border);
+  border-radius: 99px;
+  position: relative;
+  transition: background var(--transition);
+  flex-shrink: 0;
+}
+[data-theme="dark"] .toggle-track { background: var(--accent); }
+
+.toggle-thumb {
+  position: absolute;
+  left: 3px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.6rem;
+  color: #94a3b8;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.25);
+  transition: transform var(--transition), color var(--transition);
+}
+[data-theme="dark"] .toggle-thumb {
+  transform: translateX(20px);
+  color: #f59e0b;
+}
 
 /* Mobile controls (theme + hamburger) */
 .nav-controls {

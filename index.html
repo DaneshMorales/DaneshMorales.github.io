@@ -23,7 +23,7 @@
       <!-- Mobile top-right: theme toggle + hamburger -->
       <div class="nav-controls">
         <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
-          <i class="fas fa-moon" id="theme-icon"></i>
+          <span class="toggle-track"><span class="toggle-thumb"><i class="fas fa-moon"></i></span></span>
         </button>
         <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
           <span></span><span></span><span></span>
@@ -44,24 +44,19 @@
 
         <div class="nav-meta">
           <div class="nav-socials">
-            <!-- TODO: replace href="#" with your actual profile URLs -->
-            <a href="#" class="social-icon" aria-label="Google Scholar" title="Google Scholar">
-              <i class="fas fa-graduation-cap"></i>
+            <a href="https://scholar.google.com/citations?hl=en&user=f_ltr8oAAAAJ" class="social-icon" aria-label="Google Scholar" title="Google Scholar" target="_blank" rel="noopener">
+              <i class="ai ai-google-scholar"></i>
             </a>
-            <a href="#" class="social-icon" aria-label="LinkedIn" title="LinkedIn">
+            <a href="https://www.linkedin.com/in/daneshmh/" class="social-icon" aria-label="LinkedIn" title="LinkedIn" target="_blank" rel="noopener">
               <i class="fab fa-linkedin-in"></i>
             </a>
-            <a href="#" class="social-icon" aria-label="GitHub" title="GitHub">
-              <i class="fab fa-github"></i>
-            </a>
-            <!-- TODO: replace with your email -->
-            <a href="mailto:your.email@university.edu" class="social-icon" aria-label="Email" title="Email">
+            <a href="mailto:danesh.moraleshashemi@uwaterloo.ca" class="social-icon" aria-label="Email" title="Email">
               <i class="fas fa-envelope"></i>
             </a>
           </div>
           <!-- Desktop-only theme toggle (inside menu row) -->
-          <button class="theme-toggle theme-toggle-desk" id="theme-toggle-desk" aria-label="Toggle dark mode">
-            <i class="fas fa-moon" id="theme-icon-desk"></i>
+          <button class="theme-toggle theme-toggle-desk" aria-label="Toggle dark mode">
+            <span class="toggle-track"><span class="toggle-thumb"><i class="fas fa-moon"></i></span></span>
           </button>
         </div>
       </div>
@@ -96,13 +91,11 @@
             under the supervision of
             <a href="https://gsbsmith.ca/" target="_blank" rel="noopener">Prof. Graeme Smith</a>.
             <!-- TODO: describe your specific research focus -->
-            My research focuses on [your specific research focus].
+            My research focuses on quantum error correction under realistic noise, specifically the behavior of QEC codes in the presence of non-Markovian (temporally correlated) noise.
           </p>
           <p class="about-bio">
             I hold a Bachelor of Mathematics in Mathematical Physics with a minor in
-            Pure Mathematics, also from the University of Waterloo.
-            I am broadly interested in the theoretical foundations of quantum information
-            and near-term quantum technologies.
+            Pure Mathematics, also from the University of Waterloo. I am broadly interested in the theoretical aspects of quantum error correction and fault tolerance, open quantum systems, and the development of practical protocols for error mitigation, characterization, and suppression in near-term quantum devices.
           </p>
 
           <div class="interests">
@@ -110,8 +103,11 @@
             <div class="interest-tags">
               <!-- TODO: edit tags to match your actual interests -->
               <span class="tag">Quantum Error Correction</span>
-              <span class="tag">Quantum Error Mitigation</span>
+              <span class="tag">Fault-Tolerant Quantum Computing</span>
+              <span class="tag">Non-Markovian Noise</span>
               <span class="tag">Open Quantum Systems</span>
+              <span class="tag">Quantum Error Mitigation</span>
+              <span class="tag">Quantum Characterization & Suppression</span>
             </div>
           </div>
         </div>
@@ -227,41 +223,6 @@
             Read more <i class="fas fa-arrow-right"></i>
           </a>
         </article>
-        
-
-        <article class="blog-card">
-          <div class="blog-card-meta">
-            <time class="blog-date">March 2025</time>
-            <span class="blog-tag">Quantum Information</span>
-          </div>
-          <h3 class="blog-card-title">
-            <a href="blog/posts/quantum-entanglement-basics.html">
-              Introduction to Quantum Entanglement and Bell Inequalities
-            </a>
-          </h3>
-          <p class="blog-card-excerpt">
-            A gentle introduction to quantum entanglement, the EPR paradox, and Bell inequalities.
-            We derive the CHSH inequality and discuss its experimental implications.
-          </p>
-          <a href="blog/posts/quantum-entanglement-basics.html" class="read-more">
-            Read more <i class="fas fa-arrow-right"></i>
-          </a>
-        </article>
-
-        <article class="blog-card">
-          <div class="blog-card-meta">
-            <time class="blog-date">February 2025</time>
-            <span class="blog-tag">Formalism</span>
-          </div>
-          <h3 class="blog-card-title">
-            <a href="#">The Density Matrix Formalism</a>
-          </h3>
-          <p class="blog-card-excerpt">
-            Why pure states aren't always enough: introducing the density matrix and its role
-            in describing mixed states and open quantum systems.
-          </p>
-          <a href="#" class="read-more">Read more <i class="fas fa-arrow-right"></i></a>
-        </article>
 
       </div>
 
@@ -284,16 +245,14 @@
             <i class="fas fa-envelope contact-icon"></i>
             <div>
               <h3>Email</h3>
-              <!-- TODO: your email -->
-              <a href="mailto:your.email@university.edu">your.email@university.edu</a>
+              <a href="mailto:danesh.moraleshashemi@uwaterloo.ca">danesh.moraleshashemi@uwaterloo.ca</a>
             </div>
           </div>
           <div class="contact-item">
             <i class="fas fa-map-marker-alt contact-icon"></i>
             <div>
               <h3>Office</h3>
-              <!-- TODO: add your office room number -->
-              <p>Department of Applied Mathematics<br>Institute for Quantum Computing<br>University of Waterloo<br>Waterloo, ON, Canada</p>
+              <p>QNC 4203<br>Institute for Quantum Computing<br>University of Waterloo<br>Waterloo, ON, Canada</p>
             </div>
           </div>
         </div>
@@ -301,32 +260,30 @@
         <div class="contact-socials-block">
           <h3>Find me online</h3>
           <div class="social-links-list">
-            <!-- TODO: replace href="#" with actual URLs -->
-            <!-- TODO: replace href="#" with actual profile URLs -->
-            <a href="#" class="social-link-row">
+            <a href="https://scholar.google.com/citations?hl=en&user=f_ltr8oAAAAJ" class="social-link-row" target="_blank" rel="noopener">
               <i class="ai ai-google-scholar"></i>
               <span>Google Scholar</span>
             </a>
-            <a href="#" class="social-link-row">
+            <a href="https://www.linkedin.com/in/daneshmh/" class="social-link-row" target="_blank" rel="noopener">
               <i class="fab fa-linkedin-in"></i>
               <span>LinkedIn</span>
             </a>
-            <a href="#" class="social-link-row">
-              <i class="fab fa-github"></i>
-              <span>GitHub</span>
-            </a>
-            <a href="#" class="social-link-row">
-              <i class="fab fa-twitter"></i>
-              <span>Twitter / X</span>
-            </a>
-            <a href="#" class="social-link-row">
-              <i class="fab fa-orcid"></i>
-              <span>ORCID</span>
-            </a>
-            <a href="mailto:your.email@university.edu" class="social-link-row">
+            <a href="mailto:danesh.moraleshashemi@uwaterloo.ca" class="social-link-row">
               <i class="fas fa-envelope"></i>
               <span>Email</span>
             </a>
+            <!-- <a href="#" class="social-link-row" target="_blank" rel="noopener">
+              <i class="fab fa-github"></i>
+              <span>GitHub</span>
+            </a> -->
+            <!-- <a href="#" class="social-link-row" target="_blank" rel="noopener">
+              <i class="fab fa-twitter"></i>
+              <span>Twitter / X</span>
+            </a> -->
+            <!-- <a href="#" class="social-link-row" target="_blank" rel="noopener">
+              <i class="ai ai-orcid"></i>
+              <span>ORCID</span>
+            </a> -->
           </div>
         </div>
 
