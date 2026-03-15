@@ -82,6 +82,19 @@ if (sections.length && navLinks.length) {
   }, { rootMargin: '-50% 0px -50% 0px' });
 
   sections.forEach(s => observer.observe(s));
+
+  // When scrolled to the bottom, activate the last section's nav link
+  window.addEventListener('scroll', () => {
+    if (window.innerHeight + window.scrollY >= document.body.scrollHeight - 10) {
+      const lastSection = sections[sections.length - 1];
+      navLinks.forEach(link => {
+        link.classList.toggle(
+          'active',
+          link.getAttribute('href').includes(lastSection.id)
+        );
+      });
+    }
+  }, { passive: true });
 }
 
 /* =============================================
