@@ -154,13 +154,14 @@ h1, h2, h3, h4 { line-height: 1.25; color: var(--text); }
   border-radius: 99px;
   font-size: 0.875rem;
   font-weight: 500;
-  background: var(--accent);
-  color: #fff !important;
+  background: var(--accent-bg);
+  color: var(--accent) !important;
   border: none;
-  transition: opacity var(--transition);
+  transition: background var(--transition), color var(--transition);
 }
 .nav-cv:hover {
-  opacity: 0.8;
+  background: var(--accent);
+  color: #fff !important;
 }
 
 /* Divider between links and socials */
