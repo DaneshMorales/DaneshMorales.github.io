@@ -68,33 +68,24 @@ const sections = document.querySelectorAll('section[id]');
 const navLinks  = document.querySelectorAll('.nav-link[href*="#"]');
 
 if (sections.length && navLinks.length) {
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        navLinks.forEach(link => {
-          link.classList.toggle(
-            'active',
-            link.getAttribute('href').includes(entry.target.id)
-          );
-        });
-      }
-    });
-  }, { rootMargin: '-50% 0px -50% 0px' });
-
-  sections.forEach(s => observer.observe(s));
-
-  // When scrolled to the bottom, activate the last section's nav link
-  window.addEventListener('scroll', () => {
+  function updateActiveNav() {
+    // At the bottom of the page, activate the last section
     if (window.innerHeight + window.scrollY >= document.body.scrollHeight - 10) {
-      const lastSection = sections[sections.length - 1];
-      navLinks.forEach(link => {
-        link.classList.toggle(
-          'active',
-          link.getAttribute('href').includes(lastSection.id)
-        );
-      });
+      const lastId = sections[sections.length - 1].id;
+      navLinks.forEach(l => l.classList.toggle('active', l.getAttribute('href').includes(lastId)));
+      return;
     }
-  }, { passive: true });
+    // Otherwise find the last section whose top is above the middle of the viewport
+    const mid = window.innerHeight / 2;
+    let current = sections[0].id;
+    sections.forEach(s => {
+      if (s.getBoundingClientRect().top <= mid) current = s.id;
+    });
+    navLinks.forEach(l => l.classList.toggle('active', l.getAttribute('href').includes(current)));
+  }
+
+  window.addEventListener('scroll', updateActiveNav, { passive: true });
+  updateActiveNav();
 }
 
 /* =============================================
