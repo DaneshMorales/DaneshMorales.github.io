@@ -303,7 +303,7 @@ h1, h2, h3, h4 { line-height: 1.25; color: var(--text); }
   height: 100%;
   display: block;
   object-fit: cover;
-  object-position: center top;
+  object-position: center;
 }
 
 /* ── Education timeline ── */
@@ -339,7 +339,7 @@ h1, h2, h3, h4 { line-height: 1.25; color: var(--text); }
 .edu-item::before {
   content: '';
   position: absolute;
-  left: -1.45rem;
+  left: calc(-1.25rem - 5px);
   top: 0.4rem;
   width: 8px;
   height: 8px;
