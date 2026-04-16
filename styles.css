@@ -290,18 +290,20 @@ h1, h2, h3, h4 { line-height: 1.25; color: var(--text); }
 
 .about-photo {
   width: 180px;
-  border-radius: 12px;
+  height: 180px;
+  border-radius: 50%;
   overflow: hidden;
-  border: 1px solid var(--border);
+  border: 3px solid var(--border);
   box-shadow: var(--shadow-md);
   flex-shrink: 0;
 }
 
 .about-photo img {
   width: 100%;
-  height: auto;
+  height: 100%;
   display: block;
   object-fit: cover;
+  object-position: center top;
 }
 
 /* ── Education timeline ── */
@@ -894,7 +896,7 @@ h1, h2, h3, h4 { line-height: 1.25; color: var(--text); }
 @media (max-width: 480px) {
   .section { padding: 3rem 0; }
   .blog-grid { grid-template-columns: 1fr; }
-  .about-photo { width: 130px; height: auto; }
+  .about-photo { width: 140px; height: 140px; }
 }
 
 /* ==============================================
