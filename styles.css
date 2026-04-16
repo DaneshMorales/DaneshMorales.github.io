@@ -291,6 +291,7 @@ h1, h2, h3, h4 { line-height: 1.25; color: var(--text); }
 .about-photo {
   width: 180px;
   height: 180px;
+  aspect-ratio: 1;
   border-radius: 50%;
   overflow: hidden;
   border: 3px solid var(--border);
@@ -896,7 +897,7 @@ h1, h2, h3, h4 { line-height: 1.25; color: var(--text); }
 @media (max-width: 480px) {
   .section { padding: 3rem 0; }
   .blog-grid { grid-template-columns: 1fr; }
-  .about-photo { width: 140px; height: 140px; }
+  .about-photo { width: 140px; height: 140px; aspect-ratio: 1; }
 }
 
 /* ==============================================
