@@ -119,7 +119,7 @@
           <a href="publications.html"  class="nav-link active">Publications</a>
           <a href="blog/index.html"    class="nav-link">Blog</a>
           <a href="index.html#contact" class="nav-link">Contact</a>
-          <a href="assets/cv.pdf" class="nav-cv" target="_blank" rel="noopener noreferrer">
+          <a href="files/Danesh_Resume-1.pdf" class="nav-cv" target="_blank" rel="noopener noreferrer">
             <i class="fas fa-file-alt"></i> CV
           </a>
         </div>
@@ -154,8 +154,8 @@
         <button class="filter-btn" data-filter="preprint">Preprints</button>
         <button class="filter-btn" data-filter="publication">Publications</button>
         <button class="filter-btn" data-filter="project">School Projects</button>
-        <button class="filter-btn" data-filter="2025">2026</button>
-        <button class="filter-btn" data-filter="2024">2025</button>
+        <button class="filter-btn" data-filter="2025">2025</button>
+        <button class="filter-btn" data-filter="2024">2024</button>
       </div>
     </div>
   </div>
@@ -169,29 +169,88 @@
         <div class="pub-year-label">2025</div>
         <div class="pub-list">
 
-          <!-- TODO: replace with your actual papers -->
-          <div class="paper-card compact" data-type="preprint" data-year="2025">
+          <div class="paper-card compact" data-type="project" data-year="2025">
             <div class="paper-header">
-              <span class="paper-year">2026</span>
-              <span class="badge badge-preprint">Preprint</span>
+              <span class="paper-year">2025</span>
+              <span class="badge badge-project">School Project</span>
             </div>
-            <h3 class="paper-title">Your Paper Title Here</h3>
+            <h3 class="paper-title">Demonstrating Circuit Benchmarking for Efficient and Scalable Fidelity Estimation</h3>
             <p class="paper-authors">
-              <strong>Danesh Morales Hashemi</strong>, Co-author One, Co-author Two
+              <strong>Danesh Morales Hashemi</strong>
             </p>
-            <p class="paper-venue">arXiv:2501.00000 [quant-ph]</p>
+            <p class="paper-venue">PHYS 437B &mdash; Undergraduate Thesis, University of Waterloo, April 2025</p>
             <p class="paper-abstract">
-              A full abstract of what this paper is about. Replace with your actual abstract text.
-              Describe the problem, your approach, and the key results.
+              In this project, we will illustrate the theoretical concept of circuit benchmarking, an
+              efficient and scalable protocol to “lower bound” the process fidelity of a circuit. Finding a
+              lower bound to the process fidelity is crucial because it tells us what is the worst-case error
+              rate in our quantum circuit. We will exhaustively run simulations on quantum circuits with
+              different error models and error strengths to measure the closeness of the theoretical bound
+              imposed by the circuit benchmarking theory with respect to the actual process fidelity. We
+              will find that in several cases there is a minimal or zero gap, and thus not only we have
+              found a lower bound, but rather a good approximation to the process fidelity.
             </p>
             <div class="paper-links" style="margin-top:0.75rem;">
-              <a href="#" class="paper-link"><i class="fas fa-file-pdf"></i> PDF</a>
-              <a href="#" class="paper-link"><i class="ai ai-arxiv"></i> arXiv</a>
-              <a href="#" class="paper-link"><span class="scirate-badge">SR</span> SciRate</a>
-              <a href="#" class="paper-link"><i class="fab fa-github"></i> Code</a>
-              <button class="toggle-abstract">
-                Abstract <i class="fas fa-chevron-down"></i>
-              </button>
+              <a href="files/Undergraduate_Thesis.pdf" class="paper-link" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i> PDF</a>
+              <button class="toggle-abstract">Abstract <i class="fas fa-chevron-down"></i></button>
+            </div>
+          </div>
+
+          <div class="paper-card compact" data-type="project" data-year="2025">
+            <div class="paper-header">
+              <span class="paper-year">2025</span>
+              <span class="badge badge-project">School Project</span>
+            </div>
+            <h3 class="paper-title">Introduction to Cycle Benchmarking for Quantum Error Diagnostics</h3>
+            <p class="paper-authors">
+              <strong>Danesh Morales Hashemi</strong>
+            </p>
+            <p class="paper-venue">Theory of Quantum Information &mdash; Course Project, University of Waterloo, 2025</p>
+            <p class="paper-abstract">
+              Cycle benchmarking is a scalable protocol used to measure the error rate of a specific cycle of
+              quantum gates implemented in parallel. We will introduce the cycle benchmarking protocol, explain
+              how it works, and numerically illustrate its effectiveness. We demonstrate that relaxing the assumptions
+              required to accurately estimate the process fidelity can lead to inaccurate results; in particular, allowing
+              gate-dependent noise on the twirling gates can cause a misestimation of the process fidelity. However, we
+              also show that highly gate-dependent errors can still yield accurate results in certain regimes. Finally,
+              when the gate-independent condition is relaxed, we show that it is possible to reconcile the estimated
+              and theoretical fidelities by measuring in a different basis via a unitary transformation which depends
+              on both the chosen error model on the twirling gates and the targeted gateset.
+            </p>
+            <div class="paper-links" style="margin-top:0.75rem;">
+              <a href="files/TQI_Project.pdf" class="paper-link" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i> PDF</a>
+              <button class="toggle-abstract">Abstract <i class="fas fa-chevron-down"></i></button>
+            </div>
+          </div>
+
+          <div class="paper-card compact" data-type="project" data-year="2025">
+            <div class="paper-header">
+              <span class="paper-year">2025</span>
+              <span class="badge badge-project">School Project</span>
+            </div>
+            <h3 class="paper-title">Predicting Major League Baseball Playoffs Using Quantum Machine Learning</h3>
+            <p class="paper-authors">
+              <strong>Danesh Morales Hashemi</strong>, Jonathan Zhu
+            </p>
+            <p class="paper-venue">Quantum Machine Learning &mdash; Course Project, University of Waterloo, 2025</p>
+            <p class="paper-abstract">
+              This project explores the application of Quantum
+              Machine Learning (QML) to predict the outcomes of Major League Baseball (MLB) games, specifically the Postseason
+              matches that took place throughout the month of October.
+              Using features such as team batting averages, pitching performance, and game context (e.g. home vs. away), we implemented
+              two QML algorithms: the Quantum Support Vector Machine
+              (QSVM) and the Variational Quantum Classifier (VQC), using the Qiskit framework. We then compared these quantum
+              classifiers to their classical counterparts, namely the Support
+              Vector Machine (SVM) and a classical neural network, the Multi-
+              Layer Perceptron (MLP) Classifier. We found that the QML
+              algorithms achieved prediction accuracies comparable to those
+              of the classical algorithms; however, training the QML models
+              was significantly more time-consuming. We therefore conclude
+              that, in this setting, there is no quantum advantage, and that
+              classical prediction models remain the preferable choice.
+            </p>
+            <div class="paper-links" style="margin-top:0.75rem;">
+              <a href="files/QML_Project.pdf" class="paper-link" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i> PDF</a>
+              <button class="toggle-abstract">Abstract <i class="fas fa-chevron-down"></i></button>
             </div>
           </div>
 
@@ -200,56 +259,37 @@
 
       <!-- ── 2024 ── -->
       <div class="pub-year-group">
-        <div class="pub-year-label">2025</div>
+        <div class="pub-year-label">2024</div>
         <div class="pub-list">
-
-          <div class="paper-card compact" data-type="publication" data-year="2024">
-            <div class="paper-header">
-              <span class="paper-year">2024</span>
-              <span class="badge badge-pub">Publication</span>
-            </div>
-            <h3 class="paper-title">Another Paper Title</h3>
-            <p class="paper-authors">
-              <strong>Danesh Morales Hashemi</strong>, XYZ
-            </p>
-            <p class="paper-venue">
-              <em>Journal X</em>
-            </p>
-            <p class="paper-abstract">
-              A full abstract for this published paper. Describe the main contributions and results.
-            </p>
-            <div class="paper-links" style="margin-top:0.75rem;">
-              <a href="#" class="paper-link"><i class="fas fa-file-pdf"></i> PDF</a>
-              <a href="#" class="paper-link"><i class="fas fa-external-link-alt"></i> Journal</a>
-              <a href="#" class="paper-link"><i class="ai ai-arxiv"></i> arXiv</a>
-              <a href="#" class="paper-link"><span class="scirate-badge">SR</span> SciRate</a>
-              <button class="toggle-abstract">
-                Abstract <i class="fas fa-chevron-down"></i>
-              </button>
-            </div>
-          </div>
 
           <div class="paper-card compact" data-type="project" data-year="2024">
             <div class="paper-header">
-              <span class="paper-year">2025</span>
+              <span class="paper-year">2024</span>
               <span class="badge badge-project">School Project</span>
             </div>
-            <h3 class="paper-title">A Course Project Title</h3>
+            <h3 class="paper-title">Introduction to Superoperator Representations and Characterization of Completely Positive Maps</h3>
             <p class="paper-authors">
               <strong>Danesh Morales Hashemi</strong>
             </p>
-            <p class="paper-venue">
-              AMATH 900 — Course Name, University of Waterloo, 2025
-            </p>
+            <p class="paper-venue">AMATH 900 &mdash; Advanced Quantum Theory, University of Waterloo, Spring 2024</p>
             <p class="paper-abstract">
-              A brief description of this course project. You can use this badge for term papers,
-              course projects, or any academic work that isn't a formal publication or preprint.
+              We introduce the concept of superoperators, which are math ematical constructs used to describe the evolution of quantum states. We will
+              we focus on completely positive and trace-preserving maps, which are essential in
+              quantum information theory as they represent the most general form of physical
+              quantum operations. Next, we delve into different representations of superoperators. We define each
+              of these representations in detail and prove several theorems that demonstrate
+              their importance. Then, we prove that all the different representations of a superoperator are
+              equivalent. This equivalence is important because it allows us to convert between
+              representations with ease, depending on which one is more convenient for the
+              problem at hand. Consequently, we analyze the properties of these representations when we add
+              the restrictions that the superoperators are trace-preserving and/or completely
+              positive. Finally, we visualize specific quantum channels using these representations.
+              This analysis provides a new perspective on how the representations depict the
+              channels and allows us to examine their properties in greater detail.
             </p>
             <div class="paper-links" style="margin-top:0.75rem;">
-              <a href="#" class="paper-link"><i class="fas fa-file-pdf"></i> PDF</a>
-              <button class="toggle-abstract">
-                Abstract <i class="fas fa-chevron-down"></i>
-              </button>
+              <a href="files/Superoperator.pdf" class="paper-link" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i> PDF</a>
+              <button class="toggle-abstract">Abstract <i class="fas fa-chevron-down"></i></button>
             </div>
           </div>
 
