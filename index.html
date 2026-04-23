@@ -13,9 +13,60 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link rel="stylesheet" href="styles.css">
   <style>
-    /* Ensure publication preview cards match publications.html */
+    /* Publication preview — inline fallback so cards render correctly in all environments */
+    :root {
+      --bg: #ffffff; --bg-alt: #f8fafc; --surface: #ffffff;
+      --border: #e2e8f0; --text: #0f172a; --text-muted: #64748b;
+      --accent: #2563eb; --accent-hover: #1d4ed8; --accent-bg: #eff6ff;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.05);
+      --shadow-md: 0 4px 14px rgba(0,0,0,0.10);
+      --radius: 10px; --transition: 0.25s ease;
+    }
+    [data-theme="dark"] {
+      --bg: #0d1117; --bg-alt: #161b22; --surface: #1c2128;
+      --border: #30363d; --text: #e6edf3; --text-muted: #8b949e;
+      --accent: #58a6ff; --accent-hover: #79b8ff; --accent-bg: #1a2744;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.3), 0 1px 2px rgba(0,0,0,0.2);
+      --shadow-md: 0 4px 14px rgba(0,0,0,0.35);
+    }
+    .paper-list { display: flex; flex-direction: column; gap: 1.25rem; }
+    .paper-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 1.5rem;
+      box-shadow: var(--shadow-sm);
+      transition: box-shadow var(--transition), border-color var(--transition);
+    }
+    .paper-card:hover { box-shadow: var(--shadow-md); border-color: var(--accent); }
+    .paper-card.compact { padding: 1.25rem 1.5rem; }
     .paper-card.compact .paper-abstract { display: none; }
     .paper-card.compact.expanded .paper-abstract { display: block; }
+    .paper-header { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem; }
+    .paper-year { font-size: 0.85rem; color: var(--text-muted); font-weight: 500; }
+    .badge { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; padding: 0.2rem 0.55rem; border-radius: 99px; }
+    .badge-project { background: #ede9fe; color: #5b21b6; }
+    [data-theme="dark"] .badge-project { background: #2e1065; color: #c4b5fd; }
+    .paper-title { font-size: 1.05rem; font-weight: 600; margin-bottom: 0.35rem; }
+    .paper-authors { font-size: 0.875rem; color: var(--text-muted); margin-bottom: 0.25rem; }
+    .paper-venue { font-size: 0.85rem; color: var(--accent); font-style: italic; margin-bottom: 0.75rem; }
+    .paper-abstract { font-size: 0.9rem; color: var(--text-muted); line-height: 1.65; margin-bottom: 1rem; }
+    .paper-links { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    .paper-link {
+      display: inline-flex; align-items: center; gap: 0.35rem;
+      font-size: 0.82rem; font-weight: 500; padding: 0.3rem 0.65rem;
+      border-radius: 6px; background: var(--bg-alt); color: var(--text-muted) !important;
+      border: 1px solid var(--border);
+      transition: color var(--transition), background var(--transition), border-color var(--transition);
+    }
+    .paper-link:hover { color: var(--accent) !important; border-color: var(--accent); background: var(--accent-bg); }
+    .toggle-abstract {
+      background: none; border: none; cursor: pointer;
+      font-size: 0.82rem; font-weight: 500; color: var(--text-muted);
+      padding: 0; display: inline-flex; align-items: center; gap: 0.3rem;
+      transition: color var(--transition);
+    }
+    .toggle-abstract:hover { color: var(--accent); }
+    .toggle-abstract i { font-size: 0.7rem; transition: transform 0.2s; }
+    .paper-card.expanded .toggle-abstract i { transform: rotate(180deg); }
   </style>
 </head>
 <body>
