@@ -26,14 +26,13 @@ jobs:
 
       - name: Move PDF to repo
         run: |
-          mkdir -p files
-          mv overleaf-cv/main.pdf files/cv.pdf
+          mv overleaf-cv/main.pdf files/Danesh_Resume-1.pdf
 
       - name: Commit and push if changed
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add files/cv.pdf
+          git add files/Danesh_Resume-1.pdf
           if git diff --staged --quiet; then
             echo "No changes to CV"
           else
