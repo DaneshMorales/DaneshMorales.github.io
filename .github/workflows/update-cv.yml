@@ -1,0 +1,42 @@
+name: Update CV from Overleaf
+
+on:
+  schedule:
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
+
+jobs:
+  update-cv:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Clone Overleaf project
+        run: |
+          git clone ${{ secrets.OVERLEAF_REPO_URL }} overleaf-cv
+
+      - name: Compile LaTeX
+        uses: xu-cheng/latex-action@v3
+        with:
+          root_file: main.tex
+          working_directory: overleaf-cv
+
+      - name: Move PDF to repo
+        run: |
+          mkdir -p files
+          mv overleaf-cv/main.pdf files/cv.pdf
+
+      - name: Commit and push if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add files/cv.pdf
+          if git diff --staged --quiet; then
+            echo "No changes to CV"
+          else
+            git commit -m "Auto-update CV from Overleaf"
+            git push
+          fi
