@@ -2,95 +2,46 @@
 <html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8">
-  <script>(function(){var t=localStorage.getItem('theme');if(t==='dark'||(t===null&&window.matchMedia('(prefers-color-scheme: dark)').matches)){document.documentElement.setAttribute('data-theme','dark');}})();</script>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Blog — Danesh Morales Hashemi</title>
+  <script>(function(){document.documentElement.classList.add('js');var t;try{t=localStorage.getItem('theme');}catch(e){}if(t!=='light'&&t!=='dark'){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}document.documentElement.dataset.theme=t;})();</script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Notes and explanations on quantum information, mathematics, and research.">
+  <meta name="theme-color" content="#f6f8fb">
+  <title>Notes — Danesh Morales Hashemi</title>
   <link rel="icon" type="image/svg+xml" href="../icon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Lora:ital,wght@0,400;0,600;1,400&amp;display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../styles.css">
 </head>
-<body>
-
-  <nav class="navbar" id="navbar">
-    <div class="nav-container">
-      <a href="/" class="nav-brand">Danesh Morales Hashemi</a>
-      <div class="nav-controls">
-        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
-          <span class="toggle-track"><span class="toggle-thumb"><i class="fas fa-sun"></i></span></span>
-        </button>
-        <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
-          <span></span><span></span><span></span>
-        </button>
-      </div>
-      <div class="nav-menu" id="nav-menu">
-        <div class="nav-links">
-          <button class="theme-toggle theme-toggle-desk" aria-label="Toggle dark mode">
-            <span class="toggle-track"><span class="toggle-thumb"><i class="fas fa-sun"></i></span></span>
-          </button>
-          <a href="../index.html#about"   class="nav-link">About</a>
-          <a href="../publications.html"  class="nav-link">Publications</a>
-          <a href="../blog/index.html"    class="nav-link active">Blog</a>
-          <a href="../index.html#contact" class="nav-link">Contact</a>
-          <a href="../files/Danesh_Resume-1.pdf" class="nav-cv" target="_blank" rel="noopener noreferrer">
-            <i class="fas fa-file-alt"></i> CV
-          </a>
-        </div>
-        <div class="nav-meta">
-          <div class="nav-socials">
-            <a href="https://scholar.google.com/citations?hl=en&user=f_ltr8oAAAAJ" class="social-icon" aria-label="Google Scholar" target="_blank" rel="noopener"><i class="fas fa-graduation-cap"></i></a>
-            <a href="https://www.linkedin.com/in/daneshmh/" class="social-icon" aria-label="LinkedIn" target="_blank" rel="noopener"><i class="fab fa-linkedin-in"></i></a>
-            <a href="mailto:danesh.moraleshashemi@uwaterloo.ca" class="social-icon" aria-label="Email"><i class="fas fa-envelope"></i></a>
-          </div>
-        </div>
-      </div>
+<body><a class="skip-link" href="#main-content">Skip to content</a>
+<nav class="navbar" id="navbar" aria-label="Main navigation">
+  <div class="nav-container">
+    <a class="nav-brand" href="../index.html" aria-label="Danesh Morales Hashemi — home"><span class="brand-mark" aria-hidden="true">dm.</span><span class="brand-name">Danesh Morales Hashemi</span></a>
+    <div class="nav-menu" id="nav-menu">
+      <a class="nav-link" href="../index.html#about">About</a>
+      <a class="nav-link" href="../publications.html">Research</a>
+      <a class="nav-link" href="../blog/index.html" aria-current="page">Notes</a>
+      <a class="nav-link" href="../index.html#contact">Contact</a>
     </div>
-  </nav>
-
-  <div class="container">
-    <div class="blog-hero">
-      <h1>Blog</h1>
-      <p>Notes on quantum information, mathematics, and research.</p>
-    </div>
-
-    <div class="blog-list">
-
-      <div class="blog-list-item">
-        <div class="blog-list-date">March 2026</div>
-        <div class="blog-list-content">
-          <h2><a href="posts/pauli-channel-non-markovian.html">Induced Non-Markovianity via Pauli Twirling</a></h2>
-          <p>Soon!</p>
-          <div style="margin-top:0.5rem">
-            <span class="post-tag">Quantum Channels</span>
-            <span class="post-tag">Non-Markovian Noise</span>
-          </div>
-        </div>
-      </div>
-
-
-      <div class="blog-list-item">
-        <div class="blog-list-date">Dec 2025</div>
-        <div class="blog-list-content">
-          <h2><a href="posts/cycle-benchmarking-intro.html">Introduction to Cycle Benchmarking for Quantum Error Diagnostics</a></h2>
-          <p>A scalable, SPAM-robust protocol for estimating the process fidelity of a fixed cycle of parallel gates. We introduce the CB protocol, explain how randomized compiling tailors noise into Pauli channels, and analyze when the gate-independence assumption can be relaxed.</p>
-          <div style="margin-top:0.5rem">
-            <span class="post-tag">Error Characterization</span>
-          </div>
-        </div>
-      </div>
-
+    <div class="nav-actions">
+      <a class="nav-cv" href="../files/Danesh_Resume-1.pdf" target="_blank" rel="noopener">CV <span aria-hidden="true">↗</span></a>
+      <button class="theme-toggle" type="button" aria-label="Switch to dark theme" aria-pressed="false"><span class="theme-icon" aria-hidden="true">◐</span></button>
+      <button class="hamburger" type="button" id="hamburger" aria-label="Open navigation menu" aria-controls="nav-menu" aria-expanded="false"><span></span><span></span></button>
     </div>
   </div>
-
-  <footer class="footer">
-    <div class="container footer-inner">
-      <p>&copy; 2026 Danesh Morales</p>
-      <p class="footer-sub">Hosted on <a href="https://pages.github.com" target="_blank" rel="noopener">GitHub Pages</a></p>
-    </div>
-  </footer>
-
-  <script src="../script.js"></script>
+</nav>
+<main id="main-content" class="archive-main"><header class="page-hero container"><p class="eyebrow">From the notebook</p><h1>Ideas, worked<br><em>through.</em></h1><p>Personal notes on quantum information, mathematics, and research.</p></header>
+<section class="container notes-archive" aria-labelledby="all-notes"><h2 class="sr-only" id="all-notes">All notes</h2><div class="note-list"><article class="note-row">
+      <div class="note-meta"><time datetime="2025-12">December 2025</time><span>Research note</span></div>
+      <div><h3><a href="../blog/posts/cycle-benchmarking-intro.html">Introduction to Cycle Benchmarking for Quantum Error Diagnostics</a></h3><p>A scalable, SPAM-robust protocol for estimating the process fidelity of a cycle of parallel quantum gates.</p><a class="text-link" href="../blog/posts/cycle-benchmarking-intro.html">Read the note <span aria-hidden="true">↗</span></a></div>
+    </article>
+    <article class="note-row note-upcoming">
+      <div class="note-meta"><span class="status-label">In preparation</span><span>Quantum channels</span></div>
+      <div><h3>Induced Non-Markovianity via Pauli Twirling</h3><p>Coming soon.</p></div>
+    </article></div></section></main><footer class="footer"><div class="container footer-inner">
+  <p>© 2026 Danesh Morales Hashemi</p>
+  <div class="footer-links"><a href="https://scholar.google.com/citations?hl=en&user=f_ltr8oAAAAJ" target="_blank" rel="noopener">Google Scholar</a><a href="https://www.linkedin.com/in/daneshmh/" target="_blank" rel="noopener">LinkedIn</a><a href="mailto:danesh.moraleshashemi@uwaterloo.ca">Email</a></div>
+</div></footer>
+<script src="../script.js"></script>
 </body>
 </html>
