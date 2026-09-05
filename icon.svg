@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200">
   <!-- Blue rounded rectangle background -->
-  <rect width="200" height="200" rx="44" ry="44" fill="#3B82F6"/>
+  <rect width="200" height="200" rx="44" ry="44" fill="#2858c9"/>
   <!-- Psi symbol centered -->
   <text
     x="100"
@@ -12,3 +12,4 @@
     dominant-baseline="central"
   >ψ</text>
 </svg>
+
