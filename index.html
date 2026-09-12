@@ -2,413 +2,137 @@
 <html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8">
-  <script>(function(){var t=localStorage.getItem('theme');if(t==='dark'||(t===null&&window.matchMedia('(prefers-color-scheme: dark)').matches)){document.documentElement.setAttribute('data-theme','dark');}})();</script>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Danesh Morales Hashemi – Master's student in Quantum Information at the University of Waterloo and researcher at the Institute for Quantum Computing.">
+  <script>(function(){document.documentElement.classList.add('js');var t;try{t=localStorage.getItem('theme');}catch(e){}if(t!=='light'&&t!=='dark'){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}document.documentElement.dataset.theme=t;})();</script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Danesh Morales Hashemi studies quantum error correction and non-Markovian noise at the University of Waterloo and the Institute for Quantum Computing.">
+  <meta name="theme-color" content="#f6f8fb">
   <title>Danesh Morales Hashemi | Quantum Information</title>
   <link rel="icon" type="image/svg+xml" href="icon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Lora:ital,wght@0,400;0,600;1,400&amp;display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
-  <style>
-    /* Publication preview — inline fallback so cards render correctly in all environments */
-    :root {
-      --bg: #ffffff; --bg-alt: #f8fafc; --surface: #ffffff;
-      --border: #e2e8f0; --text: #0f172a; --text-muted: #64748b;
-      --accent: #2563eb; --accent-hover: #1d4ed8; --accent-bg: #eff6ff;
-      --shadow-sm: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.05);
-      --shadow-md: 0 4px 14px rgba(0,0,0,0.10);
-      --radius: 10px; --transition: 0.25s ease;
-    }
-    [data-theme="dark"] {
-      --bg: #0d1117; --bg-alt: #161b22; --surface: #1c2128;
-      --border: #30363d; --text: #e6edf3; --text-muted: #8b949e;
-      --accent: #58a6ff; --accent-hover: #79b8ff; --accent-bg: #1a2744;
-      --shadow-sm: 0 1px 3px rgba(0,0,0,0.3), 0 1px 2px rgba(0,0,0,0.2);
-      --shadow-md: 0 4px 14px rgba(0,0,0,0.35);
-    }
-    .paper-list { display: flex; flex-direction: column; gap: 1.25rem; }
-    .paper-card {
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: var(--radius); padding: 1.5rem;
-      box-shadow: var(--shadow-sm);
-      transition: box-shadow var(--transition), border-color var(--transition);
-    }
-    .paper-card:hover { box-shadow: var(--shadow-md); border-color: var(--accent); }
-    .paper-card.compact { padding: 1.25rem 1.5rem; }
-    .paper-card.compact .paper-abstract { display: none; }
-    .paper-card.compact.expanded .paper-abstract { display: block; }
-    .paper-header { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem; }
-    .paper-year { font-size: 0.85rem; color: var(--text-muted); font-weight: 500; }
-    .badge { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; padding: 0.2rem 0.55rem; border-radius: 99px; }
-    .badge-project { background: #ede9fe; color: #5b21b6; }
-    [data-theme="dark"] .badge-project { background: #2e1065; color: #c4b5fd; }
-    .paper-title { font-size: 1.05rem; font-weight: 600; margin-bottom: 0.35rem; }
-    .paper-authors { font-size: 0.875rem; color: var(--text-muted); margin-bottom: 0.25rem; }
-    .paper-venue { font-size: 0.85rem; color: var(--accent); font-style: italic; margin-bottom: 0.75rem; }
-    .paper-abstract { font-size: 0.9rem; color: var(--text-muted); line-height: 1.65; margin-bottom: 1rem; }
-    .paper-links { display: flex; flex-wrap: wrap; gap: 0.5rem; }
-    .paper-link {
-      display: inline-flex; align-items: center; gap: 0.35rem;
-      font-size: 0.82rem; font-weight: 500; padding: 0.3rem 0.65rem;
-      border-radius: 6px; background: var(--bg-alt); color: var(--text-muted) !important;
-      border: 1px solid var(--border);
-      transition: color var(--transition), background var(--transition), border-color var(--transition);
-    }
-    .paper-link:hover { color: var(--accent) !important; border-color: var(--accent); background: var(--accent-bg); }
-    .toggle-abstract {
-      background: none; border: none; cursor: pointer;
-      font-size: 0.82rem; font-weight: 500; color: var(--text-muted);
-      padding: 0; display: inline-flex; align-items: center; gap: 0.3rem;
-      transition: color var(--transition);
-    }
-    .toggle-abstract:hover { color: var(--accent); }
-    .toggle-abstract i { font-size: 0.7rem; transition: transform 0.2s; }
-    .paper-card.expanded .toggle-abstract i { transform: rotate(180deg); }
-  </style>
 </head>
-<body>
-
-  <!-- ===== NAVBAR ===== -->
-  <nav class="navbar" id="navbar">
-    <div class="nav-container">
-
-      <a href="/" class="nav-brand">Danesh Morales Hashemi</a>
-
-      <!-- Mobile top-right: theme toggle + hamburger -->
-      <div class="nav-controls">
-        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
-          <span class="toggle-track"><span class="toggle-thumb"><i class="fas fa-sun"></i></span></span>
-        </button>
-        <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
-          <span></span><span></span><span></span>
-        </button>
-      </div>
-
-      <!-- Full menu (desktop inline, mobile dropdown) -->
-      <div class="nav-menu" id="nav-menu">
-        <div class="nav-links">
-          <button class="theme-toggle theme-toggle-desk" aria-label="Toggle dark mode">
-            <span class="toggle-track"><span class="toggle-thumb"><i class="fas fa-sun"></i></span></span>
-          </button>
-          <a href="#about"         class="nav-link">About</a>
-          <a href="#publications"  class="nav-link">Publications</a>
-          <a href="#blog"           class="nav-link">Blog</a>
-          <a href="#contact"        class="nav-link">Contact</a>
-          <a href="files/Danesh_Resume-1.pdf" class="nav-cv" target="_blank" rel="noopener noreferrer">
-            <i class="fas fa-file-alt"></i> CV
-          </a>
-        </div>
-
-        <div class="nav-meta">
-          <div class="nav-socials">
-            <a href="https://scholar.google.com/citations?hl=en&user=f_ltr8oAAAAJ" class="social-icon" aria-label="Google Scholar" title="Google Scholar" target="_blank" rel="noopener">
-              <i class="fas fa-graduation-cap"></i>
-            </a>
-            <a href="https://www.linkedin.com/in/daneshmh/" class="social-icon" aria-label="LinkedIn" title="LinkedIn" target="_blank" rel="noopener">
-              <i class="fab fa-linkedin-in"></i>
-            </a>
-            <a href="mailto:danesh.moraleshashemi@uwaterloo.ca" class="social-icon" aria-label="Email" title="Email">
-              <i class="fas fa-envelope"></i>
-            </a>
-          </div>
-        </div>
-      </div>
-
+<body><a class="skip-link" href="#main-content">Skip to content</a>
+<nav class="navbar" id="navbar" aria-label="Main navigation">
+  <div class="nav-container">
+    <a class="nav-brand" href="index.html" aria-label="Danesh Morales Hashemi — home"><span class="brand-mark" aria-hidden="true">dm.</span><span class="brand-name">Danesh Morales Hashemi</span></a>
+    <div class="nav-menu" id="nav-menu">
+      <a class="nav-link" href="index.html#about">About</a>
+      <a class="nav-link" href="publications.html">Research</a>
+      <a class="nav-link" href="blog/index.html">Notes</a>
+      <a class="nav-link" href="index.html#contact">Contact</a>
     </div>
-  </nav>
-
-  <!-- ===== ABOUT ===== -->
-  <section id="about" class="section">
-    <div class="container">
-      <div class="about-grid">
-
-        <div class="about-photo-wrap">
-          <div class="about-photo">
-            <img src="assets/photo.jpg" alt="Danesh Morales Hashemi">
-          </div>
-        </div>
-
-        <div class="about-content">
-          <h1>Danesh Morales Hashemi</h1>
-          <p class="about-title">Quantum Information</p>
-          <p class="about-affiliation">
-            <i class="fas fa-university"></i>
-            University of Waterloo
-          </p>
-
-          <p class="about-bio">
-            I am a Masters student at the
-            University of Waterloo and a researcher at the
-            Institute for Quantum Computing,
-            under the supervision of
-            <a href="https://gsbsmith.ca/" target="_blank" rel="noopener">Prof. Graeme Smith</a>.
-            <!-- TODO: describe your specific research focus -->
-            My research focuses on quantum error correction under non-Markovian noise. Using the process tensor framework, I study how QEC codes interact with temporally correlated errors and whether error correction can effectively suppress or Markovianize the noise process.
-          </p>
-          <p class="about-bio">
-
-          <div class="interests">
-            <h3>Research Interests</h3>
-            <div class="interest-tags">
-              <span class="tag">Quantum Error Correction</span>
-              <span class="tag">Fault-Tolerant Quantum Computing</span>
-              <span class="tag">Non-Markovian Dynamics</span>
-              <span class="tag">Open Quantum Systems</span>
-              <span class="tag">Quantum Error Mitigation</span>
-              <span class="tag">Quantum Error Characterization & Suppression</span>
-            </div>
-          </div>
-
-          <div class="education">
-            <h3>Education</h3>
-            <div class="edu-list">
-              <div class="edu-item">
-                <div class="edu-degree">Master of Mathematics in Applied Mathematics</div>
-                <div class="edu-school">University of Waterloo</div>
-                <div class="edu-detail">Quantum Information Specialization</div>
-                <div class="edu-years">May 2025 – Current</div>
-              </div>
-              <div class="edu-item">
-                <div class="edu-degree">Bachelor of Mathematics in Mathematical Physics</div>
-                <div class="edu-school">University of Waterloo</div>
-                <div class="edu-detail">Co-op Program · Pure Mathematics Minor · Graduated with Distinction and Dean's Honours</div>
-                <div class="edu-years">September 2020 – April 2025</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-      </div>
+    <div class="nav-actions">
+      <a class="nav-cv" href="files/Danesh_Resume-1.pdf" target="_blank" rel="noopener">CV <span aria-hidden="true">↗</span></a>
+      <button class="theme-toggle" type="button" aria-label="Switch to dark theme" aria-pressed="false"><span class="theme-icon" aria-hidden="true">◐</span></button>
+      <button class="hamburger" type="button" id="hamburger" aria-label="Open navigation menu" aria-controls="nav-menu" aria-expanded="false"><span></span><span></span></button>
+    </div>
+  </div>
+</nav>
+<main id="main-content">
+  <section class="hero container" id="about" aria-labelledby="hero-title">
+    <div class="hero-copy">
+      <p class="eyebrow">Quantum information · University of Waterloo</p>
+      <h1 id="hero-title">Danesh Morales<br><em>Hashemi.</em></h1>
+      <p class="hero-intro">I study how quantum error correction protects information when noise has memory.</p>
+      <p class="hero-bio">I’m a master’s student in Applied Mathematics at the University of Waterloo and a researcher at the Institute for Quantum Computing, supervised by <a href="https://gsbsmith.ca/" target="_blank" rel="noopener">Graeme Smith</a>.</p>
+      <div class="hero-actions"><a class="btn-primary" href="#publications">Explore my work <span aria-hidden="true">↓</span></a><a class="text-link" href="mailto:danesh.moraleshashemi@uwaterloo.ca">Get in touch <span aria-hidden="true">↗</span></a></div>
+    </div>
+    <figure class="hero-portrait"><div class="portrait-frame"><img src="assets/photo.jpg" alt="Danesh Morales Hashemi" width="575" height="575" fetchpriority="high"></div><figcaption><span>Institute for Quantum Computing</span><span>Waterloo, Ontario</span></figcaption></figure>
+  </section>
+  <section class="research-strip container" aria-labelledby="research-focus">
+    <div class="section-label"><span class="section-number">01 /</span><h2 id="research-focus">Research focus</h2></div>
+    <div><p class="focus-copy">Using the process tensor framework, I study how quantum error-correcting codes interact with temporally correlated errors—and whether error correction can suppress the memory in a noise process.</p>
+      <ul class="interest-tags" aria-label="Research interests"><li>Quantum error correction</li><li>Fault-tolerant quantum computing</li><li>Non-Markovian dynamics</li><li>Open quantum systems</li><li>Quantum error mitigation</li><li>Error characterization &amp; suppression</li></ul>
     </div>
   </section>
-
-  <!-- ===== PUBLICATIONS PREVIEW ===== -->
-  <section id="publications" class="section section-alt">
-    <div class="container">
-      <h2 class="section-title">Publications</h2>
-      <p class="section-sub">Selected papers, preprints, and school projects</p>
-
-      <div class="paper-list">
-
-        <div class="paper-card compact">
-          <div class="paper-header">
-            <span class="paper-year">2025</span>
-            <span class="badge badge-project">School Project</span>
-          </div>
-          <h3 class="paper-title">Introduction to Cycle Benchmarking for Quantum Error Diagnostics</h3>
-          <p class="paper-authors">
-            <strong>Danesh Morales Hashemi</strong>
-          </p>
-          <p class="paper-venue">Theory of Quantum Information &mdash; Final Project, University of Waterloo, Fall 2025</p>
-          <p class="paper-abstract">
-            Cycle benchmarking is a scalable protocol used to measure the error rate of a specific cycle of
-            quantum gates implemented in parallel. We will introduce the cycle benchmarking protocol, explain
-            how it works, and numerically illustrate its effectiveness. We demonstrate that relaxing the assumptions
-            required to accurately estimate the process fidelity can lead to inaccurate results; in particular, allowing
-            gate-dependent noise on the twirling gates can cause a misestimation of the process fidelity. However, we
-            also show that highly gate-dependent errors can still yield accurate results in certain regimes. Finally,
-            when the gate-independent condition is relaxed, we show that it is possible to reconcile the estimated
-            and theoretical fidelities by measuring in a different basis via a unitary transformation which depends
-            on both the chosen error model on the twirling gates and the targeted gateset.
-          </p>
-          <div class="paper-links">
-            <a href="files/TQI_Project.pdf" class="paper-link" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i> PDF</a>
-            <button class="toggle-abstract">Abstract <i class="fas fa-chevron-down"></i></button>
-          </div>
-        </div>
-
-        <div class="paper-card compact">
-          <div class="paper-header">
-            <span class="paper-year">2025</span>
-            <span class="badge badge-project">School Project</span>
-          </div>
-          <h3 class="paper-title">Predicting Major League Baseball Playoffs Using Quantum Machine Learning</h3>
-          <p class="paper-authors">
-            <strong>Danesh Morales Hashemi</strong>, Jonathan Zhu
-          </p>
-          <p class="paper-venue">Quantum Machine Learning &mdash; Final Project, University of Waterloo, Fall 2025</p>
-          <p class="paper-abstract">
-            This project explores the application of Quantum Machine Learning (QML) to predict the outcomes of Major League Baseball (MLB) games, specifically the Postseason
-            matches that took place throughout the month of October.
-            Using features such as team batting averages, pitching performance, and game context (e.g. home vs. away), we implemented
-            two QML algorithms: the Quantum Support Vector Machine (QSVM) and the Variational Quantum Classifier (VQC), using the Qiskit framework. We then compared these quantum
-            classifiers to their classical counterparts, namely the Support Vector Machine (SVM) and a classical neural network, the Multi-Layer Perceptron (MLP) Classifier. We found that the QML
-            algorithms achieved prediction accuracies comparable to those of the classical algorithms; however, training the QML models was significantly more time-consuming. We therefore conclude
-            that, in this setting, there is no quantum advantage, and that classical prediction models remain the preferable choice.
-          </p>
-          <div class="paper-links">
-            <a href="files/QML_Project.pdf" class="paper-link" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i> PDF</a>
-            <a href="https://github.com/DaneshMorales/QML_project" class="paper-link" target="_blank" rel="noopener"><i class="fab fa-github"></i> GitHub</a>
-            <button class="toggle-abstract">Abstract <i class="fas fa-chevron-down"></i></button>
-          </div>
-        </div>
-
-        <div class="paper-card compact">
-          <div class="paper-header">
-            <span class="paper-year">2024</span>
-            <span class="badge badge-project">School Project</span>
-          </div>
-          <h3 class="paper-title">Introduction to Superoperator Representations and Characterization of Completely Positive Maps</h3>
-          <p class="paper-authors">
-            <strong>Danesh Morales Hashemi</strong>
-          </p>
-          <p class="paper-venue">Open Quantum Systems &mdash; Final Project, University of Waterloo, Spring 2024</p>
-          <p class="paper-abstract">
-            We introduce the concept of superoperators, which are mathematical constructs used to describe the evolution of quantum states. We will
-            focus on completely positive and trace-preserving maps, which are essential in
-            quantum information theory as they represent the most general form of physical
-            quantum operations. Next, we delve into different representations of superoperators. We define each
-            of these representations in detail and prove several theorems that demonstrate
-            their importance. Then, we prove that all the different representations of a superoperator are
-            equivalent. This equivalence is important because it allows us to convert between
-            representations with ease, depending on which one is more convenient for the
-            problem at hand. Consequently, we analyze the properties of these representations when we add
-            the restrictions that the superoperators are trace-preserving and/or completely
-            positive. Finally, we visualize specific quantum channels using these representations.
-            This analysis provides a new perspective on how the representations depict the
-            channels and allows us to examine their properties in greater detail.
-          </p>
-          <div class="paper-links">
-            <a href="files/Superoperator.pdf" class="paper-link" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i> PDF</a>
-            <button class="toggle-abstract">Abstract <i class="fas fa-chevron-down"></i></button>
-          </div>
-        </div>
-
+  <section class="section work-section" id="publications" aria-labelledby="work-title"><div class="container">
+    <div class="section-heading"><div><p class="eyebrow">02 / Research &amp; projects</p><h2 id="work-title">Selected work.</h2></div><a class="text-link" href="publications.html">View all work <span aria-hidden="true">↗</span></a></div>
+    <div class="paper-list"><article class="paper-card" data-type="project" data-year="2025">
+      <div class="paper-index" aria-hidden="true">01</div>
+      <div class="paper-content">
+        <div class="paper-header"><span class="paper-year">2025</span><span class="badge badge-project">Undergraduate thesis</span></div>
+        <h3 class="paper-title"><a href="files/Undergraduate_Thesis.pdf" target="_blank" rel="noopener">Demonstrating Circuit Benchmarking for Efficient and Scalable Fidelity Estimation</a></h3>
+        <p class="paper-authors"><strong>Danesh Morales Hashemi</strong></p>
+        <p class="paper-venue">PHYS 437B &mdash; Undergraduate Thesis, University of Waterloo, Winter 2025</p>
+        <details class="paper-details"><summary>Abstract</summary><p class="paper-abstract">In this project, we will illustrate the theoretical concept of circuit benchmarking, an
+              efficient and scalable protocol to “lower bound” the process fidelity of a circuit. Finding a
+              lower bound to the process fidelity is crucial because it tells us what is the worst-case error
+              rate in our quantum circuit. We will exhaustively run simulations on quantum circuits with
+              different error models and error strengths to measure the closeness of the theoretical bound
+              imposed by the circuit benchmarking theory with respect to the actual process fidelity. We
+              will find that in several cases there is a minimal or zero gap, and thus not only we have
+              found a lower bound, but rather a good approximation to the process fidelity.</p></details>
       </div>
-
-      <div class="section-cta">
-        <a href="publications.html" class="btn-primary">View all publications</a>
+      <div class="paper-links"><a class="paper-link" href="files/Undergraduate_Thesis.pdf" target="_blank" rel="noopener">PDF <span aria-hidden="true">↗</span></a></div>
+    </article><article class="paper-card" data-type="project" data-year="2025">
+      <div class="paper-index" aria-hidden="true">02</div>
+      <div class="paper-content">
+        <div class="paper-header"><span class="paper-year">2025</span><span class="badge badge-project">Course project</span></div>
+        <h3 class="paper-title"><a href="files/TQI_Project.pdf" target="_blank" rel="noopener">Introduction to Cycle Benchmarking for Quantum Error Diagnostics</a></h3>
+        <p class="paper-authors"><strong>Danesh Morales Hashemi</strong></p>
+        <p class="paper-venue">Theory of Quantum Information &mdash; Final Project, University of Waterloo, Fall 2025</p>
+        <details class="paper-details"><summary>Abstract</summary><p class="paper-abstract">Cycle benchmarking is a scalable protocol used to measure the error rate of a specific cycle of
+              quantum gates implemented in parallel. We will introduce the cycle benchmarking protocol, explain
+              how it works, and numerically illustrate its effectiveness. We demonstrate that relaxing the assumptions
+              required to accurately estimate the process fidelity can lead to inaccurate results; in particular, allowing
+              gate-dependent noise on the twirling gates can cause a misestimation of the process fidelity. However, we
+              also show that highly gate-dependent errors can still yield accurate results in certain regimes. Finally,
+              when the gate-independent condition is relaxed, we show that it is possible to reconcile the estimated
+              and theoretical fidelities by measuring in a different basis via a unitary transformation which depends
+              on both the chosen error model on the twirling gates and the targeted gateset.</p></details>
       </div>
-    </div>
+      <div class="paper-links"><a class="paper-link" href="files/TQI_Project.pdf" target="_blank" rel="noopener">PDF <span aria-hidden="true">↗</span></a></div>
+    </article><article class="paper-card" data-type="project" data-year="2025">
+      <div class="paper-index" aria-hidden="true">03</div>
+      <div class="paper-content">
+        <div class="paper-header"><span class="paper-year">2025</span><span class="badge badge-project">Course project</span></div>
+        <h3 class="paper-title"><a href="files/QML_Project.pdf" target="_blank" rel="noopener">Predicting Major League Baseball Playoffs Using Quantum Machine Learning</a></h3>
+        <p class="paper-authors"><strong>Danesh Morales Hashemi</strong>, Jonathan Zhu</p>
+        <p class="paper-venue">Quantum Machine Learning &mdash; Final Project, University of Waterloo, Fall 2025</p>
+        <details class="paper-details"><summary>Abstract</summary><p class="paper-abstract">This project explores the application of Quantum
+              Machine Learning (QML) to predict the outcomes of Major League Baseball (MLB) games, specifically the Postseason
+              matches that took place throughout the month of October.
+              Using features such as team batting averages, pitching performance, and game context (e.g. home vs. away), we implemented
+              two QML algorithms: the Quantum Support Vector Machine
+              (QSVM) and the Variational Quantum Classifier (VQC), using the Qiskit framework. We then compared these quantum
+              classifiers to their classical counterparts, namely the Support
+              Vector Machine (SVM) and a classical neural network, the Multi-
+              Layer Perceptron (MLP) Classifier. We found that the QML
+              algorithms achieved prediction accuracies comparable to those
+              of the classical algorithms; however, training the QML models
+              was significantly more time-consuming. We therefore conclude
+              that, in this setting, there is no quantum advantage, and that
+              classical prediction models remain the preferable choice.</p></details>
+      </div>
+      <div class="paper-links"><a class="paper-link" href="files/QML_Project.pdf" target="_blank" rel="noopener">PDF <span aria-hidden="true">↗</span></a><a class="paper-link" href="https://github.com/DaneshMorales/QML_project" target="_blank" rel="noopener">Code <span aria-hidden="true">↗</span></a></div>
+    </article></div>
+  </div></section>
+  <section class="section container" id="blog" aria-labelledby="notes-title">
+    <div class="section-heading"><div><p class="eyebrow">03 / From the notebook</p><h2 id="notes-title">Notes &amp; explanations.</h2></div><a class="text-link" href="blog/index.html">All notes <span aria-hidden="true">↗</span></a></div>
+    <div class="note-list"><article class="note-row">
+      <div class="note-meta"><time datetime="2025-12">December 2025</time><span>Research note</span></div>
+      <div><h3><a href="blog/posts/cycle-benchmarking-intro.html">Introduction to Cycle Benchmarking for Quantum Error Diagnostics</a></h3><p>A scalable, SPAM-robust protocol for estimating the process fidelity of a cycle of parallel quantum gates.</p><a class="text-link" href="blog/posts/cycle-benchmarking-intro.html">Read the note <span aria-hidden="true">↗</span></a></div>
+    </article>
+    <article class="note-row note-upcoming">
+      <div class="note-meta"><span class="status-label">In preparation</span><span>Quantum channels</span></div>
+      <div><h3>Induced Non-Markovianity via Pauli Twirling</h3><p>Coming soon.</p></div>
+    </article></div>
   </section>
-
-  <!-- ===== BLOG PREVIEW ===== -->
-  <section id="blog" class="section">
-    <div class="container">
-      <h2 class="section-title">Blog</h2>
-      <p class="section-sub">Personal notes on quantum information.</p>
-
-      <div class="blog-grid">
-
-        <article class="blog-card">
-          <div class="blog-card-meta">
-            <time class="blog-date">March 2026</time>
-            <span class="post-tag">Quantum Channels</span>
-            <span class="post-tag">Non-Markovian Noise</span>
-          </div>
-          <h3 class="blog-card-title">
-            <a href="blog/posts/pauli-channel-non-markovian.html">
-              Induced Non-Markovianity via Pauli Twirling
-            </a>
-          </h3>
-          <p class="blog-card-excerpt">
-            Coming soon!
-          </p>
-          <a href="blog/posts/pauli-channel-non-markovian.html" class="read-more">
-            Read more <i class="fas fa-arrow-right"></i>
-          </a>
-        </article>
-
-
-        <article class="blog-card">
-          <div class="blog-card-meta">
-            <time class="blog-date">December 2025</time>
-            <span class="post-tag">Error Characterization</span>
-          </div>
-          <h3 class="blog-card-title">
-            <a href="blog/posts/cycle-benchmarking-intro.html">
-              Introduction to Cycle Benchmarking for Quantum Error Diagnostics
-            </a>
-          </h3>
-          <p class="blog-card-excerpt">
-            A scalable, SPAM-robust protocol for estimating the process fidelity of a fixed
-            cycle of parallel gates via randomized compiling and Pauli twirling.
-          </p>
-          <a href="blog/posts/cycle-benchmarking-intro.html" class="read-more">
-            Read more <i class="fas fa-arrow-right"></i>
-          </a>
-        </article>
-
-      </div>
-
-      <div class="section-cta">
-        <a href="blog/index.html" class="btn-primary">View all posts</a>
-      </div>
-    </div>
+  <section class="education-section container" aria-labelledby="education-title">
+    <div class="section-label"><span class="section-number">04 /</span><h2 id="education-title">Education</h2></div>
+    <div class="education-list"><article class="education-item"><p class="education-date">2025 — Present</p><div><h3>MMath, Applied Mathematics</h3><p>Quantum Information specialization · University of Waterloo</p></div></article><article class="education-item"><p class="education-date">2020 — 2025</p><div><h3>BMath, Mathematical Physics</h3><p>University of Waterloo · Co-op · Pure Mathematics minor</p><p class="education-detail">Graduated with Distinction and Dean’s Honours</p></div></article></div>
   </section>
-
-  <!-- ===== CONTACT ===== -->
-  <section id="contact" class="section section-alt">
-    <div class="container">
-      <h2 class="section-title">Contact</h2>
-      <p class="section-sub">Feel free to reach out &mdash; I'm open to questions about my research, collaboration proposals, and job or research opportunities. </p>
-
-      <div class="contact-grid">
-
-        <div class="contact-info">
-          <div class="contact-item">
-            <i class="fas fa-envelope contact-icon"></i>
-            <div>
-              <h3>Email</h3>
-              <a href="mailto:danesh.moraleshashemi@uwaterloo.ca">danesh.moraleshashemi@uwaterloo.ca</a>
-            </div>
-          </div>
-          <div class="contact-item">
-            <i class="fas fa-map-marker-alt contact-icon"></i>
-            <div>
-              <h3>Office</h3>
-              <p>QNC 4203<br>Quantum Nano Centre<br>University of Waterloo<br>Waterloo, ON, Canada</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="contact-socials-block">
-          <h3>Find me online</h3>
-          <div class="social-links-list">
-            <a href="https://scholar.google.com/citations?hl=en&user=f_ltr8oAAAAJ" class="social-link-row" target="_blank" rel="noopener">
-              <i class="fas fa-graduation-cap"></i>
-              <span>Google Scholar</span>
-            </a>
-            <a href="https://www.linkedin.com/in/daneshmh/" class="social-link-row" target="_blank" rel="noopener">
-              <i class="fab fa-linkedin-in"></i>
-              <span>LinkedIn</span>
-            </a>
-            <a href="mailto:danesh.moraleshashemi@uwaterloo.ca" class="social-link-row">
-              <i class="fas fa-envelope"></i>
-              <span>Email</span>
-            </a>
-            <!-- <a href="#" class="social-link-row" target="_blank" rel="noopener">
-              <i class="fab fa-github"></i>
-              <span>GitHub</span>
-            </a> -->
-            <!-- <a href="#" class="social-link-row" target="_blank" rel="noopener">
-              <i class="fab fa-twitter"></i>
-              <span>Twitter / X</span>
-            </a> -->
-            <!-- <a href="#" class="social-link-row" target="_blank" rel="noopener">
-              <i class="ai ai-orcid"></i>
-              <span>ORCID</span>
-            </a> -->
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- ===== FOOTER ===== -->
-  <footer class="footer">
-    <div class="container footer-inner">
-      <p>&copy; 2026 Danesh Morales</p>
-      <p class="footer-sub">
-        Hosted on <a href="https://pages.github.com" target="_blank" rel="noopener">GitHub Pages</a>
-      </p>
-    </div>
-  </footer>
-
-  <script src="script.js"></script>
+  <section class="contact-section" id="contact" aria-labelledby="contact-title"><div class="container contact-layout">
+    <div><p class="eyebrow">05 / Contact</p><h2 id="contact-title">Let’s talk<br><em>quantum.</em></h2><p>I welcome questions about my research, collaboration proposals, and research opportunities.</p><a class="contact-email" href="mailto:danesh.moraleshashemi@uwaterloo.ca">danesh.moraleshashemi@uwaterloo.ca <span aria-hidden="true">↗</span></a></div>
+    <address><span class="address-label">Find me at</span>QNC 4203<br>Quantum Nano Centre<br>University of Waterloo<br>Waterloo, ON, Canada</address>
+  </div></section>
+</main>
+<footer class="footer"><div class="container footer-inner">
+  <p>© 2026 Danesh Morales Hashemi</p>
+  <div class="footer-links"><a href="https://scholar.google.com/citations?hl=en&user=f_ltr8oAAAAJ" target="_blank" rel="noopener">Google Scholar</a><a href="https://www.linkedin.com/in/daneshmh/" target="_blank" rel="noopener">LinkedIn</a><a href="mailto:danesh.moraleshashemi@uwaterloo.ca">Email</a></div>
+</div></footer>
+<script src="script.js"></script>
 </body>
 </html>

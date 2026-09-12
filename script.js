@@ -1,127 +1,68 @@
-/* =============================================
-   Theme (dark / light) toggle
-   ============================================= */
+/* Shared interactions; the site and abstracts remain usable without JavaScript. */
 const html = document.documentElement;
-
-// On page load: apply saved theme or system preference
-function getInitialTheme() {
-  const saved = localStorage.getItem('theme');
-  if (saved) return saved;
-  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-}
-
-function applyTheme(theme) {
-  html.setAttribute('data-theme', theme);
-  localStorage.setItem('theme', theme);
-
-  // Update both toggle icons (mobile top-bar + desktop in menu)
-  document.querySelectorAll('.theme-toggle i').forEach(icon => {
-    icon.className = theme === 'dark' ? 'fas fa-moon' : 'fas fa-sun';
+let savedTheme;
+try { savedTheme = localStorage.getItem('theme'); } catch (_) {}
+const systemTheme = window.matchMedia('(prefers-color-scheme: dark)');
+function applyTheme(theme, save = false) {
+  html.dataset.theme = theme;
+  if (save) { try { localStorage.setItem('theme', theme); } catch (_) {} }
+  document.querySelectorAll('.theme-toggle').forEach(button => {
+    button.setAttribute('aria-pressed', String(theme === 'dark'));
+    button.setAttribute('aria-label', `Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`);
   });
 }
+applyTheme(savedTheme === 'dark' || savedTheme === 'light' ? savedTheme : systemTheme.matches ? 'dark' : 'light');
+document.querySelectorAll('.theme-toggle').forEach(button => button.addEventListener('click', () => {
+  savedTheme = html.dataset.theme === 'dark' ? 'light' : 'dark';
+  applyTheme(savedTheme, true);
+}));
+systemTheme.addEventListener('change', event => { if (savedTheme !== 'light' && savedTheme !== 'dark') applyTheme(event.matches ? 'dark' : 'light'); });
 
-applyTheme(getInitialTheme());
-
-document.querySelectorAll('.theme-toggle').forEach(btn => {
-  btn.addEventListener('click', () => {
-    const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-    applyTheme(next);
-  });
-});
-
-/* =============================================
-   Mobile hamburger menu
-   ============================================= */
 const hamburger = document.getElementById('hamburger');
-const navMenu   = document.getElementById('nav-menu');
-
+const navMenu = document.getElementById('nav-menu');
+function closeMenu(restoreFocus = false) {
+  if (!hamburger || !navMenu) return;
+  navMenu.classList.remove('open');
+  hamburger.classList.remove('open');
+  hamburger.setAttribute('aria-expanded', 'false');
+  hamburger.setAttribute('aria-label', 'Open navigation menu');
+  if (restoreFocus) hamburger.focus();
+}
 if (hamburger && navMenu) {
   hamburger.addEventListener('click', () => {
-    const isOpen = navMenu.classList.toggle('open');
-    hamburger.classList.toggle('open', isOpen);
-    hamburger.setAttribute('aria-expanded', isOpen);
+    const open = navMenu.classList.toggle('open');
+    hamburger.classList.toggle('open', open);
+    hamburger.setAttribute('aria-expanded', String(open));
+    hamburger.setAttribute('aria-label', open ? 'Close navigation menu' : 'Open navigation menu');
+    if (open) navMenu.querySelector('a')?.focus();
   });
-
-  // Close menu when a nav link is clicked
-  navMenu.querySelectorAll('.nav-link, .nav-cv').forEach(link => {
-    link.addEventListener('click', () => {
-      navMenu.classList.remove('open');
-      hamburger.classList.remove('open');
-      hamburger.setAttribute('aria-expanded', 'false');
-    });
-  });
-
-  // Close on outside click
-  document.addEventListener('click', e => {
-    if (!navMenu.contains(e.target) && !hamburger.contains(e.target)) {
-      navMenu.classList.remove('open');
-      hamburger.classList.remove('open');
-      hamburger.setAttribute('aria-expanded', 'false');
-    }
-  });
+  navMenu.querySelectorAll('a').forEach(link => link.addEventListener('click', () => closeMenu()));
+  document.addEventListener('keydown', event => { if (event.key === 'Escape' && navMenu.classList.contains('open')) closeMenu(true); });
+  document.addEventListener('click', event => { if (!navMenu.contains(event.target) && !hamburger.contains(event.target)) closeMenu(); });
+  document.addEventListener('focusin', event => { if (!navMenu.contains(event.target) && !hamburger.contains(event.target)) closeMenu(); });
+  window.matchMedia('(min-width: 901px)').addEventListener('change', event => { if (event.matches) closeMenu(); });
 }
 
-/* =============================================
-   Active nav link on scroll (main page only)
-   ============================================= */
-const sections = document.querySelectorAll('section[id]');
-const navLinks  = document.querySelectorAll('.nav-link[href*="#"]');
+const filterButtons = document.querySelectorAll('.filter-btn');
+const papers = document.querySelectorAll('.paper-card[data-type]');
+filterButtons.forEach(button => button.addEventListener('click', () => {
+  filterButtons.forEach(item => {
+    const active = item === button;
+    item.classList.toggle('active', active);
+    item.setAttribute('aria-pressed', String(active));
+  });
+  let count = 0;
+  papers.forEach(paper => {
+    const value = button.dataset.filter;
+    paper.hidden = !(value === 'all' || value === paper.dataset.type || value === paper.dataset.year);
+    if (!paper.hidden) count++;
+  });
+  const status = document.getElementById('result-count');
+  if (status) status.textContent = `${count} ${count === 1 ? 'work' : 'works'}`;
+  const empty = document.getElementById('empty-state');
+  if (empty) empty.hidden = count !== 0;
+}));
 
-if (sections.length && navLinks.length) {
-  function updateActiveNav() {
-    // At the bottom of the page, activate the last section
-    if (window.innerHeight + window.scrollY >= document.body.scrollHeight - 10) {
-      const lastId = sections[sections.length - 1].id;
-      navLinks.forEach(l => l.classList.toggle('active', l.getAttribute('href').includes(lastId)));
-      return;
-    }
-    // Otherwise find the last section whose top is above the middle of the viewport
-    const mid = window.innerHeight / 2;
-    let current = sections[0].id;
-    sections.forEach(s => {
-      if (s.getBoundingClientRect().top <= mid) current = s.id;
-    });
-    navLinks.forEach(l => l.classList.toggle('active', l.getAttribute('href').includes(current)));
-  }
-
-  window.addEventListener('scroll', updateActiveNav, { passive: true });
-  updateActiveNav();
-}
-
-/* =============================================
-   Blog post citation renderer
-   =============================================
-   Usage in a post:
-     Inline:  <span class="cite" data-key="bell1964"></span>
-              <span class="cite" data-key="bell1964 nielsen2000"></span>  ← multiple
-
-     Define references (anywhere in the HTML, before </body>):
-     <script type="application/json" id="post-citations">
-     {
-       "bell1964": {
-         "authors": "J.S. Bell",
-         "title": "On the Einstein Podolsky Rosen Paradox",
-         "venue": "Physics",
-         "volume": "1",
-         "pages": "195",
-         "year": 1964,
-         "url": "https://..."
-       }
-     }
-     </script>
-
-     Place the bibliography target in the post body:
-     <section class="references-section">
-       <h2>References</h2>
-       <div id="post-references"></div>
-     </section>
-   ============================================= */
-/* =============================================
-   Citation renderer — IEEE style
-   Inline: <span class="cite" data-key="key1 key2"></span>
-   Data:   <script type="application/json" id="post-citations">{...}</script>
-   Target: <div id="post-references"></div>
-   ============================================= */
 function initCitations() {
   const dataEl = document.getElementById('post-citations');
   if (!dataEl) return;
@@ -265,32 +206,6 @@ function initTOC() {
   headings.forEach(h => obs.observe(h));
 }
 
-/* =============================================
-   Abstract toggle — works on any page with
-   .paper-card.compact + .toggle-abstract buttons
-   ============================================= */
-function initAbstractToggles() {
-  document.querySelectorAll('.toggle-abstract').forEach(btn => {
-    btn.addEventListener('click', () => {
-      btn.closest('.paper-card').classList.toggle('expanded');
-    });
-  });
-}
 
-document.addEventListener('DOMContentLoaded', () => {
-  initCitations();
-  initTOC();
-  initAbstractToggles();
-});
-
-/* =============================================
-   Navbar shadow on scroll
-   ============================================= */
-const navbar = document.getElementById('navbar');
-if (navbar) {
-  window.addEventListener('scroll', () => {
-    navbar.style.boxShadow = window.scrollY > 8
-      ? '0 1px 12px rgba(0,0,0,0.12)'
-      : '';
-  }, { passive: true });
-}
+initCitations();
+initTOC();
