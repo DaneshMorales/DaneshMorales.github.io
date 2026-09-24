@@ -2,7 +2,8 @@
 <html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8">
-  <script>(function(){var t=localStorage.getItem('theme');if(t==='dark'||(t===null&&window.matchMedia('(prefers-color-scheme: dark)').matches)){document.documentElement.setAttribute('data-theme','dark');}})();</script>
+  <script>(function(){document.documentElement.classList.add('js');var t;try{t=localStorage.getItem('theme');}catch(e){}if(t!=='light'&&t!=='dark'){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}document.documentElement.dataset.theme=t;})();</script>
+  <meta name="description" content="An introduction to cycle benchmarking for quantum error diagnostics, with derivations and references.">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Introduction to Cycle Benchmarking — Danesh Morales Hashemi</title>
   <link rel="icon" type="image/svg+xml" href="../../icon.svg">
@@ -42,46 +43,30 @@
 </head>
 <body>
 
-  <nav class="navbar" id="navbar">
-    <div class="nav-container">
-      <a href="/" class="nav-brand">Danesh Morales Hashemi</a>
-      <div class="nav-controls">
-        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
-          <span class="toggle-track"><span class="toggle-thumb"><i class="fas fa-sun"></i></span></span>
-        </button>
-        <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
-          <span></span><span></span><span></span>
-        </button>
-      </div>
-      <div class="nav-menu" id="nav-menu">
-        <div class="nav-links">
-          <button class="theme-toggle theme-toggle-desk" aria-label="Toggle dark mode">
-            <span class="toggle-track"><span class="toggle-thumb"><i class="fas fa-sun"></i></span></span>
-          </button>
-          <a href="../../index.html#about"   class="nav-link">About</a>
-          <a href="../../publications.html"  class="nav-link">Publications</a>
-          <a href="../../blog/index.html"    class="nav-link active">Blog</a>
-          <a href="../../index.html#contact" class="nav-link">Contact</a>
-          <a href="../../files/Danesh_Resume-1.pdf" class="nav-cv" target="_blank" rel="noopener noreferrer">
-            <i class="fas fa-file-alt"></i> CV
-          </a>
-        </div>
-        <div class="nav-meta">
-          <div class="nav-socials">
-            <a href="https://scholar.google.com/citations?hl=en&user=f_ltr8oAAAAJ" class="social-icon" aria-label="Google Scholar" target="_blank" rel="noopener"><i class="fas fa-graduation-cap"></i></a>
-            <a href="https://www.linkedin.com/in/daneshmh/" class="social-icon" aria-label="LinkedIn" target="_blank" rel="noopener"><i class="fab fa-linkedin-in"></i></a>
-            <a href="mailto:danesh.moraleshashemi@uwaterloo.ca" class="social-icon" aria-label="Email"><i class="fas fa-envelope"></i></a>
-          </div>
-        </div>
-      </div>
+  <a class="skip-link" href="#main-content">Skip to content</a>
+<nav class="navbar" id="navbar" aria-label="Main navigation">
+  <div class="nav-container">
+    <a class="nav-brand" href="../../index.html" aria-label="Danesh Morales Hashemi — home"><span class="brand-mark" aria-hidden="true">dm.</span><span class="brand-name">Danesh Morales Hashemi</span></a>
+    <div class="nav-menu" id="nav-menu">
+      <a class="nav-link" href="../../index.html#about">About</a>
+      <a class="nav-link" href="../../publications.html">Research</a>
+      <a class="nav-link" href="../../blog/index.html" aria-current="page">Notes</a>
+      <a class="nav-link" href="../../index.html#contact">Contact</a>
     </div>
-  </nav>
+    <div class="nav-actions">
+      <a class="nav-cv" href="../../files/Danesh_Resume-1.pdf" target="_blank" rel="noopener">CV <span aria-hidden="true">↗</span></a>
+      <button class="theme-toggle" type="button" aria-label="Switch to dark theme" aria-pressed="false"><span class="theme-icon" aria-hidden="true">◐</span></button>
+      <button class="hamburger" type="button" id="hamburger" aria-label="Open navigation menu" aria-controls="nav-menu" aria-expanded="false"><span></span><span></span></button>
+    </div>
+  </div>
+</nav>
 
+  <main id="main-content">
   <!-- Post hero -->
   <div class="post-hero">
     <div class="container">
       <a href="../index.html" class="post-back">
-        <i class="fas fa-arrow-left"></i> Back to blog
+        <i class="fas fa-arrow-left"></i> Back to notes
       </a>
       <div class="post-meta-line">
         <time class="post-date">December 2025</time>
@@ -664,13 +649,13 @@
   }
   </script>
 
-  <footer class="footer">
-    <div class="container footer-inner">
-      <p>&copy; 2026 Danesh Morales</p>
-      <p class="footer-sub">Hosted on <a href="https://pages.github.com" target="_blank" rel="noopener">GitHub Pages</a></p>
-    </div>
-  </footer>
+  </main>
+<footer class="footer"><div class="container footer-inner">
+  <p>© 2026 Danesh Morales Hashemi</p>
+  <div class="footer-links"><a href="https://scholar.google.com/citations?hl=en&user=f_ltr8oAAAAJ" target="_blank" rel="noopener">Google Scholar</a><a href="https://www.linkedin.com/in/daneshmh/" target="_blank" rel="noopener">LinkedIn</a><a href="mailto:danesh.moraleshashemi@uwaterloo.ca">Email</a></div>
+</div></footer>
 
   <script src="../../script.js"></script>
 </body>
 </html>
+
