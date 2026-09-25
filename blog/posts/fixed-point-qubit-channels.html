@@ -10,10 +10,10 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-  <link rel="stylesheet" href="../../styles.css">
+  <link rel="stylesheet" href="../../styles.css?v=20260925">
 
   <!-- MathJax: shared blog configuration -->
-  <script src="../mathjax-config.js"></script>
+  <script src="../mathjax-config.js?v=20260925"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
 </head>
 <body>
@@ -93,6 +93,12 @@
       \begin{equation}
         \mathcal{D}_p(\rho) = (1-p)\rho + p\,\frac{\mathds{1}}{d}\Tr(\rho)
       \end{equation}
+
+      <p>
+        Throughout this post, we take $0 \lt p \leq 1$ and $0 \lt \gamma \leq 1$,
+        where $\gamma$ is the amplitude damping parameter introduced below.
+        These assumptions exclude the identity-channel cases $p=0$ and $\gamma=0$.
+      </p>
 
       <p>It is easy to see that</p>
 
@@ -189,6 +195,11 @@
         \operatorname{vec}(\rho) = \frac{1}{2} \begin{pmatrix} 1 \\ r_x \\ r_y \\ r_z \end{pmatrix}
       \end{equation}
 
+      <p>
+        Here, $\operatorname{vec}(\rho)$ denotes the coefficient vector in the ordered,
+        unnormalized Pauli basis $(\mathds{1},X,Y,Z)$, rather than column-stacking the density matrix.
+      </p>
+
       <p>Then,</p>
 
       \begin{equation}
@@ -204,9 +215,11 @@
       \end{equation}
 
       <p>
-        Let $\mathcal{U} = U\rho U^\dagger$ be a unitary channel. Let $\Vec{n}$ be the unit vector
+        Let $\mathcal{U}(\rho) = U\rho U^\dagger$ be a unitary channel. Let $\Vec{n}$ be the unit vector
         pointing in the axis that intersects the target state $\rho^\star$. Then, we can find a
-        unitary $U$ such that $U^\dagger \Vec{n} = \Vec{z}$. Consider the following channel:
+        unitary $U$ such that $UZU^\dagger = n_xX+n_yY+n_zZ$.
+        For $\rho^\star = \mathds{1}/2$, the direction is arbitrary and we can take
+        $\Vec{n}=\Vec{z}$ and $U=\mathds{1}$. Consider the following channel:
       </p>
 
       \begin{equation}
@@ -225,7 +238,7 @@
       </p>
 
       \begin{equation}
-        [\Phi]^n := [\mathcal{U}]\left(\lambda[\mathcal D_p]+(1-\lambda)[\mathcal A_\gamma] \right)^n[\mathcal{U}^\dagger]
+        [\Phi]^n = [\mathcal{U}]\left(\lambda[\mathcal D_p]+(1-\lambda)[\mathcal A_\gamma] \right)^n[\mathcal{U}^\dagger]
       \end{equation}
 
       <p>
@@ -259,6 +272,12 @@
       \end{equation}
 
       <p>
+        The denominator is positive under our parameter assumptions, and $0\leq\lambda\leq1$.
+        A maximally mixed target gives $\lambda=1$, while a pure target gives $\lambda=0$.
+        Both endpoints are included in the construction.
+      </p>
+
+      <p>
         Here is a visual animation of the trajectory from $\rho_0$ to $\rho^\star$ as we compose
         the channel $\Phi$ defined above. You can change the coordinates of the two density
         operators and see how the convergence path changes!
@@ -269,6 +288,169 @@
                 title="Interactive Bloch sphere: trajectory from ρ₀ to ρ★ under repeated application of Φ"
                 loading="lazy" allowfullscreen></iframe>
       </figure>
+
+      <h2>3. Connection to the Banach Fixed-Point Theorem</h2>
+
+      <p>
+        The PTM calculation above gives the limit explicitly. To connect it to the Banach
+        fixed-point theorem, we need a complete metric space and a contraction on that space.
+        Consider the set of single-qubit density operators
+      </p>
+
+      \begin{equation}
+        \mathcal{S}(\mathbb{C}^2)
+        = \left\{\rho\in M_2(\mathbb{C}) : \rho\geq0,\ \Tr(\rho)=1\right\}
+      \end{equation}
+
+      <p>with trace distance</p>
+
+      \begin{equation}
+        D(\rho,\sigma)=\frac12\|\rho-\sigma\|_1,
+        \qquad \|A\|_1=\Tr\sqrt{A^\dagger A}.
+      \end{equation}
+
+      <p>
+        This set is nonempty and closed in the finite-dimensional normed space
+        $M_2(\mathbb{C})$, so it is complete in this metric. Also, $\Phi$ maps this set
+        into itself: convex combinations and compositions of quantum channels are quantum channels.
+      </p>
+
+      <p>
+        For qubits, the eigenvalues of $\rho-\sigma$ are
+        $\pm\|\mathbf{r}_\rho-\mathbf{r}_\sigma\|_2/2$, so
+      </p>
+
+      \begin{equation}
+        D(\rho,\sigma)=\frac12\|\mathbf{r}_\rho-\mathbf{r}_\sigma\|_2.
+      \end{equation}
+
+      <p>Let</p>
+
+      \begin{equation}
+        \Psi=\lambda\mathcal{D}_p+(1-\lambda)\mathcal{A}_\gamma.
+      \end{equation}
+
+      <p>The PTMs above show that its action on a Bloch vector is</p>
+
+      \begin{equation}
+        \mathbf{r}\longmapsto M\mathbf{r}+\mathbf{t},\qquad
+        M=\begin{pmatrix}a&0&0\\0&a&0\\0&0&b\end{pmatrix},\qquad
+        \mathbf{t}=\begin{pmatrix}0\\0\\(1-\lambda)\gamma\end{pmatrix},
+      \end{equation}
+
+      <p>where</p>
+
+      \begin{equation}
+        \begin{aligned}
+          a&=\lambda(1-p)+(1-\lambda)\sqrt{1-\gamma},\\
+          b&=\lambda(1-p)+(1-\lambda)(1-\gamma).
+        \end{aligned}
+      \end{equation}
+
+      <p>
+        When we subtract the output Bloch vectors of two states, the translation
+        $\mathbf{t}$ cancels. Therefore,
+      </p>
+
+      \begin{equation}
+        \begin{aligned}
+          D(\Psi(\rho),\Psi(\sigma))
+          &=\frac12\|M(\mathbf{r}_\rho-\mathbf{r}_\sigma)\|_2\\
+          &\leq q\,D(\rho,\sigma),
+        \end{aligned}
+        \qquad q=\max\{|a|,|b|\}=a\lt1.
+      \end{equation}
+
+      <p>
+        Here $0\leq b\leq a\lt1$ follows from $0\lt p\leq1$, $0\lt\gamma\leq1$,
+        and $0\leq\lambda\leq1$. Thus the same constant $q\lt1$ works for every pair
+        of states, including when $\lambda=0$ or $\lambda=1$. The contraction is on
+        differences of normalized states, not a claim that the full PTM has norm less than one.
+      </p>
+
+      <p>
+        Unitary conjugation preserves trace distance, so
+        $\Phi=\mathcal{U}\circ\Psi\circ\mathcal{U}^\dagger$ has the same contraction constant:
+      </p>
+
+      \begin{equation}
+        D(\Phi(\rho),\Phi(\sigma))\leq q\,D(\rho,\sigma),\qquad 0\leq q\lt1.
+      \end{equation}
+
+      <p>
+        We can now apply the Banach fixed-point theorem<span class="cite" data-key="banach_1922"></span>:
+        $\Phi$ has exactly one fixed state, and its iterates converge to that state from every
+        initial density operator. Our choice of $U$ and $\lambda$ identifies that state as
+        $\rho^\star$. We also get a quantitative convergence bound:
+      </p>
+
+      \begin{equation}
+        D(\Phi^n(\rho_0),\rho^\star)
+        \leq q^nD(\rho_0,\rho^\star),\qquad n\geq1.
+      \end{equation}
+
+      <h2>4. Relation to Known Fixed-Point Results</h2>
+
+      <p>
+        John Watrous's <em>The Theory of Quantum Information</em>, Theorem 4.24 in
+        Section 4.2.2 (pp. 228–229), gives a more general existence
+        result<span class="cite" data-key="watrous_quantum_2018"></span>.
+        On a finite-dimensional Hilbert space $\mathcal{X}$, every positive, trace-preserving
+        linear map $T:\mathrm{L}(\mathcal{X})\to\mathrm{L}(\mathcal{X})$ leaves at least one
+        density operator unchanged:
+      </p>
+
+      \begin{equation}
+        \exists\,\omega\geq0:\qquad \Tr(\omega)=1,\qquad T(\omega)=\omega.
+      \end{equation}
+
+      <p>
+        In particular, this applies to every quantum channel with the same input and output
+        space. Despite the section's focus on unital channels, this theorem does not require
+        unitality or strict contractivity. Watrous notes that existence follows from Brouwer's
+        fixed-point theorem, then gives a direct proof using averages of powers of the map and
+        nested compact sets<span class="cite" data-key="watrous_quantum_2018"></span>.
+      </p>
+
+      <p>
+        This guarantees existence, but not uniqueness or convergence of the iterates.
+        For example, every density operator is fixed by the identity channel. Also, the
+        channel $\Theta(\rho)=X\rho X$ fixes $\mathds{1}/2$, but starting from
+        $\ketbra{0}$ gives
+      </p>
+
+      \begin{equation}
+        \Theta^{2n}(\ketbra{0})=\ketbra{0},\qquad
+        \Theta^{2n+1}(\ketbra{0})=\ketbra{1},\qquad n\geq0,
+      \end{equation}
+
+      <p>so the sequence does not converge.</p>
+
+      <p>
+        Our example adds more conclusions for a more restricted family of channels.
+        We choose the target state first, then choose $U$ and $\lambda$ so that the
+        target is the unique fixed state and every initial state converges to it at the rate
+        bounded above. This does not strengthen Watrous's theorem for arbitrary channels;
+        it uses the extra strict-contraction property of our construction.
+      </p>
+
+      <p>
+        The connection between Banach's theorem and quantum channels is already known.
+        Raginsky studies strictly contractive quantum channels, their unique fixed states,
+        convergence under iteration, and their Bloch-ball geometry<span class="cite" data-key="raginsky_contractivity_2002"></span>.
+        His paper also shows that convex combinations of strictly contractive channels remain
+        strictly contractive.
+      </p>
+
+      <p>
+        Prescribing a target state is also possible more directly: the reset channel
+        $\mathcal{R}_{\rho^\star}(A)=\Tr(A)\rho^\star$ sends every density operator to
+        $\rho^\star$ in one step. Constant-output channels appear in Raginsky's construction
+        as well<span class="cite" data-key="raginsky_contractivity_2002"></span>.
+        The point of this post is the explicit construction using depolarizing and amplitude
+        damping channels plus a unitary rotation, and its connection to a theorem from
+        functional analysis, rather than a claim of a new general fixed-point theorem.
+      </p>
 
       <section class="references-section">
         <h2>References</h2>
@@ -309,6 +491,23 @@
       "pages": "74",
       "year": 2019,
       "url": "https://doi.org/10.1038/s41534-019-0189-0"
+    },
+    "watrous_quantum_2018": {
+      "authors": "J. Watrous",
+      "title": "The Theory of Quantum Information",
+      "venue": "Cambridge University Press",
+      "pages": "228–229",
+      "year": 2018,
+      "url": "https://cs.uwaterloo.ca/~watrous/TQI/TQI.4.pdf#page=28"
+    },
+    "raginsky_contractivity_2002": {
+      "authors": "M. Raginsky",
+      "title": "Strictly contractive quantum channels and physically realizable quantum computers",
+      "venue": "Physical Review A",
+      "volume": "65",
+      "pages": "032306",
+      "year": 2002,
+      "url": "https://doi.org/10.1103/PhysRevA.65.032306"
     }
   }
   </script>
@@ -320,6 +519,6 @@
     </div>
   </footer>
 
-  <script src="../../script.js"></script>
+  <script src="../../script.js?v=20260925"></script>
 </body>
 </html>

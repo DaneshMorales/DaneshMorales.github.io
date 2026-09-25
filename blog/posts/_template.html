@@ -16,6 +16,10 @@
 
   To start a post: copy this file to blog/posts/<slug>.html, fill in the placeholders,
   then add a card to index.html (#blog) and an item to blog/index.html (newest first).
+
+  Shared assets carry a version (?v=YYYYMMDD). When you change styles.css, script.js or
+  blog/mathjax-config.js, bump it on the post pages (and embedded figures): GitHub Pages lets
+  browsers cache those files for 10 minutes, so new HTML could otherwise load old CSS/JS.
 -->
 <html lang="en" data-theme="light">
 <head>
@@ -28,10 +32,10 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-  <link rel="stylesheet" href="../../styles.css">
+  <link rel="stylesheet" href="../../styles.css?v=20260925">
 
   <!-- MathJax: shared blog configuration (+ optional post-specific macros) -->
-  <script src="../mathjax-config.js"></script>
+  <script src="../mathjax-config.js?v=20260925"></script>
   <!-- <script>Object.assign(MathJax.tex.macros, { C: '{\\mathcal{C}}' });</script> -->
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
 </head>
@@ -155,6 +159,6 @@
     </div>
   </footer>
 
-  <script src="../../script.js"></script>
+  <script src="../../script.js?v=20260925"></script>
 </body>
 </html>

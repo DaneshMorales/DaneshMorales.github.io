@@ -1086,16 +1086,22 @@ h1, h2, h3, h4 { line-height: 1.25; color: var(--text); }
   }
 }
 
-/* Blog posts: once the side margins can no longer absorb it, wide MathJax display math
-   scrolls inside the text column instead of widening the page
-   (MathJax puts an inline min-width on numbered equations) */
-@media (max-width: 1200px) {
-  .post-body mjx-container[display="true"] {
-    overflow-x: auto;
-    overflow-y: hidden;
-    max-width: 100%;
-    min-width: 0 !important;
-  }
+/* Blog posts: wide MathJax display math may extend into the free space right of the text
+   column (as before), but never past the viewport; beyond that it scrolls instead of widening
+   the page. Cap = 100% + free space right of the column (same for indented list items)
+   − 0.5rem gutter. MathJax puts an inline min-width on numbered equations, hence !important. */
+.post-body mjx-container[display="true"] {
+  overflow-x: auto;
+  overflow-y: hidden;
+  width: max-content;
+  min-width: 100% !important;
+  max-width: calc(100% + max(0px, 50vw - 570px) + 0.75rem);  /* sidebar layout, max-width 1140px */
+}
+@media (max-width: 1024px) {  /* column centred, max-width 720px, 1.25rem padding */
+  .post-body mjx-container[display="true"] { max-width: calc(100% + max(0.75rem, 50vw - 368px)); }
+}
+@media (max-width: 640px) {   /* 1rem padding */
+  .post-body mjx-container[display="true"] { max-width: calc(100% + 0.5rem); }
 }
 
 /* Clip overflowing MathJax display math on small screens */

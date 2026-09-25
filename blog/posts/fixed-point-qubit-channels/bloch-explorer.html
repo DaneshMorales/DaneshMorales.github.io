@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../../../styles.css">
+  <link rel="stylesheet" href="../../../styles.css?v=20260925">
   <style>
     /* Explorer-only colours. Text, borders, surfaces, accent and dark mode come from styles.css. */
     :root {
@@ -235,7 +235,6 @@
     .timeline { display: flex; align-items: center; gap: 10px; margin-top: 8px; }
     .timeline span { min-width: 16px; font: 11px var(--bx-mono); color: var(--text-muted); }
     .timeline span:last-child { min-width: 28px; text-align: right; }
-    .motion-note { margin-top: 6px; font-size: 10px; color: var(--text-muted); }
 
     .toast {
       position: fixed;
@@ -357,9 +356,8 @@
         <div class="timeline">
           <span>0</span>
           <input type="range" id="scrubber" min="0" max="100" step="1" value="0" aria-label="Channel application number">
-          <span>100</span>
+          <span id="last-step">100</span>
         </div>
-        <p class="motion-note">Dots are exact channel iterations. Motion between dots is visual interpolation.</p>
       </div>
     </section>
 
@@ -442,15 +440,13 @@
     out[index] = value;
     const other2 = out.reduce((s, x, i) => s + (i === index ? 0 : x * x), 0);
     const available = Math.max(0, 1 - value * value);
-    let adjusted = Math.abs(value - requested) > 1e-12;
     // Preserve the coordinate being dragged. Rescale only the OTHER two
     // coordinates when a drag would otherwise leave the Bloch ball.
     if (other2 > available + 1e-14) {
       const factor = Math.sqrt(available / other2);
       for (let i = 0; i < 3; i++) if (i !== index) out[i] *= factor;
-      adjusted = true;
     }
-    return { v: validate(out), adjusted };
+    return validate(out);
   }
 
   const api = { GAMMA, P, norm, dot, sub, scale, clamp, validate, channel, apply, makeModel, editComponent };
@@ -465,11 +461,11 @@
   'use strict';
   const E = BlochEngine, $ = id => document.getElementById(id);
   const DEFAULT = { initial: [-0.6, 0.65, 0.4], target: [0.4, -0.2, 0.4] };
-  const STEPS = 100;           // iterations plotted and reachable with the scrubber
+  const STEPS = 100;           // horizon searched for the stopping point (convergence here takes < 40 steps)
   const SPEED = 10;            // channel applications per second during playback
   const STOP_DISTANCE = 1e-3;  // playback stops once the trace distance to the target drops below this
   const state = { initial: DEFAULT.initial.slice(), target: DEFAULT.target.slice(), position: 0, playing: false };
-  let model = E.makeModel(state.initial, state.target, STEPS), dirty = true, lastTime = null, toastTimer;
+  let model = E.makeModel(state.initial, state.target, STEPS), stopK = 0, dirty = true, lastTime = null, toastTimer;
   const view = { az: -2.35, el: 0.36, zoom: 1 };
   const sphere = $('sphere'), ctx = sphere.getContext('2d');
   let size = { w: 0, h: 0 }, C = {};
@@ -510,6 +506,8 @@
   }
   function rebuild() {
     model = E.makeModel(state.initial, state.target, STEPS);
+    stopK = stoppingPoint();
+    if (Number.isFinite(state.position)) state.position = Math.min(state.position, stopK);
     syncControls();
     dirty = true;
   }
@@ -554,7 +552,7 @@
       function edit(value) {
         if (!Number.isFinite(value)) { syncControls(); return; }
         pause();
-        state[kind] = E.editComponent(state[kind], index, value).v;
+        state[kind] = E.editComponent(state[kind], index, value);
         $(kind + '-preset').value = 'custom';
         rebuild();
       }
@@ -579,26 +577,30 @@
       $(kind + '-meter').style.width = (100 * t) + '%';
       $(kind + '-type').textContent = t < 1e-12 ? 'Max. mixed' : t > 1 - 1e-10 ? 'Pure' : 'Mixed';
     }
+    // The scrubber ends where playback stops: the first k with D(ρ_k, ρ★) < 10⁻³
+    $('scrubber').max = stopK;
+    $('last-step').textContent = stopK;
   }
 
   function updateControls() {
-    const limit = state.position === Infinity, k = limit ? STEPS : Math.round(state.position);
+    const limit = state.position === Infinity, k = limit ? stopK : Math.round(state.position);
     $('scrubber').value = k;
     $('scrubber').setAttribute('aria-valuetext', limit ? 'k → ∞' : 'k = ' + k);
     $('play').textContent = state.playing ? 'Ⅱ Pause' : '▶ Play';
     $('play').setAttribute('aria-label', state.playing ? 'Pause animation' : 'Play animation');
-    $('step').disabled = limit || state.position >= STEPS;
+    $('step').disabled = limit || state.position >= stopK;
     $('limit').classList.toggle('is-active', limit);
   }
 
   /* ── Playback ── */
+  // First k with trace distance below STOP_DISTANCE (STEPS if not reached within the horizon)
   function stoppingPoint() {
     const i = model.samples.findIndex(s => s.distance < STOP_DISTANCE);
     return i < 0 ? STEPS : i;
   }
   function playToggle() {
     if (state.playing) { pause(); return; }
-    const end = stoppingPoint();
+    const end = stopK;
     if (end === 0) {
       state.position = 0;
       dirty = true;
@@ -628,7 +630,7 @@
   };
   $('play').onclick = playToggle;
   $('restart').onclick = () => { pause(false); state.position = 0; dirty = true; };
-  $('step').onclick = () => { pause(false); state.position = Math.min(STEPS, Math.floor(state.position + 1e-8) + 1); dirty = true; };
+  $('step').onclick = () => { pause(false); state.position = Math.min(stopK, Math.floor(state.position + 1e-8) + 1); dirty = true; };
   $('limit').onclick = () => { pause(false); state.position = Infinity; dirty = true; };
   $('scrubber').addEventListener('input', e => { pause(false); state.position = e.target.valueAsNumber; dirty = true; });
   document.addEventListener('keydown', e => {
@@ -716,16 +718,16 @@
     ctx.fillStyle = C.origin; ctx.beginPath(); ctx.arc(zero.x, zero.y, 2.2, 0, Math.PI * 2); ctx.fill();
     if (model.ch.t > 1e-12) line3([[0, 0, 0], E.scale(model.ch.n, 1.03)], project, C.targetAxis, 1.2, [5, 5]);
 
-    const sample = model.sample(state.position), all = model.samples.map(s => s.v);
+    const sample = model.sample(state.position), all = model.samples.slice(0, stopK + 1).map(s => s.v);
     line3(all, project, C.path, 2, [4, 4]);
-    const upto = state.position === Infinity ? STEPS : Math.floor(state.position);
+    const upto = state.position === Infinity ? stopK : Math.floor(state.position);
     const traveled = all.slice(0, upto + 1);
     traveled.push(sample.v);
     line3(traveled, project, C.accent, 2.9);
     line3([[0, 0, 0], sample.v], project, C.radius, 1.1);
     // Discrete channel applications, suppressing dots closer than 4px.
     let previous = null;
-    for (let k = 0; k <= Math.min(STEPS, 50); k++) {
+    for (let k = 0; k <= Math.min(stopK, 50); k++) {
       const p = project(all[k]);
       if (previous && Math.hypot(p.x - previous.x, p.y - previous.y) < 4) continue;
       ctx.fillStyle = k <= upto ? C.accent : C.future;
@@ -774,8 +776,10 @@
   const release = e => { if (pointer === e.pointerId) { pointer = null; last = null; } };
   for (const type of ['pointerup', 'pointercancel', 'lostpointercapture']) sphere.addEventListener(type, release);
   sphere.addEventListener('wheel', e => {
+    const zoom = E.clamp(view.zoom * Math.exp(-e.deltaY * 0.001), 0.6, 1.65);
+    if (zoom === view.zoom) return;  // at a zoom limit: let the page scroll
     e.preventDefault();
-    view.zoom = E.clamp(view.zoom * Math.exp(-e.deltaY * 0.001), 0.6, 1.65);
+    view.zoom = zoom;
     dirty = true;
   }, { passive: false });
   sphere.addEventListener('keydown', e => {
@@ -832,8 +836,7 @@
     if (state.playing) {
       const dt = lastTime === null ? 0 : Math.min(0.15, (time - lastTime) / 1000);
       state.position += dt * SPEED;
-      const end = stoppingPoint();
-      if (state.position >= end) { state.position = end; state.playing = false; }
+      if (state.position >= stopK) { state.position = stopK; state.playing = false; }
       dirty = true;
     }
     lastTime = time;
@@ -846,11 +849,11 @@
     engine: E,
     snapshot: () => ({
       initial: state.initial.slice(), target: state.target.slice(), lambda: model.ch.lambda, a: model.ch.a, b: model.ch.b,
-      position: state.position, playing: state.playing, steps: STEPS, speed: SPEED, stopDistance: STOP_DISTANCE,
+      position: state.position, playing: state.playing, stopK, speed: SPEED, stopDistance: STOP_DISTANCE,
       current: model.sample(state.position), view: { ...view },
     }),
   };
-  syncControls();
+  rebuild();
   resize();
   requestAnimationFrame(frame);
 })();
