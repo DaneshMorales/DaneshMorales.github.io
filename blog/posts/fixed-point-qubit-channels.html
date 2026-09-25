@@ -298,7 +298,7 @@
       </p>
 
       \begin{equation}
-        \mathcal{S}(\mathbb{C}^2)
+        \mathrm{D}(\mathbb{C}^2)
         = \left\{\rho\in M_2(\mathbb{C}) : \rho\geq0,\ \Tr(\rho)=1\right\}
       \end{equation}
 
@@ -306,7 +306,7 @@
 
       \begin{equation}
         D(\rho,\sigma)=\frac12\|\rho-\sigma\|_1,
-        \qquad \|A\|_1=\Tr\sqrt{A^\dagger A}.
+        \qquad \|\rho\|_1=\Tr\sqrt{\rho^\dagger \rho}.
       \end{equation}
 
       <p>
@@ -389,67 +389,42 @@
         \leq q^nD(\rho_0,\rho^\star),\qquad n\geq1.
       \end{equation}
 
-      <h2>4. Relation to Known Fixed-Point Results</h2>
+      <h2>4. Important Observations</h2>
 
       <p>
         John Watrous's <em>The Theory of Quantum Information</em>, Theorem 4.24 in
-        Section 4.2.2 (pp. 228–229), gives a more general existence
+        Section 4.2.2 gives a more general existence
         result<span class="cite" data-key="watrous_quantum_2018"></span>.
-        On a finite-dimensional Hilbert space $\mathcal{X}$, every positive, trace-preserving
-        linear map $T:\mathrm{L}(\mathcal{X})\to\mathrm{L}(\mathcal{X})$ leaves at least one
-        density operator unchanged:
+        On a finite-dimensional Hilbert space $\mathcal{X}$, every positive,
+        trace-preserving linear map
+        $\Phi:\mathrm{L}(\mathcal{X})\to\mathrm{L}(\mathcal{X})$
+        leaves at least one density operator unchanged:
       </p>
 
       \begin{equation}
-        \exists\,\omega\geq0:\qquad \Tr(\omega)=1,\qquad T(\omega)=\omega.
+        \exists\,\rho^\star \in \mathrm{D}(\mathcal{X}):
+        \qquad \Phi(\rho^\star)=\rho^\star.
       \end{equation}
 
       <p>
-        In particular, this applies to every quantum channel with the same input and output
-        space. Despite the section's focus on unital channels, this theorem does not require
-        unitality or strict contractivity. Watrous notes that existence follows from Brouwer's
-        fixed-point theorem, then gives a direct proof using averages of powers of the map and
-        nested compact sets<span class="cite" data-key="watrous_quantum_2018"></span>.
-      </p>
-
-      <p>
-        This guarantees existence, but not uniqueness or convergence of the iterates.
-        For example, every density operator is fixed by the identity channel. Also, the
-        channel $\Theta(\rho)=X\rho X$ fixes $\mathds{1}/2$, but starting from
-        $\ketbra{0}$ gives
+        The result here addresses a different problem. Rather than starting
+        with a channel and asking whether a fixed state exists, we start with an
+        arbitrary target qubit state $\rho^\star$ and explicitly construct a channel
+        $\Phi$ that fixes the target. Moreover, $\rho^\star$ is the
+        unique fixed density operator such that
       </p>
 
       \begin{equation}
-        \Theta^{2n}(\ketbra{0})=\ketbra{0},\qquad
-        \Theta^{2n+1}(\ketbra{0})=\ketbra{1},\qquad n\geq0,
+        \lim_{n\to\infty}\Phi^n(\rho)=\rho^\star
+        \qquad
+        \text{for every } \rho\in\mathrm{D}(\mathbb{C}^2).
       \end{equation}
 
-      <p>so the sequence does not converge.</p>
-
       <p>
-        Our example adds more conclusions for a more restricted family of channels.
-        We choose the target state first, then choose $U$ and $\lambda$ so that the
-        target is the unique fixed state and every initial state converges to it at the rate
-        bounded above. This does not strengthen Watrous's theorem for arbitrary channels;
-        it uses the extra strict-contraction property of our construction.
-      </p>
-
-      <p>
-        The connection between Banach's theorem and quantum channels is already known.
-        Raginsky studies strictly contractive quantum channels, their unique fixed states,
-        convergence under iteration, and their Bloch-ball geometry<span class="cite" data-key="raginsky_contractivity_2002"></span>.
-        His paper also shows that convex combinations of strictly contractive channels remain
-        strictly contractive.
-      </p>
-
-      <p>
-        Prescribing a target state is also possible more directly: the reset channel
-        $\mathcal{R}_{\rho^\star}(A)=\Tr(A)\rho^\star$ sends every density operator to
-        $\rho^\star$ in one step. Constant-output channels appear in Raginsky's construction
-        as well<span class="cite" data-key="raginsky_contractivity_2002"></span>.
-        The point of this post is the explicit construction using depolarizing and amplitude
-        damping channels plus a unitary rotation, and its connection to a theorem from
-        functional analysis, rather than a claim of a new general fixed-point theorem.
+        Note that we could have used the reset channel
+        $\mathcal{R}_{\rho^\star}(\rho)=\Tr(\rho)\rho^\star$ as it sends every density operator to
+        $\rho^\star$ in one step. In our case, we wanted to construct a channel using physically meaningful maps, such as the depolarizing and amplitude
+        damping channels plus a unitary rotation, and show the path that $\rho_$ follows as it converges to $\rho^\star$.
       </p>
 
       <section class="references-section">
