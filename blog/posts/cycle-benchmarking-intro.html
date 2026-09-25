@@ -12,31 +12,14 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link rel="stylesheet" href="../../styles.css">
 
-  <!-- MathJax configuration -->
+  <!-- MathJax: shared blog configuration + paper-specific macros -->
+  <script src="../mathjax-config.js"></script>
   <script>
-    MathJax = {
-      tex: {
-        tags: 'ams',
-        inlineMath:  [['$', '$'], ['\\(', '\\)']],
-        displayMath: [['$$', '$$'], ['\\[', '\\]']],
-        macros: {
-          /* Paper-specific macros */
-          C:      '{\\mathcal{C}}',
-          R:      '{\\mathcal{R}}',
-          G:      '{\\mathcal{G}}',
-          /* Physics-package equivalents */
-          ket:    ['{\\left| #1 \\right\\rangle}', 1],
-          bra:    ['{\\left\\langle #1 \\right|}', 1],
-          braket: ['{\\left\\langle #1 \\mid #2 \\right\\rangle}', 2],
-          mel:    ['{\\left\\langle #1 \\right| #2 \\left| #3 \\right\\rangle}', 3],
-          ketbra: ['{\\left| #1 \\right\\rangle\\!\\left\\langle #1 \\right|}', 1],
-          expect: ['{\\left\\langle #1 \\right\\rangle}', 1],
-          Tr:     '{\\operatorname{Tr}}',
-          Vec:    ['{\\vec{#1}}', 1],
-        }
-      },
-      options: { skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre'] }
-    };
+    Object.assign(MathJax.tex.macros, {
+      C: '{\\mathcal{C}}',
+      R: '{\\mathcal{R}}',
+      G: '{\\mathcal{G}}',
+    });
   </script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
 </head>
@@ -88,12 +71,6 @@
         <span class="post-tag">Error Characterization</span>
       </div>
       <h1>Introduction to Cycle Benchmarking for Quantum Error Diagnostics</h1>
-      <p class="post-excerpt">
-        Cycle benchmarking is a scalable, SPAM-robust protocol for estimating the process fidelity
-        of a fixed cycle of parallel quantum gates. We introduce the protocol, explain how randomized
-        compiling tailors noise into Pauli channels, and discuss when the gate-independence assumption
-        can be relaxed without sacrificing accuracy.
-      </p>
     </div>
   </div>
 
@@ -106,20 +83,6 @@
     </aside>
 
     <article class="post-body">
-
-      <blockquote>
-        <strong>Abstract.</strong>
-        Cycle benchmarking is a scalable protocol used to measure the error rate of a specific cycle
-        of quantum gates implemented in parallel. We introduce the cycle benchmarking protocol, explain
-        how it works, and numerically illustrate its effectiveness. We demonstrate that relaxing the
-        assumptions required to accurately estimate the process fidelity can lead to inaccurate results;
-        in particular, allowing gate-dependent noise on the twirling gates can cause a misestimation of
-        the process fidelity. However, we also show that highly gate-dependent errors can still yield
-        accurate results in certain regimes. Finally, when the gate-independence condition is relaxed,
-        we show that it is possible to reconcile the estimated and theoretical fidelities by measuring
-        in a different basis via a unitary transformation which depends on both the chosen error model
-        on the twirling gates and the targeted gateset.
-      </blockquote>
 
       <h2>1. Introduction</h2>
 

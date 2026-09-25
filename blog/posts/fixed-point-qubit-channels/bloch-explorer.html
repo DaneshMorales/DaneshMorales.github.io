@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <script>(function(){var d=document.documentElement,t=null;if(window.parent!==window)d.classList.add('embedded');try{t=localStorage.getItem('theme');}catch(e){}if(t==='dark'||(t===null&&window.matchMedia('(prefers-color-scheme: dark)').matches)){d.setAttribute('data-theme','dark');}})();</script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex">
+  <title>Bloch Channel Explorer — Danesh Morales Hashemi</title>
+  <link rel="icon" type="image/svg+xml" href="../../../icon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../styles.css">
+  <style>
+    /* Explorer-only colours. Text, borders, surfaces, accent and dark mode come from styles.css. */
+    :root {
+      --bx-teal:        #008575;
+      --bx-teal-soft:   #e7f5f1;
+      --bx-amber:       #b4660b;
+      --bx-amber-soft:  #fcf1e2;
+      --bx-mono:        ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+      /* Canvas colours (read by the renderer) */
+      --bx-stage-glow:  #f4f8ff;
+      --bx-halo:        rgba(255, 255, 255, 0.94);
+      --bx-fill-0:      rgba(240, 246, 255, 0.16);
+      --bx-fill-1:      rgba(224, 236, 255, 0.12);
+      --bx-fill-2:      rgba(216, 228, 248, 0.22);
+      --bx-mesh-front:  rgba(127, 155, 197, 0.35);
+      --bx-mesh-back:   rgba(156, 175, 204, 0.13);
+      --bx-axis:        rgba(89, 114, 148, 0.3);
+      --bx-outline:     rgba(133, 157, 193, 0.31);
+      --bx-origin:      #8c9bb0;
+      --bx-target-axis: rgba(0, 133, 117, 0.45);
+      --bx-path:        rgba(37, 99, 235, 0.3);
+      --bx-radius-line: rgba(37, 99, 235, 0.22);
+      --bx-glow:        rgba(37, 99, 235, 0.2);
+      --bx-dot-future:  #a9c0f3;
+    }
+
+    [data-theme="dark"] {
+      --bx-teal:        #3fb8a4;
+      --bx-teal-soft:   #11302b;
+      --bx-amber:       #e3a452;
+      --bx-amber-soft:  #3a2912;
+      --bx-stage-glow:  #172233;
+      --bx-halo:        rgba(28, 33, 40, 0.94);
+      --bx-fill-0:      rgba(88, 166, 255, 0.05);
+      --bx-fill-1:      rgba(88, 166, 255, 0.03);
+      --bx-fill-2:      rgba(88, 166, 255, 0.08);
+      --bx-mesh-front:  rgba(139, 160, 190, 0.3);
+      --bx-mesh-back:   rgba(139, 160, 190, 0.1);
+      --bx-axis:        rgba(139, 148, 158, 0.45);
+      --bx-outline:     rgba(139, 160, 190, 0.35);
+      --bx-origin:      #6e7681;
+      --bx-target-axis: rgba(63, 184, 164, 0.5);
+      --bx-path:        rgba(88, 166, 255, 0.35);
+      --bx-radius-line: rgba(88, 166, 255, 0.25);
+      --bx-glow:        rgba(88, 166, 255, 0.3);
+      --bx-dot-future:  #2f4d78;
+    }
+
+    /* Standalone page gets the site background; inside a post the frame is transparent */
+    .embedded body { background: transparent; }
+
+    .bx { max-width: 1200px; margin: 0 auto; padding: 1.25rem; font-size: 14px; line-height: 1.5; }
+    .embedded .bx { max-width: none; padding: 4px; }  /* room for card shadows */
+
+    .bx button, .bx input, .bx select { font: inherit; color: inherit; }
+    .bx button, .bx select { cursor: pointer; min-height: 36px; }
+    .bx button { transition: background var(--transition), filter var(--transition); }
+    .bx button:disabled { opacity: 0.45; cursor: default; }
+    .bx button:hover:not(:disabled) { filter: brightness(0.965); }
+    .bx :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+    [data-theme="dark"] .bx select,
+    [data-theme="dark"] .bx input { color-scheme: dark; }
+
+    .mono { font-family: var(--bx-mono); font-variant-numeric: tabular-nums; }
+    .subtle { color: var(--text-muted); }
+
+    /* ── Layout ── */
+    .layout {
+      display: grid;
+      grid-template-columns: 300px minmax(0, 1fr);
+      gap: 14px;
+      align-items: stretch;
+    }
+    .sidebar { display: flex; flex-direction: column; gap: 12px; }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+    }
+
+    /* ── State cards ── */
+    .state-card { padding: 16px 16px 12px; --bx-tone: var(--bx-amber); --bx-tone-soft: var(--bx-amber-soft); }
+    .state-card.target { --bx-tone: var(--bx-teal); --bx-tone-soft: var(--bx-teal-soft); }
+    .state-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+    .state-title { display: flex; align-items: center; gap: 9px; }
+    .state-title h2 { font-size: 16px; font-weight: 650; letter-spacing: -0.2px; }
+    .state-icon { display: block; width: 10px; height: 10px; border: 2px solid var(--bx-tone); border-radius: 50%; }
+    .target .state-icon { border-radius: 1px; transform: rotate(45deg); background: var(--bx-tone); }
+    .state-tag {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--bx-tone);
+      background: var(--bx-tone-soft);
+      padding: 3px 7px;
+      border-radius: 5px;
+      white-space: nowrap;
+    }
+    .preset {
+      width: 100%;
+      margin-top: 12px;
+      padding: 4px 9px;
+      background: var(--bg-alt);
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      color: var(--text-muted);
+      font-size: 12px;
+    }
+    .components { margin: 12px 0 8px; }
+    .component {
+      display: grid;
+      grid-template-columns: 16px minmax(0, 1fr) 68px;
+      gap: 8px;
+      align-items: center;
+      margin: 5px 0;
+    }
+    .component label { font: 500 14px var(--bx-mono); color: var(--text-muted); }
+    .bx input[type=range] {
+      width: 100%;
+      min-height: 30px;
+      margin: 0;
+      padding: 0;
+      accent-color: var(--bx-tone, var(--accent));
+      cursor: pointer;
+    }
+    .bx input[type=number] {
+      width: 100%;
+      min-height: 32px;
+      padding: 4px 5px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      text-align: right;
+      font: 12px var(--bx-mono);
+      font-variant-numeric: tabular-nums;
+      -moz-appearance: textfield;
+      appearance: textfield;
+    }
+    .bx input[type=number]::-webkit-inner-spin-button,
+    .bx input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+    .state-stats {
+      display: flex;
+      justify-content: space-between;
+      gap: 5px;
+      padding-top: 10px;
+      border-top: 1px solid var(--border);
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+    .state-stats strong { font-weight: 600; color: var(--text); }
+    .radius-meter { height: 3px; margin-top: 9px; border-radius: 3px; background: var(--border); overflow: hidden; }
+    .radius-meter i { display: block; height: 100%; background: var(--bx-tone); transition: width 0.08s; }
+
+    /* ── Buttons ── */
+    .btn {
+      padding: 7px 11px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      font-size: 12px;
+      white-space: nowrap;
+    }
+    .btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 600; }
+    .btn.subtle { background: var(--bg-alt); color: var(--text-muted); }
+    .btn.is-active { background: var(--bx-teal-soft); border-color: var(--bx-teal); }
+    .pair-actions { display: flex; gap: 8px; }
+    .pair-actions .btn { flex: 1; }
+
+    /* ── Sphere ── */
+    .sphere-card { display: flex; flex-direction: column; min-width: 0; }
+    .viz-toolbar { display: flex; justify-content: flex-end; padding: 12px 14px 4px; }
+    .view-actions { display: flex; gap: 5px; }
+    .view-actions .btn { min-height: 28px; padding: 4px 8px; border-radius: 6px; font-size: 11px; }
+    .sphere-stage {
+      position: relative;
+      flex: 1 1 auto;
+      min-height: 390px;
+      background: radial-gradient(ellipse at 51% 52%, var(--bx-stage-glow) 0, var(--surface) 64%);
+      overflow: hidden;
+    }
+    .sphere-stage canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+      touch-action: none;
+      cursor: grab;
+    }
+    .sphere-stage canvas:active { cursor: grabbing; }
+    .sphere-stage:fullscreen { width: 100vw; height: 100vh; background: var(--surface); }
+    .canvas-hint {
+      position: absolute;
+      top: 8px;
+      right: 16px;
+      font-size: 10px;
+      color: var(--text-muted);
+      pointer-events: none;
+    }
+
+    .legend {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 8px 20px;
+      padding: 0 12px 11px;
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+    .legend span { display: inline-flex; align-items: center; gap: 7px; }
+    .legend i { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); }
+    .legend .initial { width: 9px; height: 9px; border: 2px solid var(--bx-amber); background: var(--surface); }
+    .legend .target { border-radius: 1px; transform: rotate(45deg); background: var(--bx-teal); }
+
+    /* ── Playback ── */
+    .playback { padding: 14px 16px 12px; border-top: 1px solid var(--border); }
+    .play-row { display: flex; flex-wrap: wrap; align-items: center; gap: 7px; }
+    .play-row .btn.primary { min-width: 90px; }
+    .timeline { display: flex; align-items: center; gap: 10px; margin-top: 8px; }
+    .timeline span { min-width: 16px; font: 11px var(--bx-mono); color: var(--text-muted); }
+    .timeline span:last-child { min-width: 28px; text-align: right; }
+    .motion-note { margin-top: 6px; font-size: 10px; color: var(--text-muted); }
+
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 50;
+      padding: 10px 17px;
+      border-radius: 9px;
+      background: var(--text);
+      color: var(--bg);
+      font-size: 12px;
+      box-shadow: var(--shadow-md);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s;
+    }
+    .toast.visible { opacity: 1; }
+    .noscript {
+      padding: 1rem 1.25rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--bg-alt);
+      color: var(--text-muted);
+    }
+
+    /* ── Responsive (media queries follow the frame width, i.e. the post column) ── */
+    @media (max-width: 900px) {
+      .layout { grid-template-columns: 270px minmax(0, 1fr); gap: 12px; }
+      .state-card { padding: 14px 13px 11px; }
+      .component { grid-template-columns: 14px minmax(0, 1fr) 64px; gap: 7px; }
+      .sphere-stage { min-height: 360px; }
+    }
+    @media (max-width: 720px) {
+      .layout { grid-template-columns: minmax(0, 1fr); }
+      .sphere-card { order: -1; }
+      .sidebar { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+      .pair-actions { grid-column: 1 / -1; }
+      .sphere-stage { min-height: 380px; }
+    }
+    @media (max-width: 480px) {
+      .sidebar { grid-template-columns: minmax(0, 1fr); }
+      .sphere-stage { min-height: 320px; }
+      .canvas-hint { right: 12px; font-size: 9px; }
+      .legend { gap: 6px 14px; font-size: 10px; }
+      .play-row { gap: 5px; }
+      .play-row .btn { padding: 7px 9px; font-size: 11px; }
+      .play-row .btn.primary { min-width: 78px; }
+      .view-actions .btn { padding: 3px 6px; font-size: 10px; }
+    }
+    @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+  </style>
+</head>
+<body>
+<noscript><div class="noscript">This interactive figure needs JavaScript to run.</div></noscript>
+
+<main class="bx" id="bx">
+  <div class="layout">
+
+    <aside class="sidebar" aria-label="Choose the two states">
+      <section class="card state-card" id="initial-card">
+        <div class="state-head">
+          <div class="state-title"><i class="state-icon" aria-hidden="true"></i><h2>Initial state <span class="subtle">ρ₀</span></h2></div>
+          <span class="state-tag" id="initial-type">Mixed</span>
+        </div>
+        <select class="preset" id="initial-preset" aria-label="Initial state preset"></select>
+        <div class="components" id="initial-components"></div>
+        <div class="state-stats">
+          <span>Radius <strong class="mono" id="initial-radius"></strong></span>
+          <span>Purity <strong class="mono" id="initial-purity"></strong></span>
+        </div>
+        <div class="radius-meter"><i id="initial-meter"></i></div>
+      </section>
+
+      <section class="card state-card target" id="target-card">
+        <div class="state-head">
+          <div class="state-title"><i class="state-icon" aria-hidden="true"></i><h2>Target state <span class="subtle">ρ★</span></h2></div>
+          <span class="state-tag" id="target-type">Mixed</span>
+        </div>
+        <select class="preset" id="target-preset" aria-label="Target state preset"></select>
+        <div class="components" id="target-components"></div>
+        <div class="state-stats">
+          <span>Radius <strong class="mono" id="target-radius"></strong></span>
+          <span>Purity <strong class="mono" id="target-purity"></strong></span>
+        </div>
+        <div class="radius-meter"><i id="target-meter"></i></div>
+      </section>
+
+      <div class="pair-actions">
+        <button class="btn" id="swap">⇄ Swap states</button>
+        <button class="btn" id="reset">Reset example</button>
+      </div>
+    </aside>
+
+    <section class="card sphere-card" aria-label="Animated Bloch ball">
+      <div class="viz-toolbar">
+        <div class="view-actions">
+          <button class="btn subtle" id="view3d" title="Restore the default 3D view">3D view</button>
+          <button class="btn subtle" id="facepath" title="View perpendicular to the trajectory plane">Face path</button>
+          <button class="btn subtle" id="expand" title="Show the Bloch sphere fullscreen" aria-label="Fullscreen sphere">⛶</button>
+        </div>
+      </div>
+      <div class="sphere-stage" id="sphere-stage">
+        <canvas id="sphere" tabindex="0" aria-label="Bloch ball. Drag or use arrow keys to rotate. Scroll or use plus and minus to zoom."></canvas>
+        <div class="canvas-hint">Drag to rotate · scroll to zoom</div>
+      </div>
+      <div class="legend">
+        <span><i class="initial"></i>Initial ρ₀</span>
+        <span><i></i>Current ρₖ</span>
+        <span><i class="target"></i>Target ρ★ = ρ∞</span>
+      </div>
+      <div class="playback">
+        <div class="play-row">
+          <button class="btn primary" id="play">▶ Play</button>
+          <button class="btn" id="restart" title="Return to k = 0">↺ Restart</button>
+          <button class="btn" id="step" title="Apply the channel once">+1 step</button>
+          <button class="btn" id="limit" title="Show the exact analytic limiting state">k → ∞</button>
+        </div>
+        <div class="timeline">
+          <span>0</span>
+          <input type="range" id="scrubber" min="0" max="100" step="1" value="0" aria-label="Channel application number">
+          <span>100</span>
+        </div>
+        <p class="motion-note">Dots are exact channel iterations. Motion between dots is visual interpolation.</p>
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+/* Numerical engine (no DOM). Notation follows the blog post:
+   D_p(rho) = (1-p) rho + p I/2,  A_gamma = amplitude damping toward |0>,
+   Phi(rho) = U [lambda D_p(U† rho U) + (1-lambda) A_gamma(U† rho U)] U†  with  U Z U† = n.sigma.
+   The renderer uses the exact closed-form Bloch iterate of Phi. */
+(function (root) {
+  'use strict';
+  const GAMMA = 0.30, P = 0.20;
+  const norm  = v => Math.hypot(...v);
+  const dot   = (u, v) => u.reduce((s, x, i) => s + x * v[i], 0);
+  const sub   = (u, v) => u.map((x, i) => x - v[i]);
+  const scale = (v, s) => v.map(x => x * s);
+  const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
+
+  function validate(v) {
+    if (!Array.isArray(v) || v.length !== 3 || !v.every(Number.isFinite))
+      throw new Error('A Bloch vector needs three finite real numbers.');
+    const length = norm(v);
+    if (length > 1 + 1e-12) throw new Error('The Bloch-vector length must not exceed 1.');
+    return length > 1 ? scale(v, 1 / length) : v.slice();
+  }
+
+  function channel(target, gamma = GAMMA, p = P) {
+    if (!Number.isFinite(gamma) || !Number.isFinite(p) || gamma <= 0 || gamma > 1 || p <= 0 || p > 1)
+      throw new Error('Automatic target matching requires 0 < gamma, p <= 1.');
+    target = validate(target);
+    const t = norm(target), n = t > 0 ? scale(target, 1 / t) : [0, 0, 1];
+    // Depolarizing weight that makes the target the fixed point: lambda = gamma(1-t) / [gamma(1-t) + p t]
+    const lambda = gamma * (1 - t) / (gamma * (1 - t) + t * p);
+    const c = (1 - lambda) * gamma;
+    const a = (1 - lambda) * Math.sqrt(1 - gamma) + lambda * (1 - p);  // decay perpendicular to n
+    const b = (1 - lambda) * (1 - gamma) + lambda * (1 - p);           // decay along n
+    return { target, t, n, lambda, a, b, c, gamma, p };
+  }
+
+  function apply(v, ch) {
+    v = validate(v);
+    const q = (ch.b - ch.a) * dot(v, ch.n) + ch.c;
+    return v.map((x, i) => ch.a * x + q * ch.n[i]);
+  }
+
+  function makeModel(initial, target, steps = 100) {
+    initial = validate(initial);
+    if (!Number.isInteger(steps) || steps < 1 || steps > 10000) throw new Error('Invalid number of iterations.');
+    const ch = channel(target);
+    const delta = sub(initial, ch.target), parallel = dot(delta, ch.n);
+    const perp = delta.map((x, i) => x - parallel * ch.n[i]);
+    const perp2 = dot(perp, perp);
+    function sample(position) {
+      if (position === Infinity) return { v: ch.target.slice(), distance: 0, position };
+      if (!Number.isFinite(position) || position < 0) throw new Error('Iteration must be nonnegative.');
+      const k = Math.floor(position), f = position - k;
+      // At integers: exact channel powers. Between integers: only visual
+      // linear interpolation of consecutive density matrices, not a new channel.
+      const A = Math.pow(ch.a, k) * ((1 - f) + f * ch.a);
+      const B = Math.pow(ch.b, k) * ((1 - f) + f * ch.b);
+      const v = position === 0 ? initial.slice() : ch.target.map((x, i) => x + A * perp[i] + B * parallel * ch.n[i]);
+      // Trace distance from the decaying difference, avoiding subtraction
+      // of nearly identical matrices at late times.
+      const distance = 0.5 * Math.sqrt(A * A * perp2 + B * B * parallel * parallel);
+      return { v, distance, position };
+    }
+    const samples = Array.from({ length: steps + 1 }, (_, k) => sample(k));
+    return { initial, ch, steps, parallel, perp, sample, samples };
+  }
+
+  function editComponent(v, index, requested) {
+    v = validate(v);
+    if (!Number.isInteger(index) || index < 0 || index > 2 || !Number.isFinite(requested))
+      throw new Error('Invalid component.');
+    const out = v.slice(), value = clamp(requested, -1, 1);
+    out[index] = value;
+    const other2 = out.reduce((s, x, i) => s + (i === index ? 0 : x * x), 0);
+    const available = Math.max(0, 1 - value * value);
+    let adjusted = Math.abs(value - requested) > 1e-12;
+    // Preserve the coordinate being dragged. Rescale only the OTHER two
+    // coordinates when a drag would otherwise leave the Bloch ball.
+    if (other2 > available + 1e-14) {
+      const factor = Math.sqrt(available / other2);
+      for (let i = 0; i < 3; i++) if (i !== index) out[i] *= factor;
+      adjusted = true;
+    }
+    return { v: validate(out), adjusted };
+  }
+
+  const api = { GAMMA, P, norm, dot, sub, scale, clamp, validate, channel, apply, makeModel, editComponent };
+  if (typeof module !== 'undefined' && module.exports) module.exports = api;
+  root.BlochEngine = api;
+})(typeof globalThis !== 'undefined' ? globalThis : this);
+</script>
+
+<script>
+/* UI and canvas rendering */
+(function () {
+  'use strict';
+  const E = BlochEngine, $ = id => document.getElementById(id);
+  const DEFAULT = { initial: [-0.6, 0.65, 0.4], target: [0.4, -0.2, 0.4] };
+  const STEPS = 100;           // iterations plotted and reachable with the scrubber
+  const SPEED = 10;            // channel applications per second during playback
+  const STOP_DISTANCE = 1e-3;  // playback stops once the trace distance to the target drops below this
+  const state = { initial: DEFAULT.initial.slice(), target: DEFAULT.target.slice(), position: 0, playing: false };
+  let model = E.makeModel(state.initial, state.target, STEPS), dirty = true, lastTime = null, toastTimer;
+  const view = { az: -2.35, el: 0.36, zoom: 1 };
+  const sphere = $('sphere'), ctx = sphere.getContext('2d');
+  let size = { w: 0, h: 0 }, C = {};
+  if (!ctx) return;
+
+  /* ── Theme ── */
+  function readPalette() {
+    const css = getComputedStyle(document.documentElement), v = name => css.getPropertyValue(name).trim();
+    C = {
+      muted: v('--text-muted'), accent: v('--accent'), surface: v('--surface'),
+      teal: v('--bx-teal'), amber: v('--bx-amber'), halo: v('--bx-halo'),
+      fill: [v('--bx-fill-0'), v('--bx-fill-1'), v('--bx-fill-2')],
+      meshFront: v('--bx-mesh-front'), meshBack: v('--bx-mesh-back'),
+      axis: v('--bx-axis'), outline: v('--bx-outline'), origin: v('--bx-origin'),
+      targetAxis: v('--bx-target-axis'), path: v('--bx-path'), radius: v('--bx-radius-line'),
+      glow: v('--bx-glow'), future: v('--bx-dot-future'),
+    };
+  }
+  function setTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme === 'dark' ? 'dark' : 'light');
+    readPalette();
+    dirty = true;
+  }
+  readPalette();
+
+  /* ── Helpers ── */
+  const fixed = (x, d = 4) => Math.abs(x) < 0.5 * Math.pow(10, -d) ? (0).toFixed(d) : x.toFixed(d);
+  function toast(text) {
+    clearTimeout(toastTimer);
+    $('toast').textContent = text;
+    $('toast').classList.add('visible');
+    toastTimer = setTimeout(() => $('toast').classList.remove('visible'), 2600);
+  }
+  function pause(snap = true) {
+    state.playing = false;
+    if (snap && Number.isFinite(state.position)) state.position = Math.round(state.position);
+    dirty = true;
+  }
+  function rebuild() {
+    model = E.makeModel(state.initial, state.target, STEPS);
+    syncControls();
+    dirty = true;
+  }
+
+  /* ── State controls ── */
+  const presetOptions = [
+    ['custom', 'Custom coordinates'], ['example', 'Original example'],
+    ['zero', '|0⟩  ·  +z'], ['one', '|1⟩  ·  −z'], ['plus', '|+⟩  ·  +x'], ['minus', '|−⟩  ·  −x'],
+    ['plusi', '|+i⟩  ·  +y'], ['minusi', '|−i⟩  ·  −y'], ['center', 'Maximally mixed  ·  I/2'],
+    ['pure', 'Make this state pure'], ['random', 'Random mixed state'], ['randompure', 'Random pure state'],
+  ];
+  function randomState(pure = false) {
+    const z = 2 * Math.random() - 1, phi = 2 * Math.PI * Math.random(), rad = pure ? 1 : Math.cbrt(Math.random());
+    return [rad * Math.sqrt(1 - z * z) * Math.cos(phi), rad * Math.sqrt(1 - z * z) * Math.sin(phi), rad * z];
+  }
+  function preset(kind, name) {
+    const known = { zero: [0, 0, 1], one: [0, 0, -1], plus: [1, 0, 0], minus: [-1, 0, 0], plusi: [0, 1, 0], minusi: [0, -1, 0], center: [0, 0, 0] };
+    if (known[name]) return known[name];
+    if (name === 'example') return DEFAULT[kind].slice();
+    if (name === 'random' || name === 'randompure') return randomState(name === 'randompure');
+    if (name === 'pure') { const t = E.norm(state[kind]); return t ? E.scale(state[kind], 1 / t) : [0, 0, 1]; }
+    return state[kind].slice();
+  }
+
+  for (const kind of ['initial', 'target']) {
+    $(kind + '-preset').innerHTML = presetOptions.map(([value, text]) => '<option value="' + value + '">' + text + '</option>').join('');
+    $(kind + '-preset').addEventListener('change', e => {
+      if (e.target.value === 'custom') return;
+      pause();
+      state[kind] = E.validate(preset(kind, e.target.value));
+      state.position = 0;
+      rebuild();
+    });
+    const parent = $(kind + '-components');
+    ['x', 'y', 'z'].forEach((component, index) => {
+      const row = document.createElement('div');
+      row.className = 'component';
+      row.innerHTML = '<label for="' + kind + '-' + component + '">' + component + '</label>' +
+        '<input type="range" id="' + kind + '-' + component + '" min="-1" max="1" step="0.001" aria-label="' + kind + ' Bloch ' + component + ' coordinate">' +
+        '<input type="number" id="' + kind + '-' + component + '-number" min="-1" max="1" step="0.001" aria-label="' + kind + ' Bloch ' + component + ' exact value">';
+      parent.appendChild(row);
+      function edit(value) {
+        if (!Number.isFinite(value)) { syncControls(); return; }
+        pause();
+        state[kind] = E.editComponent(state[kind], index, value).v;
+        $(kind + '-preset').value = 'custom';
+        rebuild();
+      }
+      $(kind + '-' + component).addEventListener('input', e => edit(e.target.valueAsNumber));
+      const number = $(kind + '-' + component + '-number');
+      number.addEventListener('change', e => edit(e.target.valueAsNumber));
+      number.addEventListener('keydown', e => { if (e.key === 'Enter') { edit(e.target.valueAsNumber); e.target.blur(); } });
+    });
+  }
+
+  function syncControls() {
+    for (const kind of ['initial', 'target']) {
+      const v = state[kind], t = E.norm(v);
+      ['x', 'y', 'z'].forEach((component, i) => {
+        const slider = $(kind + '-' + component);
+        slider.value = v[i];
+        slider.setAttribute('aria-valuetext', fixed(v[i], 5));
+        $(kind + '-' + component + '-number').value = fixed(v[i], 4);
+      });
+      $(kind + '-radius').textContent = fixed(t);
+      $(kind + '-purity').textContent = fixed((1 + t * t) / 2);
+      $(kind + '-meter').style.width = (100 * t) + '%';
+      $(kind + '-type').textContent = t < 1e-12 ? 'Max. mixed' : t > 1 - 1e-10 ? 'Pure' : 'Mixed';
+    }
+  }
+
+  function updateControls() {
+    const limit = state.position === Infinity, k = limit ? STEPS : Math.round(state.position);
+    $('scrubber').value = k;
+    $('scrubber').setAttribute('aria-valuetext', limit ? 'k → ∞' : 'k = ' + k);
+    $('play').textContent = state.playing ? 'Ⅱ Pause' : '▶ Play';
+    $('play').setAttribute('aria-label', state.playing ? 'Pause animation' : 'Play animation');
+    $('step').disabled = limit || state.position >= STEPS;
+    $('limit').classList.toggle('is-active', limit);
+  }
+
+  /* ── Playback ── */
+  function stoppingPoint() {
+    const i = model.samples.findIndex(s => s.distance < STOP_DISTANCE);
+    return i < 0 ? STEPS : i;
+  }
+  function playToggle() {
+    if (state.playing) { pause(); return; }
+    const end = stoppingPoint();
+    if (end === 0) {
+      state.position = 0;
+      dirty = true;
+      toast(model.sample(0).distance === 0 ? 'The initial state is already the target.' : 'The initial state is already within 10⁻³ of the target.');
+      return;
+    }
+    if (!Number.isFinite(state.position) || state.position >= end) state.position = 0;
+    state.playing = true;
+    lastTime = null;
+    dirty = true;
+  }
+
+  $('swap').onclick = () => {
+    pause();
+    [state.initial, state.target] = [state.target, state.initial];
+    state.position = 0;
+    for (const k of ['initial', 'target']) $(k + '-preset').value = 'custom';
+    rebuild();
+  };
+  $('reset').onclick = () => {
+    pause();
+    state.initial = DEFAULT.initial.slice();
+    state.target = DEFAULT.target.slice();
+    state.position = 0;
+    for (const k of ['initial', 'target']) $(k + '-preset').value = 'custom';
+    rebuild();
+  };
+  $('play').onclick = playToggle;
+  $('restart').onclick = () => { pause(false); state.position = 0; dirty = true; };
+  $('step').onclick = () => { pause(false); state.position = Math.min(STEPS, Math.floor(state.position + 1e-8) + 1); dirty = true; };
+  $('limit').onclick = () => { pause(false); state.position = Infinity; dirty = true; };
+  $('scrubber').addEventListener('input', e => { pause(false); state.position = e.target.valueAsNumber; dirty = true; });
+  document.addEventListener('keydown', e => {
+    if (e.code === 'Space' && !/INPUT|SELECT|TEXTAREA|BUTTON/.test(document.activeElement.tagName)) { e.preventDefault(); playToggle(); }
+  });
+  document.addEventListener('visibilitychange', () => { lastTime = null; });
+
+  /* ── Canvas sizing ── */
+  function resize() {
+    const box = sphere.getBoundingClientRect(), ratio = Math.min(2, window.devicePixelRatio || 1);
+    if (!box.width || !box.height) { size = { w: 0, h: 0 }; return; }
+    sphere.width = Math.round(box.width * ratio);
+    sphere.height = Math.round(box.height * ratio);
+    ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+    size = { w: box.width, h: box.height };
+    dirty = true;
+  }
+  if (typeof ResizeObserver !== 'undefined') new ResizeObserver(resize).observe($('sphere-stage'));
+  else window.addEventListener('resize', resize);
+  document.addEventListener('fullscreenchange', resize);
+  if (document.fonts) document.fonts.ready.then(() => { dirty = true; });
+
+  /* ── Sphere rendering ── */
+  const mesh = [];
+  function addCurve(points) { for (let i = 1; i < points.length; i++) mesh.push([points[i - 1], points[i]]); }
+  for (let phi = 0; phi < 2 * Math.PI - 0.001; phi += Math.PI / 12) {
+    const points = [];
+    for (let j = 0; j <= 64; j++) { const th = -Math.PI / 2 + j * Math.PI / 64; points.push([Math.cos(th) * Math.cos(phi), Math.cos(th) * Math.sin(phi), Math.sin(th)]); }
+    addCurve(points);
+  }
+  for (let deg = -75; deg <= 75; deg += 15) {
+    const points = [], th = deg * Math.PI / 180;
+    for (let j = 0; j <= 96; j++) { const phi = 2 * Math.PI * j / 96; points.push([Math.cos(th) * Math.cos(phi), Math.cos(th) * Math.sin(phi), Math.sin(th)]); }
+    addCurve(points);
+  }
+
+  function projector() {
+    const { w, h } = size, ca = Math.cos(view.az), sa = Math.sin(view.az), ce = Math.cos(view.el), se = Math.sin(view.el);
+    const r = Math.min(w * 0.43, h * 0.39) * view.zoom, cx = w * 0.5, cy = h * 0.53;
+    const right = [-sa, ca, 0], up = [-se * ca, -se * sa, ce], normal = [ce * ca, ce * sa, se];
+    return { cx, cy, r, project: v => ({ x: cx + r * E.dot(v, right), y: cy - r * E.dot(v, up), d: E.dot(v, normal) }) };
+  }
+  function line3(points, project, color, width = 1, dash = []) {
+    if (points.length < 2) return;
+    ctx.save();
+    ctx.strokeStyle = color; ctx.lineWidth = width; ctx.setLineDash(dash);
+    ctx.beginPath();
+    points.forEach((v, i) => { const p = project(v); if (i) ctx.lineTo(p.x, p.y); else ctx.moveTo(p.x, p.y); });
+    ctx.stroke();
+    ctx.restore();
+  }
+  function textAt(text, p, color, dx = 0, dy = 0, fontSize = 12) {
+    ctx.save();
+    ctx.font = '500 ' + fontSize + 'px Inter, system-ui, sans-serif';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.lineWidth = 4; ctx.strokeStyle = C.halo; ctx.strokeText(text, p.x + dx, p.y + dy);
+    ctx.fillStyle = color; ctx.fillText(text, p.x + dx, p.y + dy);
+    ctx.restore();
+  }
+
+  function drawSphere() {
+    const { w, h } = size;
+    if (!w || !h) return;
+    ctx.clearRect(0, 0, w, h);
+    const { cx, cy, r, project } = projector();
+    const fill = ctx.createRadialGradient(cx - r * 0.28, cy - r * 0.35, 0, cx, cy, r);
+    fill.addColorStop(0, C.fill[0]); fill.addColorStop(0.8, C.fill[1]); fill.addColorStop(1, C.fill[2]);
+    ctx.fillStyle = fill; ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.fill();
+
+    const projected = mesh.map(seg => seg.map(project));
+    function meshLayer(front) {
+      ctx.beginPath();
+      for (const [u, v] of projected) { if ((u.d + v.d >= 0) !== front) continue; ctx.moveTo(u.x, u.y); ctx.lineTo(v.x, v.y); }
+      ctx.strokeStyle = front ? C.meshFront : C.meshBack; ctx.lineWidth = 0.7; ctx.stroke();
+    }
+    meshLayer(false);
+    for (const [axis, name] of [[[1, 0, 0], 'x'], [[0, 1, 0], 'y'], [[0, 0, 1], 'z · |0⟩']]) {
+      line3([E.scale(axis, -1.12), E.scale(axis, 1.14)], project, C.axis, 0.85, [3, 4]);
+      textAt(name, project(E.scale(axis, 1.19)), C.muted);
+    }
+    textAt('|1⟩', project([0, 0, -1.15]), C.muted, 0, 2);
+    meshLayer(true);
+    ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.strokeStyle = C.outline; ctx.lineWidth = 1; ctx.stroke();
+    const zero = project([0, 0, 0]);
+    ctx.fillStyle = C.origin; ctx.beginPath(); ctx.arc(zero.x, zero.y, 2.2, 0, Math.PI * 2); ctx.fill();
+    if (model.ch.t > 1e-12) line3([[0, 0, 0], E.scale(model.ch.n, 1.03)], project, C.targetAxis, 1.2, [5, 5]);
+
+    const sample = model.sample(state.position), all = model.samples.map(s => s.v);
+    line3(all, project, C.path, 2, [4, 4]);
+    const upto = state.position === Infinity ? STEPS : Math.floor(state.position);
+    const traveled = all.slice(0, upto + 1);
+    traveled.push(sample.v);
+    line3(traveled, project, C.accent, 2.9);
+    line3([[0, 0, 0], sample.v], project, C.radius, 1.1);
+    // Discrete channel applications, suppressing dots closer than 4px.
+    let previous = null;
+    for (let k = 0; k <= Math.min(STEPS, 50); k++) {
+      const p = project(all[k]);
+      if (previous && Math.hypot(p.x - previous.x, p.y - previous.y) < 4) continue;
+      ctx.fillStyle = k <= upto ? C.accent : C.future;
+      ctx.beginPath(); ctx.arc(p.x, p.y, 2.25, 0, 2 * Math.PI); ctx.fill();
+      previous = p;
+    }
+
+    // Shape + colour identify the states even where markers overlap.
+    const init = project(state.initial), target = project(state.target), current = project(sample.v);
+    ctx.beginPath(); ctx.arc(init.x, init.y, 7.2, 0, 2 * Math.PI);
+    ctx.fillStyle = C.surface; ctx.fill(); ctx.lineWidth = 2.6; ctx.strokeStyle = C.amber; ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(target.x, target.y - 9); ctx.lineTo(target.x + 9, target.y); ctx.lineTo(target.x, target.y + 9); ctx.lineTo(target.x - 9, target.y);
+    ctx.closePath(); ctx.fillStyle = C.surface; ctx.fill(); ctx.strokeStyle = C.teal; ctx.lineWidth = 2.7; ctx.stroke();
+    ctx.shadowColor = C.glow; ctx.shadowBlur = 10;
+    ctx.beginPath(); ctx.arc(current.x, current.y, 5.3, 0, Math.PI * 2); ctx.fillStyle = C.accent; ctx.fill();
+    ctx.shadowBlur = 0; ctx.strokeStyle = C.surface; ctx.lineWidth = 1.5; ctx.stroke();
+
+    const closeIT = Math.hypot(init.x - target.x, init.y - target.y) < 32;
+    textAt('ρ₀', init, C.amber, -15, -16, 14);
+    textAt('ρ★', target, C.teal, 17, closeIT ? 16 : -14, 14);
+    if (Math.min(Math.hypot(current.x - init.x, current.y - init.y), Math.hypot(current.x - target.x, current.y - target.y)) > 30)
+      textAt('ρₖ', current, C.accent, 16, -14, 14);
+    if (state.position === Infinity) {
+      ctx.save();
+      ctx.fillStyle = C.teal; ctx.font = '12px Inter, system-ui, sans-serif'; ctx.textAlign = 'center';
+      ctx.fillText('Analytic limit: ρ∞ = ρ★', w / 2, h - 12);
+      ctx.restore();
+    }
+  }
+
+  /* ── View interaction ── */
+  let pointer = null, last = null;
+  sphere.addEventListener('pointerdown', e => {
+    if (e.button !== 0 && e.pointerType === 'mouse') return;
+    pointer = e.pointerId; last = { x: e.clientX, y: e.clientY };
+    sphere.setPointerCapture(e.pointerId);
+  });
+  sphere.addEventListener('pointermove', e => {
+    if (e.pointerId !== pointer) return;
+    view.az -= (e.clientX - last.x) * 0.009;
+    view.el = E.clamp(view.el + (e.clientY - last.y) * 0.009, -Math.PI / 2 + 0.02, Math.PI / 2 - 0.02);
+    last = { x: e.clientX, y: e.clientY };
+    dirty = true;
+  });
+  const release = e => { if (pointer === e.pointerId) { pointer = null; last = null; } };
+  for (const type of ['pointerup', 'pointercancel', 'lostpointercapture']) sphere.addEventListener(type, release);
+  sphere.addEventListener('wheel', e => {
+    e.preventDefault();
+    view.zoom = E.clamp(view.zoom * Math.exp(-e.deltaY * 0.001), 0.6, 1.65);
+    dirty = true;
+  }, { passive: false });
+  sphere.addEventListener('keydown', e => {
+    const keys = ['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', '+', '=', '-'];
+    if (!keys.includes(e.key)) return;
+    e.preventDefault();
+    if (e.key === 'ArrowLeft') view.az -= 0.1;
+    if (e.key === 'ArrowRight') view.az += 0.1;
+    if (e.key === 'ArrowUp') view.el = E.clamp(view.el + 0.1, -1.55, 1.55);
+    if (e.key === 'ArrowDown') view.el = E.clamp(view.el - 0.1, -1.55, 1.55);
+    if (e.key === '+' || e.key === '=') view.zoom = Math.min(1.65, view.zoom * 1.1);
+    if (e.key === '-') view.zoom = Math.max(0.6, view.zoom / 1.1);
+    dirty = true;
+  });
+  $('view3d').onclick = () => { Object.assign(view, { az: -2.35, el: 0.36, zoom: 1 }); dirty = true; };
+  const cross = (a, b) => [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]];
+  $('facepath').onclick = () => {
+    let n = cross(state.initial, state.target);
+    if (E.norm(n) < 1e-9) {
+      const v = E.norm(state.initial) > 1e-9 ? state.initial : state.target;
+      if (E.norm(v) < 1e-9) { $('view3d').click(); return; }
+      n = cross(v, Math.abs(v[0]) / E.norm(v) > 0.9 ? [0, 1, 0] : [1, 0, 0]);
+    }
+    n = E.scale(n, 1 / E.norm(n));
+    if (n[2] < 0) n = E.scale(n, -1);
+    view.az = Math.atan2(n[1], n[0]);
+    view.el = Math.asin(E.clamp(n[2], -1, 1));
+    view.zoom = 1;
+    dirty = true;
+  };
+  $('expand').onclick = async () => {
+    try {
+      if (document.fullscreenElement) await document.exitFullscreen();
+      else if ($('sphere-stage').requestFullscreen) await $('sphere-stage').requestFullscreen();
+      else toast('Fullscreen is unavailable in this browser; rotate the sphere in place.');
+    } catch (_err) { toast('Fullscreen is unavailable here.'); }
+  };
+
+  /* ── Embedding: report height to the post and follow its theme ── */
+  if (window.parent !== window) {
+    const root = $('bx');
+    const reportHeight = () => window.parent.postMessage({ type: 'post-embed:height', height: Math.ceil(root.getBoundingClientRect().height) }, '*');
+    if (typeof ResizeObserver !== 'undefined') new ResizeObserver(reportHeight).observe(root);
+    window.addEventListener('load', reportHeight);
+    window.addEventListener('message', e => {
+      if (e.source !== window.parent || !e.data || e.data.type !== 'post-embed:theme') return;
+      setTheme(e.data.theme);
+      reportHeight();
+    });
+  }
+
+  /* ── Main loop ── */
+  function frame(time) {
+    if (state.playing) {
+      const dt = lastTime === null ? 0 : Math.min(0.15, (time - lastTime) / 1000);
+      state.position += dt * SPEED;
+      const end = stoppingPoint();
+      if (state.position >= end) { state.position = end; state.playing = false; }
+      dirty = true;
+    }
+    lastTime = time;
+    if (dirty) { updateControls(); drawSphere(); dirty = false; }
+    requestAnimationFrame(frame);
+  }
+
+  // Small read-only interface for programmatic checks.
+  window.BlochExplorer = {
+    engine: E,
+    snapshot: () => ({
+      initial: state.initial.slice(), target: state.target.slice(), lambda: model.ch.lambda, a: model.ch.a, b: model.ch.b,
+      position: state.position, playing: state.playing, steps: STEPS, speed: SPEED, stopDistance: STOP_DISTANCE,
+      current: model.sample(state.position), view: { ...view },
+    }),
+  };
+  syncControls();
+  resize();
+  requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>

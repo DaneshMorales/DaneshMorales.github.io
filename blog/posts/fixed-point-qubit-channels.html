@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <script>(function(){var t=localStorage.getItem('theme');if(t==='dark'||(t===null&&window.matchMedia('(prefers-color-scheme: dark)').matches)){document.documentElement.setAttribute('data-theme','dark');}})();</script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Constructing Qubit Channels with Arbitrary Fixed Points — Danesh Morales Hashemi</title>
+  <link rel="icon" type="image/svg+xml" href="../../icon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="../../styles.css">
+
+  <!-- MathJax: shared blog configuration -->
+  <script src="../mathjax-config.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+</head>
+<body>
+
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="/" class="nav-brand">Danesh Morales Hashemi</a>
+      <div class="nav-controls">
+        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
+          <span class="toggle-track"><span class="toggle-thumb"><i class="fas fa-sun"></i></span></span>
+        </button>
+        <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+      <div class="nav-menu" id="nav-menu">
+        <div class="nav-links">
+          <button class="theme-toggle theme-toggle-desk" aria-label="Toggle dark mode">
+            <span class="toggle-track"><span class="toggle-thumb"><i class="fas fa-sun"></i></span></span>
+          </button>
+          <a href="../../index.html#about"   class="nav-link">About</a>
+          <a href="../../publications.html"  class="nav-link">Publications</a>
+          <a href="../../blog/index.html"    class="nav-link active">Blog</a>
+          <a href="../../index.html#contact" class="nav-link">Contact</a>
+          <a href="../../files/Danesh_Resume-1.pdf" class="nav-cv" target="_blank" rel="noopener noreferrer">
+            <i class="fas fa-file-alt"></i> CV
+          </a>
+        </div>
+        <div class="nav-meta">
+          <div class="nav-socials">
+            <a href="https://scholar.google.com/citations?hl=en&user=f_ltr8oAAAAJ" class="social-icon" aria-label="Google Scholar" target="_blank" rel="noopener"><i class="fas fa-graduation-cap"></i></a>
+            <a href="https://www.linkedin.com/in/daneshmh/" class="social-icon" aria-label="LinkedIn" target="_blank" rel="noopener"><i class="fab fa-linkedin-in"></i></a>
+            <a href="mailto:danesh.moraleshashemi@uwaterloo.ca" class="social-icon" aria-label="Email"><i class="fas fa-envelope"></i></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Post hero -->
+  <div class="post-hero">
+    <div class="container">
+      <a href="../index.html" class="post-back">
+        <i class="fas fa-arrow-left"></i> Back to blog
+      </a>
+      <div class="post-meta-line">
+        <time class="post-date">September 2026</time>
+        <span class="post-tag">Quantum Channels</span>
+      </div>
+      <h1>Constructing Qubit Channels with Arbitrary Fixed Points</h1>
+    </div>
+  </div>
+
+  <!-- Post body + sidebar TOC -->
+  <div class="post-layout">
+
+    <aside class="post-toc" id="post-toc" aria-label="Table of contents">
+      <p class="toc-label">On this page</p>
+      <nav id="toc-nav"></nav>
+    </aside>
+
+    <article class="post-body">
+
+      <h2>1. Introduction</h2>
+
+      <p>
+        I recently learned about the
+        <a href="https://en.wikipedia.org/wiki/Banach_fixed-point_theorem" target="_blank" rel="noopener">Banach fixed-point theorem</a><span class="cite" data-key="banach_1922"></span>
+        in my applied functional analysis course. Later that day at home, me and my roommates
+        Daniel and Marc were discussing about possible applications of the Banach fixed-point
+        theorem for quantum information. A trivial example we found was the depolarizing
+        channel<span class="cite" data-key="nielsen_quantum_2010"></span>
+      </p>
+
+      <!-- Corrected from source: the source omits the factor p on the second term, which the
+           PTM of D_p below (and trace preservation) requires. -->
+      \begin{equation}
+        \mathcal{D}_p(\rho) = (1-p)\rho + p\,\frac{\mathds{1}}{d}\Tr(\rho)
+      \end{equation}
+
+      <p>It is easy to see that</p>
+
+      \begin{equation}
+        \lim_{n\to \infty} \mathcal{D}^n_p(\rho_0) = \frac{\mathds{1}}{d}, \qquad
+        \mathcal{D}_p\left(\frac{\mathds{1}}{d}\right) = \frac{\mathds{1}}{d}
+      \end{equation}
+
+      <p>
+        for any arbitrary initial state $\rho_0$. So we asked ourselves: For a single qubit, given
+        any $\rho_0$ and target state $\rho^\star$, can we find a channel $\Phi$ such that
+      </p>
+
+      <!-- Corrected from source: the source writes D_p here instead of the channel Φ being asked for. -->
+      \begin{equation}
+        \lim_{n\to \infty} \Phi^n(\rho_0) = \rho^\star, \qquad \Phi\left(\rho^\star\right) = \rho^\star
+      \end{equation}
+
+      <p>The answer is yes!</p>
+
+      <h2>2. Construction of the Channel</h2>
+
+      <p>
+        The starting point is to consider the convex combination of a depolarizing channel
+        $\mathcal{D}_p$ and the amplitude damping
+        channel<span class="cite" data-key="nielsen_quantum_2010"></span>
+      </p>
+
+      \begin{equation}
+        \mathcal{A}_{\gamma}(\rho) = K_0 \rho K_0^\dagger + K_1 \rho K_1^\dagger, \qquad
+        K_0 = \begin{pmatrix} 1 & 0 \\ 0 & \sqrt{1-\gamma} \end{pmatrix}, \quad
+        K_1 = \begin{pmatrix} 0 & \sqrt{\gamma} \\ 0 & 0 \end{pmatrix}
+      \end{equation}
+
+      <p>Taking into account that</p>
+
+      \begin{equation}
+        \lim_{n\to \infty} \mathcal{A}^n_\gamma(\rho_0) = \ketbra{0}, \qquad
+        \mathcal{A}_\gamma(\ketbra{0}) = \ketbra{0}
+      \end{equation}
+
+      <p>for any $\rho_0$, we figured that a convex combination</p>
+
+      \begin{equation}
+        \lambda \mathcal{D}_p(\rho) + (1-\lambda)\mathcal{A}_\gamma(\rho), \qquad 0 \leq \lambda \leq 1
+      \end{equation}
+
+      <!-- Corrected from source: "depending on the value of r" → λ (r is not defined in the post). -->
+      <p>
+        composed infinite times should converge to a density matrix lying on the positive side of
+        $Z$ axis of the Bloch sphere, depending on the value of $\lambda$. We proved that this is
+        true. Consider the Pauli transfer matrix
+        (PTM)<span class="cite" data-key="helsen_spectral_2019"></span> picture of the depolarizing
+        and amplitude damping channel
+      </p>
+
+      \begin{equation}
+        [\mathcal D_p] =
+        \begin{pmatrix}
+          1 & 0 & 0 & 0 \\
+          0 & 1-p & 0 & 0 \\
+          0 & 0 & 1-p & 0 \\
+          0 & 0 & 0 & 1-p
+        \end{pmatrix},
+        \qquad
+        [\mathcal A_\gamma] =
+        \begin{pmatrix}
+          1 & 0 & 0 & 0 \\
+          0 & \sqrt{1-\gamma} & 0 & 0 \\
+          0 & 0 & \sqrt{1-\gamma} & 0 \\
+          \gamma & 0 & 0 & 1-\gamma
+        \end{pmatrix}
+      \end{equation}
+
+      <p>Then,</p>
+
+      \begin{equation}
+        \lim_{n\to\infty} \left( \lambda[\mathcal D_p]+(1-\lambda)[\mathcal A_\gamma] \right)^n =
+        \begin{pmatrix}
+          1 & 0 & 0 & 0 \\
+          0 & 0 & 0 & 0 \\
+          0 & 0 & 0 & 0 \\
+          \frac{(1-\lambda)\gamma}{\lambda p+(1-\lambda)\gamma} & 0 & 0 & 0
+        \end{pmatrix}
+      \end{equation}
+
+      <p>
+        Therefore, for a density matrix $\rho$ written in the Pauli
+        basis<span class="cite" data-key="nielsen_quantum_2010"></span>
+      </p>
+
+      \begin{equation}
+        \rho = \frac{1}{2}\left( \mathds{1} + r_xX+r_yY+r_zZ \right), \qquad
+        \operatorname{vec}(\rho) = \frac{1}{2} \begin{pmatrix} 1 \\ r_x \\ r_y \\ r_z \end{pmatrix}
+      \end{equation}
+
+      <p>Then,</p>
+
+      \begin{equation}
+        \lim_{n\to \infty} \operatorname{vec}\left[\left(\lambda \mathcal{D}_p + (1-\lambda)\mathcal{A}_\gamma\right)^n(\rho)\right]
+        = \lim_{n\to\infty} \left( \lambda[\mathcal D_p]+(1-\lambda)[\mathcal A_\gamma] \right)^n \operatorname{vec}(\rho)
+        = \frac{1}{2} \begin{pmatrix} 1 \\ 0 \\ 0 \\ \frac{(1-\lambda)\gamma}{\lambda p+(1-\lambda)\gamma} \end{pmatrix}
+      \end{equation}
+
+      <p>Therefore, the final state $\rho'$ is</p>
+
+      \begin{equation}
+        \rho' = \frac{1}{2}\left(\mathds{1} + \frac{(1-\lambda)\gamma}{\lambda p+(1-\lambda)\gamma}Z\right)
+      \end{equation}
+
+      <p>
+        Let $\mathcal{U} = U\rho U^\dagger$ be a unitary channel. Let $\Vec{n}$ be the unit vector
+        pointing in the axis that intersects the target state $\rho^\star$. Then, we can find a
+        unitary $U$ such that $U^\dagger \Vec{n} = \Vec{z}$. Consider the following channel:
+      </p>
+
+      \begin{equation}
+        [\Phi] := [\mathcal{U}]\left(\lambda[\mathcal D_p]+(1-\lambda)[\mathcal A_\gamma] \right)[\mathcal{U}^\dagger]
+      \end{equation}
+
+      <p>which can also be written as</p>
+
+      \begin{equation}
+        \Phi(\rho) = U\left(\lambda\mathcal{D}_p(U^\dagger \rho U) + (1-\lambda)\mathcal{A}_\gamma(U^\dagger \rho U)\right)U^\dagger
+      \end{equation}
+
+      <p>
+        Since $[\mathcal{U^\dagger}] = [\mathcal{U}]^\dagger$, and the composition of superoperators
+        in the PTM picture is by left multiplication, it is easy to see that
+      </p>
+
+      \begin{equation}
+        [\Phi]^n := [\mathcal{U}]\left(\lambda[\mathcal D_p]+(1-\lambda)[\mathcal A_\gamma] \right)^n[\mathcal{U}^\dagger]
+      \end{equation}
+
+      <p>
+        We claim that, for non-trivial $p,\, \gamma$, any arbitrary state $\rho_0$, and target
+        state $\rho^\star$, we can always find a $U$ and $\lambda$ such that
+      </p>
+
+      \begin{equation}
+        \lim_{n \to \infty} [\Phi]^n\operatorname{vec}(\rho_0) = \operatorname{vec}(\rho^\star), \qquad
+        [\Phi]\operatorname{vec}(\rho^\star) = \operatorname{vec}(\rho^\star)
+      \end{equation}
+
+      <p>or equivalently,</p>
+
+      \begin{equation}
+        \lim_{n \to \infty} \Phi^n(\rho_0) = \rho^\star, \qquad \Phi(\rho^\star) = \rho^\star
+      \end{equation}
+
+      <p>
+        We have mentioned already how to find $U$. Let
+        $\textbf{r}^\star = (r_x^\star,r_y^\star,r_z^\star)$ be the target vector of $\rho^\star$.
+        Then, the value of $\lambda$ is independent of $\rho_0$, and is given by
+      </p>
+
+      <!-- Corrected from source: the source gives p‖r★‖ / [γ(1 − ‖r★‖) + p‖r★‖], which is the
+           amplitude-damping weight 1 − λ (a pure target would get λ = 1, i.e. pure depolarizing).
+           Setting the limit above equal to ‖r★‖ gives the expression below. -->
+      \begin{equation}
+        \lambda = \frac{\gamma\left(1 - \|\textbf{r}^\star\|_2\right)}
+                       {\gamma\left(1 - \|\textbf{r}^\star\|_2\right) + p\|\textbf{r}^\star\|_2}.
+      \end{equation}
+
+      <p>
+        Here is a visual animation of the trajectory from $\rho_0$ to $\rho^\star$ as we compose
+        the channel $\Phi$ defined above. You can change the coordinates of the two density
+        operators and see how the convergence path changes!
+      </p>
+
+      <figure class="post-embed">
+        <iframe class="post-embed-frame" src="fixed-point-qubit-channels/bloch-explorer.html"
+                title="Interactive Bloch sphere: trajectory from ρ₀ to ρ★ under repeated application of Φ"
+                loading="lazy" allowfullscreen></iframe>
+      </figure>
+
+      <section class="references-section">
+        <h2>References</h2>
+        <div id="post-references"></div>
+      </section>
+
+    </article>
+  </div>
+
+  <!--
+    ============================================================
+    CITATION DATA
+    ============================================================
+  -->
+  <script type="application/json" id="post-citations">
+  {
+    "banach_1922": {
+      "authors": "S. Banach",
+      "title": "Sur les opérations dans les ensembles abstraits et leur application aux équations intégrales",
+      "venue": "Fundamenta Mathematicae",
+      "volume": "3",
+      "pages": "133–181",
+      "year": 1922,
+      "url": "https://doi.org/10.4064/fm-3-1-133-181"
+    },
+    "nielsen_quantum_2010": {
+      "authors": "M.A. Nielsen, I.L. Chuang",
+      "title": "Quantum Computation and Quantum Information: 10th Anniversary Edition",
+      "venue": "Cambridge University Press",
+      "year": 2010,
+      "url": "https://doi.org/10.1017/CBO9780511976667"
+    },
+    "helsen_spectral_2019": {
+      "authors": "J. Helsen, F. Battistel, B.M. Terhal",
+      "title": "Spectral quantum tomography",
+      "venue": "npj Quantum Information",
+      "volume": "5",
+      "pages": "74",
+      "year": 2019,
+      "url": "https://doi.org/10.1038/s41534-019-0189-0"
+    }
+  }
+  </script>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <p>&copy; 2026 Danesh Morales</p>
+      <p class="footer-sub">Hosted on <a href="https://pages.github.com" target="_blank" rel="noopener">GitHub Pages</a></p>
+    </div>
+  </footer>
+
+  <script src="../../script.js"></script>
+</body>
+</html>

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<!--
+  ============================================================
+  BLOG POST TEMPLATE  (not published: GitHub Pages/Jekyll skips files starting with "_")
+  ============================================================
+  Standard technical post layout, following cycle-benchmarking-intro.html:
+    1. Title/header (.post-hero): back link, date + tags, <h1>. No excerpt/summary paragraph.
+    2. Sidebar table of contents: built automatically by script.js from the h2/h3 headings.
+    3. Article (.post-body) starts directly with "<h2>1. Introduction</h2>". No abstract.
+    4. Numbered sections (<h2>2. ...</h2>) and subsections (<h3>2.1 ...</h3>).
+    5. Citations: <span class="cite" data-key="key"></span> (IEEE style, numbered by
+       script.js) with data in #post-citations and the list in #post-references.
+    6. Math: MathJax via ../mathjax-config.js; \begin{equation} ... \end{equation} is numbered.
+    7. Optional interactive figure: <figure class="post-embed"> with an
+       <iframe class="post-embed-frame"> (see script.js for the height/theme messages).
+
+  To start a post: copy this file to blog/posts/<slug>.html, fill in the placeholders,
+  then add a card to index.html (#blog) and an item to blog/index.html (newest first).
+-->
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <script>(function(){var t=localStorage.getItem('theme');if(t==='dark'||(t===null&&window.matchMedia('(prefers-color-scheme: dark)').matches)){document.documentElement.setAttribute('data-theme','dark');}})();</script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>POST TITLE — Danesh Morales Hashemi</title>
+  <link rel="icon" type="image/svg+xml" href="../../icon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="../../styles.css">
+
+  <!-- MathJax: shared blog configuration (+ optional post-specific macros) -->
+  <script src="../mathjax-config.js"></script>
+  <!-- <script>Object.assign(MathJax.tex.macros, { C: '{\\mathcal{C}}' });</script> -->
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+</head>
+<body>
+
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="/" class="nav-brand">Danesh Morales Hashemi</a>
+      <div class="nav-controls">
+        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
+          <span class="toggle-track"><span class="toggle-thumb"><i class="fas fa-sun"></i></span></span>
+        </button>
+        <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+      <div class="nav-menu" id="nav-menu">
+        <div class="nav-links">
+          <button class="theme-toggle theme-toggle-desk" aria-label="Toggle dark mode">
+            <span class="toggle-track"><span class="toggle-thumb"><i class="fas fa-sun"></i></span></span>
+          </button>
+          <a href="../../index.html#about"   class="nav-link">About</a>
+          <a href="../../publications.html"  class="nav-link">Publications</a>
+          <a href="../../blog/index.html"    class="nav-link active">Blog</a>
+          <a href="../../index.html#contact" class="nav-link">Contact</a>
+          <a href="../../files/Danesh_Resume-1.pdf" class="nav-cv" target="_blank" rel="noopener noreferrer">
+            <i class="fas fa-file-alt"></i> CV
+          </a>
+        </div>
+        <div class="nav-meta">
+          <div class="nav-socials">
+            <a href="https://scholar.google.com/citations?hl=en&user=f_ltr8oAAAAJ" class="social-icon" aria-label="Google Scholar" target="_blank" rel="noopener"><i class="fas fa-graduation-cap"></i></a>
+            <a href="https://www.linkedin.com/in/daneshmh/" class="social-icon" aria-label="LinkedIn" target="_blank" rel="noopener"><i class="fab fa-linkedin-in"></i></a>
+            <a href="mailto:danesh.moraleshashemi@uwaterloo.ca" class="social-icon" aria-label="Email"><i class="fas fa-envelope"></i></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Post hero: metadata + title only -->
+  <div class="post-hero">
+    <div class="container">
+      <a href="../index.html" class="post-back">
+        <i class="fas fa-arrow-left"></i> Back to blog
+      </a>
+      <div class="post-meta-line">
+        <time class="post-date">MONTH YEAR</time>
+        <span class="post-tag">TAG</span>
+      </div>
+      <h1>POST TITLE</h1>
+    </div>
+  </div>
+
+  <!-- Post body + sidebar TOC -->
+  <div class="post-layout">
+
+    <aside class="post-toc" id="post-toc" aria-label="Table of contents">
+      <p class="toc-label">On this page</p>
+      <nav id="toc-nav"></nav>
+    </aside>
+
+    <article class="post-body">
+
+      <h2>1. Introduction</h2>
+
+      <p>
+        Text with a citation<span class="cite" data-key="example_key"></span> and inline math $\rho$.
+      </p>
+
+      \begin{equation}
+        \rho = \frac{1}{2}\left(\mathds{1} + \Vec{r}\cdot\Vec{\sigma}\right)
+        \label{eq:example}
+      \end{equation}
+
+      <h2>2. Section Title</h2>
+
+      <h3>2.1 Subsection Title</h3>
+
+      <p>Refer back to $\eqref{eq:example}$.</p>
+
+      <!-- Optional interactive figure (store it in blog/posts/<slug>/):
+      <figure class="post-embed">
+        <iframe class="post-embed-frame" src="SLUG/FIGURE.html" title="DESCRIPTION"
+                loading="lazy" allowfullscreen></iframe>
+      </figure>
+      -->
+
+      <section class="references-section">
+        <h2>References</h2>
+        <div id="post-references"></div>
+      </section>
+
+    </article>
+  </div>
+
+  <!--
+    ============================================================
+    CITATION DATA
+    ============================================================
+  -->
+  <script type="application/json" id="post-citations">
+  {
+    "example_key": {
+      "authors": "A. Author, B. Author",
+      "title": "Title of the work",
+      "venue": "Journal",
+      "volume": "1",
+      "pages": "1–10",
+      "year": 2026,
+      "url": "https://doi.org/...",
+      "note": "arXiv:0000.00000 [quant-ph]"
+    }
+  }
+  </script>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <p>&copy; 2026 Danesh Morales</p>
+      <p class="footer-sub">Hosted on <a href="https://pages.github.com" target="_blank" rel="noopener">GitHub Pages</a></p>
+    </div>
+  </footer>
+
+  <script src="../../script.js"></script>
+</body>
+</html>

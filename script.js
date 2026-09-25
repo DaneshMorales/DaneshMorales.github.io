@@ -18,6 +18,13 @@ function applyTheme(theme) {
   document.querySelectorAll('.theme-toggle i').forEach(icon => {
     icon.className = theme === 'dark' ? 'fas fa-moon' : 'fas fa-sun';
   });
+
+  // Keep embedded interactive figures in the same theme
+  document.querySelectorAll('iframe.post-embed-frame').forEach(frame => sendThemeToEmbed(frame, theme));
+}
+
+function sendThemeToEmbed(frame, theme) {
+  if (frame.contentWindow) frame.contentWindow.postMessage({ type: 'post-embed:theme', theme }, '*');
 }
 
 applyTheme(getInitialTheme());
@@ -266,6 +273,35 @@ function initTOC() {
 }
 
 /* =============================================
+   Blog post – embedded interactive figures
+   Usage: <figure class="post-embed">
+            <iframe class="post-embed-frame" src="..." title="..."></iframe>
+          </figure>
+   The embedded page reports its content height and follows the theme:
+     frame → page:  { type: 'post-embed:height', height }
+     page  → frame: { type: 'post-embed:theme', theme }
+   ============================================= */
+function initEmbeds() {
+  const frames = [...document.querySelectorAll('iframe.post-embed-frame')];
+  if (!frames.length) return;
+
+  window.addEventListener('message', e => {
+    const data = e.data;
+    if (!data || data.type !== 'post-embed:height' || !Number.isFinite(data.height)) return;
+    const frame = frames.find(f => f.contentWindow === e.source);
+    if (frame) frame.style.height = `${Math.ceil(data.height)}px`;
+  });
+
+  // The frame answers every theme message with its height, which also covers
+  // frames that finished loading before this listener was attached.
+  frames.forEach(frame => {
+    const sync = () => sendThemeToEmbed(frame, html.getAttribute('data-theme'));
+    frame.addEventListener('load', sync);
+    sync();
+  });
+}
+
+/* =============================================
    Abstract toggle — works on any page with
    .paper-card.compact + .toggle-abstract buttons
    ============================================= */
@@ -280,6 +316,7 @@ function initAbstractToggles() {
 document.addEventListener('DOMContentLoaded', () => {
   initCitations();
   initTOC();
+  initEmbeds();
   initAbstractToggles();
 });
 
