@@ -1,0 +1,385 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>Bloch Channel Explorer</title>
+<style>
+:root{--ink:#16273d;--muted:#627289;--line:#dce3ec;--paper:#fff;--bg:#f2f5f9;--blue:#305de5;--blue-soft:#edf2ff;--teal:#008575;--teal-soft:#e7f5f1;--amber:#b4660b;--amber-soft:#fcf1e2;--shadow:0 4px 24px rgba(24,44,74,.045);--font:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;--mono:ui-monospace,SFMono-Regular,Consolas,"Liberation Mono",monospace}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font);font-size:14px;line-height:1.5}button,input,select{font:inherit}button,select{cursor:pointer}button{transition:background .13s,box-shadow .13s}button:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible,canvas:focus-visible{outline:3px solid #7094f7;outline-offset:3px}button:disabled{opacity:.45;cursor:default}button:hover:not(:disabled){filter:brightness(.965)}button,select{min-height:36px}h1,h2,h3,p{margin:0}h1{font-weight:720;font-size:29px;letter-spacing:-1px;line-height:1.18}h2{font-size:16px;font-weight:680;letter-spacing:-.2px}h3{font-size:15px}.eyebrow{font-size:10px;letter-spacing:2px;text-transform:uppercase;font-weight:750;color:var(--muted);margin-bottom:7px}.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}.subtle{color:var(--muted)}.small{font-size:12px}.shell{max-width:1440px;padding:27px 30px 24px;margin:auto}.masthead{display:flex;justify-content:space-between;gap:20px;align-items:center;margin-bottom:22px}.tagline{margin-top:7px;color:var(--muted);font-size:13px}.offline{font-size:11px;display:inline-flex;gap:7px;align-items:center;white-space:nowrap;color:var(--muted);border:1px solid var(--line);border-radius:30px;padding:7px 12px;background:#fff}.offline:before{content:"";width:6px;height:6px;border-radius:50%;background:var(--teal)}.layout{display:grid;grid-template-columns:310px minmax(0,1fr);gap:18px;align-items:start}.sidebar{display:flex;flex-direction:column;gap:13px}.card{border:1px solid var(--line);border-radius:16px;background:var(--paper);box-shadow:var(--shadow);overflow:hidden}.state-card{padding:18px 18px 13px;--accent:var(--amber)}.state-card.target{--accent:var(--teal)}.state-head{display:flex;align-items:center;justify-content:space-between;gap:8px}.state-title{display:flex;gap:9px;align-items:center}.state-icon{display:block;width:10px;height:10px;border:2px solid var(--accent);border-radius:50%}.target .state-icon{border-radius:1px;transform:rotate(45deg);background:var(--teal)}.state-tag{font-size:10px;font-weight:700;color:var(--accent);background:var(--amber-soft);padding:3px 7px;border-radius:5px;white-space:nowrap}.target .state-tag{background:var(--teal-soft)}.preset{margin-top:12px;width:100%;background:#f8fafc;border:1px solid var(--line);padding:4px 9px;border-radius:7px;color:var(--muted);font-size:12px}.components{margin:13px 0 8px}.component{display:grid;grid-template-columns:19px minmax(0,1fr) 70px;gap:10px;align-items:center;margin:5px 0}.component label{font:500 14px var(--mono);color:var(--muted)}input[type=range]{width:100%;padding:0;margin:0;accent-color:var(--accent,var(--blue));cursor:pointer;min-height:31px}input[type=number]{width:100%;background:white;border:1px solid var(--line);border-radius:7px;min-height:33px;text-align:right;padding:4px 5px;font-family:var(--mono);font-size:12px;font-variant-numeric:tabular-nums;-moz-appearance:textfield}input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}.state-stats{border-top:1px solid #edf0f5;padding-top:10px;display:flex;justify-content:space-between;gap:5px;font-size:11px;color:var(--muted)}.state-stats strong{font-weight:600;color:var(--ink)}.radius-meter{height:3px;background:#e9edf3;border-radius:3px;margin-top:9px;overflow:hidden}.radius-meter i{display:block;background:var(--accent);height:100%;transition:width .08s}.controls-note{color:var(--muted);font-size:11px;line-height:1.6;padding:0 4px}.controls-note strong{font-weight:650}.constraint-note{color:var(--amber);min-height:19px;font-size:11px;line-height:1.6;margin-top:5px}.pair-actions{display:flex;gap:8px}.btn{background:#fff;border:1px solid var(--line);color:var(--ink);border-radius:8px;padding:7px 11px;font-size:12px;white-space:nowrap}.btn.primary{background:var(--blue);color:#fff;border-color:var(--blue);font-weight:650}.btn.subtle{background:#f8fafc;color:var(--muted)}.pair-actions .btn{flex:1}.channel-card{padding:16px 18px}.channel-heading{display:flex;justify-content:space-between;align-items:center}.pill{background:#f1f4f8;color:var(--muted);font-size:10px;padding:3px 6px;border-radius:5px;font-weight:650}.fixed{display:flex;gap:8px;margin:11px 0}.fixed span{flex:1;background:#f7f9fc;border:1px solid #edf0f5;border-radius:7px;padding:6px 8px;font-family:var(--mono);font-size:12px}.mix-row{display:flex;justify-content:space-between;align-items:baseline;margin-top:10px}.mix-row strong{font-size:24px;letter-spacing:-1px}.mix-bar{height:7px;border-radius:5px;background:var(--blue-soft);overflow:hidden;display:flex;margin-top:8px}.mix-bar i:first-child{background:var(--teal);width:50%}.mix-bar i:last-child{background:var(--blue);flex:1}.mix-labels{display:flex;justify-content:space-between;margin-top:6px;font-size:10px;color:var(--muted)}.formula{font:12px var(--mono);background:#f8fafc;border:1px solid #e7edf4;padding:10px;border-radius:8px;margin-top:12px;line-height:1.8;overflow-wrap:anywhere}.workspace{display:flex;flex-direction:column;gap:14px;min-width:0}.viz-toolbar{padding:15px 20px 5px;display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}.view-actions{display:flex;gap:5px}.view-actions button{font-size:11px;border-radius:6px;min-height:28px;padding:4px 8px}.sphere-stage{height:430px;position:relative;background:radial-gradient(ellipse at 51% 52%,#f4f8ff 0,white 64%);overflow:hidden}.sphere-stage canvas{width:100%;height:100%;display:block;touch-action:none;cursor:grab}.sphere-stage canvas:active{cursor:grabbing}.iteration-chip{position:absolute;left:20px;top:8px;pointer-events:none}.iteration-chip .small{font-size:10px;text-transform:uppercase;letter-spacing:1.1px;color:var(--muted)}.iteration-value{font-family:var(--mono);font-size:26px;letter-spacing:-1px;margin-top:2px}.phase{font-size:11px;color:var(--muted);margin-top:3px}.canvas-hint{position:absolute;right:20px;top:10px;font-size:10px;color:var(--muted);pointer-events:none}.legend{display:flex;justify-content:center;flex-wrap:wrap;gap:20px;font-size:11px;color:var(--muted);padding:0 12px 11px}.legend span{display:inline-flex;align-items:center;gap:7px}.legend i{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--blue)}.legend .initial{border:2px solid var(--amber);background:#fff;width:9px;height:9px}.legend .target{background:var(--teal);border-radius:1px;transform:rotate(45deg)}.playback{border-top:1px solid #edf0f5;padding:14px 20px 13px}.play-row{display:flex;gap:7px;align-items:center;flex-wrap:wrap}.play-row .btn{min-height:36px}.play-row .btn.primary{min-width:90px}.setting{display:flex;gap:6px;align-items:center;margin-left:auto;font-size:11px;color:var(--muted)}.setting select,.horizon select{border:1px solid var(--line);background:#fff;border-radius:6px;padding:3px 5px;min-height:29px;font-size:11px;color:var(--ink)}.timeline{display:flex;align-items:center;gap:10px;margin-top:8px}.timeline input{--accent:var(--blue)}.timeline span{font:11px var(--mono);color:var(--muted);min-width:16px}.timeline span:last-child{min-width:28px;text-align:right}.play-options{display:flex;flex-wrap:wrap;align-items:center;gap:12px 18px;font-size:11px;color:var(--muted)}.play-options label{display:flex;align-items:center;gap:5px;cursor:pointer;min-height:25px}.play-options input{accent-color:var(--blue)}.horizon{display:flex;align-items:center;gap:6px;margin-left:auto}.motion-note{font-size:10px;color:var(--muted);margin-top:7px}.readouts{display:grid;grid-template-columns:1fr 1fr 1fr;border-top:1px solid var(--line);background:#f9fbfd}.readout{padding:13px 18px;min-width:0}.readout+.readout{border-left:1px solid var(--line)}.readout .label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.55px}.readout .value{margin-top:5px;font:15px var(--mono);letter-spacing:-.3px}.readout .value.distance{color:var(--blue);font-size:19px}.readout small{display:block;color:var(--muted);font-size:10px;margin-top:2px}.chart-card{padding:17px 20px 12px}.chart-title{display:flex;align-items:center;justify-content:space-between;gap:10px}.chart-title p{font-size:11px;color:var(--muted);margin-top:3px}.segments{display:flex;border:1px solid var(--line);border-radius:6px;overflow:hidden;flex-shrink:0}.segments button{background:#fff;border:none;color:var(--muted);padding:4px 9px;font-size:11px;min-height:28px}.segments button.active{background:var(--blue-soft);color:var(--blue);font-weight:650}.chart-wrap{height:186px;margin-top:10px}.chart-wrap canvas{display:block;width:100%;height:100%;touch-action:none;cursor:crosshair}.chart-caption{display:flex;justify-content:space-between;gap:10px;font-size:10px;color:var(--muted);margin-top:2px}.details{padding:15px 20px}.details summary{cursor:pointer;font-size:13px;font-weight:650;display:list-item;list-style-position:inside}.detail-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:20px;padding-top:15px}.matrix-title{font-size:11px;color:var(--muted);margin-bottom:8px}.matrix{display:grid;grid-template-columns:1fr 1fr;gap:9px 14px;max-width:330px;border-left:2px solid #a9b6c9;border-right:2px solid #a9b6c9;padding:10px 14px;border-radius:4px;font:12px var(--mono);text-align:center;white-space:nowrap}.matrix-caption{font-size:10px;color:var(--muted);margin-top:7px}.math-text{font-size:12px;color:var(--muted);line-height:1.8}.math-text strong{color:var(--ink);font-weight:600}.math-block{font-family:var(--mono);font-size:11px;background:#f8fafc;border-radius:7px;padding:10px;margin:10px 0;overflow-wrap:anywhere}.detail-actions{display:flex;gap:8px;margin-top:16px;padding-top:13px;border-top:1px solid #edf0f5}.method{margin-top:13px;padding-top:10px;border-top:1px solid #edf0f5}.method p{margin-top:8px}.source-links{margin-top:10px;font-size:10px}.source-links a{color:var(--muted);margin-right:12px}.footer{padding:18px 4px 0;display:flex;justify-content:space-between;gap:12px;font-size:10px;color:var(--muted)}.footer a{color:inherit}.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--ink);color:white;border-radius:9px;padding:10px 17px;font-size:12px;box-shadow:0 5px 25px #15213b24;z-index:50;opacity:0;pointer-events:none;transition:opacity .2s}.toast.visible{opacity:1}.noscript{background:#ffedd1;padding:25px;border:2px solid #c48028;margin:20px;border-radius:10px;color:#452800}.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
+.mobile-quick,.mobile-distance{display:none}.mobile-live{display:none}.sphere-stage:fullscreen{width:100vw;height:100vh;background:#fff}
+@media(max-width:760px){.mobile-live:not([hidden]){display:block;position:sticky;top:6px;z-index:10;margin-bottom:12px;box-shadow:0 6px 22px rgba(24,44,74,.13)}.mobile-live .sphere-stage{height:240px}.mobile-live .iteration-chip{top:12px}.mobile-live .iteration-value{font-size:20px}.mobile-live .canvas-hint{font-size:9px}.mobile-live .mobile-quick{position:absolute;left:11px;bottom:8px;display:flex;gap:4px}.mobile-live .mobile-quick .btn{min-height:26px;padding:3px 7px;font-size:10px}.mobile-live .mobile-distance{display:block;position:absolute;right:11px;bottom:11px;font-size:10px;color:var(--blue)}}
+@media(min-width:1300px){.sphere-stage{height:456px}}
+@media(max-width:1050px){.shell{padding:22px 18px}.layout{grid-template-columns:275px minmax(0,1fr);gap:13px}.sphere-stage{height:386px}.state-card{padding:16px 14px 12px}.component{gap:7px;grid-template-columns:16px minmax(0,1fr) 67px}.readout{padding:12px}.readout .value{font-size:12px}.setting{margin-left:4px}.playback{padding:13px 15px}.detail-grid{grid-template-columns:1fr}.horizon{margin-left:0}}
+@media(max-width:760px){.shell{padding:18px 12px}.masthead{align-items:flex-start;margin-bottom:16px}.masthead h1{font-size:25px}.offline{font-size:0;padding:9px;gap:0}.tagline{font-size:12px;max-width:360px}.layout{grid-template-columns:1fr;gap:14px}.sidebar{display:grid;grid-template-columns:1fr 1fr;gap:10px}.state-card{padding:13px 12px 11px}.state-title{gap:6px}.state-head h2{font-size:14px}.state-tag{font-size:9px;padding:2px 4px}.state-head{gap:4px}.component{gap:5px;grid-template-columns:14px minmax(0,1fr) 57px}.component input[type=number]{font-size:11px;min-height:32px}.state-stats{font-size:10px;flex-wrap:wrap}.preset{font-size:11px;margin-top:9px}.pair-actions,.controls-note{grid-column:1/-1}.controls-note{font-size:10px}.constraint-note{margin-top:1px;min-height:0}.channel-card{grid-column:1/-1;display:grid;grid-template-columns:1fr 1.15fr;gap:5px 18px;padding:12px 14px}.channel-heading{grid-column:1}.channel-heading h2{font-size:13px}.fixed{margin:4px 0;grid-column:1}.fixed span{padding:3px 5px;font-size:11px}.channel-mix{grid-column:2;grid-row:1/4}.mix-row{margin-top:0}.mix-row strong{font-size:21px}.mix-row .small{font-size:10px}.formula{margin:0;border:0;background:none;padding:0;font-size:10px;grid-column:1}.sphere-stage{height:390px}.viz-toolbar{padding:13px 15px 3px}.canvas-hint{right:14px;top:8px;font-size:9px}.iteration-chip{left:15px}.readout .value{font-size:12px}.readout .value.distance{font-size:17px}.chart-wrap{height:180px}.detail-grid{grid-template-columns:1fr 1fr}.detail-grid .matrix{font-size:10px;padding:10px 6px;gap:9px 7px}.footer{flex-direction:column;gap:4px}}
+@media(max-width:420px){.state-head{flex-wrap:wrap}.state-tag{margin-left:15px}.state-card{padding:12px 10px}.state-stats{font-size:9px}.component{grid-template-columns:11px minmax(0,1fr) 52px}.component label{font-size:12px}.component input[type=number]{padding:3px;font-size:10px}.sphere-stage{height:340px}.viz-toolbar h2{font-size:14px}.view-actions button{font-size:10px;padding:3px 6px}.legend{gap:14px;font-size:10px}.play-row{gap:5px}.play-row .btn{font-size:11px;padding:7px 9px}.play-row .btn.primary{min-width:78px}.setting{font-size:10px}.readouts{grid-template-columns:1.1fr 1fr}.readout:last-child{grid-column:1/-1;border-left:0;border-top:1px solid var(--line);display:flex;align-items:center;gap:10px;padding:8px 12px}.readout:last-child .value{margin-top:0}.readout:last-child small{margin:0 0 0 auto}.chart-card{padding:15px 13px 10px}.chart-title h2{font-size:14px}.chart-title p{font-size:10px}.detail-grid{grid-template-columns:1fr}.detail-grid .matrix{max-width:100%;font-size:12px}.play-options{gap:5px 12px}.horizon{font-size:10px}.channel-card{gap:3px 10px}.mix-labels{font-size:9px}.formula{font-size:9px}.iteration-value{font-size:23px}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<noscript><div class="noscript">This is an interactive application, not a video. Open this HTML file in a browser with JavaScript enabled to use the sliders and animation.</div></noscript>
+<div class="shell">
+<header class="masthead"><div><div class="eyebrow">Quantum channels / interactive laboratory</div><h1>Bloch channel explorer</h1><p class="tagline">Choose two states. The channel is tuned to converge from the initial state to the target.</p></div><div class="offline">Self-contained · runs offline</div></header>
+<main class="layout">
+<aside class="sidebar" aria-label="Choose the two states">
+<section class="card state-card" id="initial-card"><div class="state-head"><div class="state-title"><i class="state-icon" aria-hidden="true"></i><h2>Initial state <span class="subtle">ρ₀</span></h2></div><span class="state-tag" id="initial-type">Mixed</span></div><select class="preset" id="initial-preset" aria-label="Initial state preset"></select><div class="components" id="initial-components"></div><div class="state-stats"><span>Radius <strong class="mono" id="initial-radius"></strong></span><span>Purity <strong class="mono" id="initial-purity"></strong></span></div><div class="radius-meter"><i id="initial-meter"></i></div></section>
+<section class="card state-card target" id="target-card"><div class="state-head"><div class="state-title"><i class="state-icon" aria-hidden="true"></i><h2>Target state <span class="subtle">ρ★</span></h2></div><span class="state-tag" id="target-type">Mixed</span></div><select class="preset" id="target-preset" aria-label="Target state preset"></select><div class="components" id="target-components"></div><div class="state-stats"><span>Radius <strong class="mono" id="target-radius"></strong></span><span>Purity <strong class="mono" id="target-purity"></strong></span></div><div class="radius-meter"><i id="target-meter"></i></div></section>
+<div class="pair-actions"><button class="btn" id="swap">⇄ Swap states</button><button class="btn" id="reset">Reset example</button></div>
+<div class="controls-note">Drag the six components to reshape the path live. <strong>x² + y² + z² ≤ 1</strong> is enforced: at the boundary, the other two components shrink if necessary.<div class="constraint-note" id="constraint-note" aria-live="polite"></div></div>
+<section class="card channel-card"><div class="channel-heading"><h2>Channel parameters</h2><span class="pill">λ, p fixed</span></div><div class="fixed"><span>λ = 0.30</span><span>p = 0.20</span></div><div class="channel-mix"><div class="mix-row"><span class="small subtle">Calculated <span class="mono">r</span></span><strong class="mono" id="r-value">0.5000</strong></div><div class="mix-bar" aria-hidden="true"><i id="ad-bar"></i><i></i></div><div class="mix-labels"><span id="ad-label">50% damping</span><span id="dep-label">50% depolarizing</span></div></div><div class="formula">r = tp / [λ(1 − t) + tp]<br><span class="subtle">t = ‖target Bloch vector‖</span></div></section>
+</aside>
+<div class="workspace">
+<section class="card sphere-card" aria-label="Animated Bloch ball">
+<div class="viz-toolbar"><h2 id="trajectory-heading">State trajectory</h2><div class="view-actions"><button class="btn subtle" id="view3d" title="Restore the default 3D view">3D view</button><button class="btn subtle" id="facepath" title="View perpendicular to the trajectory plane">Face path</button><button class="btn subtle" id="expand" title="Show the Bloch sphere fullscreen" aria-label="Fullscreen sphere">⛶</button></div></div>
+<div class="sphere-stage" id="sphere-stage"><canvas id="sphere" tabindex="0" aria-label="Bloch ball. Drag or use arrow keys to rotate. Scroll or use plus and minus to zoom."></canvas><div class="iteration-chip"><div class="small">Channel applications</div><div class="iteration-value" id="iteration">k = 0</div><div class="phase" id="phase">Ready to evolve</div></div><div class="canvas-hint">Drag to rotate · scroll to zoom</div><div class="mobile-quick"><button class="btn primary" id="mobile-play" aria-label="Play or pause the live preview">▶ Play</button><button class="btn" id="mobile-restart" aria-label="Restart live preview">↺</button></div><div class="mobile-distance mono" id="mobile-distance"></div></div>
+<div class="legend"><span><i class="initial"></i>Initial ρ₀</span><span><i></i>Current ρₖ</span><span><i class="target"></i>Target ρ★ = ρ∞</span></div>
+<div class="playback"><div class="play-row"><button class="btn primary" id="play">▶ Play</button><button class="btn" id="restart" title="Return to k=0">↺ Restart</button><button class="btn" id="step" title="Apply the channel once">+1 step</button><button class="btn" id="limit" title="Show the exact analytic limiting state">k → ∞</button><label class="setting">Speed <select id="speed" aria-label="Playback speed"><option value="1">1 step/s</option><option value="4" selected>4 steps/s</option><option value="10">10 steps/s</option><option value="25">25 steps/s</option></select></label></div><div class="timeline"><span>0</span><input type="range" id="scrubber" min="0" max="100" step="1" value="0" aria-label="Channel application number"><span id="last-step">100</span></div><div class="play-options"><label><input type="checkbox" id="preview" checked> Show full path</label><label><input type="checkbox" id="autostop" checked> Stop at D &lt; 10⁻⁶</label><label class="horizon">Plot to k = <select id="horizon" aria-label="Maximum number of iterations"><option>40</option><option>80</option><option selected>100</option><option>200</option></select></label></div><p class="motion-note">Dots are exact channel iterations. Motion between dots is visual interpolation.</p></div>
+<div class="readouts"><div class="readout"><div class="label">Distance to target</div><div class="value distance" id="distance">—</div><small>D = ½ ‖ρₖ − ρ★‖₁</small></div><div class="readout"><div class="label">Current purity</div><div class="value" id="current-purity">—</div><small>Tr(ρₖ²)</small></div><div class="readout"><div class="label">Current Bloch vector</div><div class="value" id="current-vector">—</div><small id="radius-small">‖vₖ‖ = —</small></div></div>
+</section>
+<section class="card chart-card"><div class="chart-title"><div><h2>Convergence to the target</h2><p>Trace distance versus channel applications · click or drag to inspect</p></div><div class="segments" role="group" aria-label="Distance scale"><button id="log-scale" class="active" aria-pressed="true">Log</button><button id="linear-scale" aria-pressed="false">Linear</button></div></div><div class="chart-wrap"><canvas id="convergence" aria-label="Trace distance to target as a function of channel applications"></canvas></div><div class="chart-caption"><span id="convergence-caption">—</span><span id="scale-note">Log floor: 10⁻¹²</span></div></section>
+<details class="card details" id="details"><summary>Density matrices, exact channel &amp; export</summary><div class="detail-grid"><div><div class="matrix-title">Current density matrix ρₖ</div><div class="matrix" id="current-matrix"></div><div class="matrix-caption">Entries displayed to four decimal places.</div></div><div><div class="matrix-title">Target density matrix ρ★</div><div class="matrix" id="target-matrix"></div><div class="matrix-caption">ρ(v) = ½ [[1 + z, x − iy], [x + iy, 1 − z]]</div></div></div><div class="method math-text"><p><strong>Into the target frame, apply the mixture, then rotate back.</strong> U maps the +z axis to the target direction n, so U† is the into-frame rotation.</p><div class="math-block">Φ(ρ) = U { r Aλ(U†ρU) + (1 − r) Dp(U†ρU) } U†<br>Dp(ρ) = (1 − p)ρ + pI/2<br>K₀ = diag(1, √(1 − λ)), &nbsp; K₁ = [[0, √λ], [0, 0]]<br>Aλ(ρ) = K₀ρK₀† + K₁ρK₁†</div><p>The browser evaluates the exact, equivalent Bloch dynamics. With n = v★/t, a = r√(1 − λ) + (1 − r)(1 − p), and b = r(1 − λ) + (1 − r)(1 − p):</p><div class="math-block">vₖ₊₁ = a vₖ + [(b − a)(vₖ · n) + rλ] n<br>vₖ − v★ = aᵏ(v₀ − v★)⊥ + bᵏ(v₀ − v★)∥<br><span id="decay-values"></span></div><p>For the fixed positive λ and p above, <strong>r = tp / [λ(1 − t) + tp]</strong> makes ρ★ the unique fixed state. A pure target gives r = 1; a maximally mixed target gives r = 0. At the centre the axis is arbitrary and the channel is simply depolarizing. When both selected states are equal, the trajectory is stationary.</p><p>The distance is evaluated directly from the decaying perpendicular and parallel components to avoid cancellation near the target. A finite k is not infinity: the <strong>k → ∞</strong> button displays the analytic limit explicitly. This is evolution of the unconditional density matrix under a convex mixture, not a randomly sampled channel history.</p><div class="source-links"><a href="https://qiskit.github.io/qiskit-aer/stubs/qiskit_aer.noise.amplitude_damping_error.html" target="_blank" rel="noopener">Amplitude-damping convention</a><a href="https://qiskit.github.io/qiskit-aer/stubs/qiskit_aer.noise.depolarizing_error.html" target="_blank" rel="noopener">Depolarizing convention</a><a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/requestAnimationFrame" target="_blank" rel="noopener">Browser animation API</a></div></div><div class="detail-actions"><button class="btn" id="export-csv">Export trajectory CSV</button><button class="btn" id="save-setup">Save setup JSON</button><button class="btn" id="load-setup">Load setup</button><input id="setup-file" type="file" accept=".json,application/json" hidden></div></details>
+</div>
+</main>
+<footer class="footer"><span>Single-file explorer · no installation, external libraries, or network requests</span><span>Keyboard: Space to play/pause; arrow keys on sliders adjust coordinates.</span></footer>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script>
+/* Pure numerical engine. No framework, network request, or random-channel sampling.
+   Convention: D_p(rho)=(1-p)rho+p I/2, A_lambda damps toward |0>.
+   U Z U†=n.sigma; Phi(rho)=U[r A_lambda(U†rho U)+(1-r)D_p(U†rho U)]U†.
+   The renderer uses the exact closed-form Bloch iterate of this channel. */
+(function(root) {
+  'use strict';
+  const LAMBDA = 0.30, P = 0.20;
+  const norm = v => Math.hypot(...v);
+  const dot = (u,v) => u.reduce((s,x,i) => s+x*v[i],0);
+  const sub = (u,v) => u.map((x,i)=>x-v[i]);
+  const scale = (v,s) => v.map(x=>x*s);
+  const clamp = (v,lo,hi) => Math.max(lo,Math.min(hi,v));
+  function validate(v) {
+    if(!Array.isArray(v) || v.length!==3 || !v.every(Number.isFinite))
+      throw new Error('A Bloch vector needs three finite real numbers.');
+    const length=norm(v);
+    if(length>1+1e-12) throw new Error('The Bloch-vector length must not exceed 1.');
+    return length>1 ? scale(v,1/length) : v.slice();
+  }
+  function channel(target,lambda=LAMBDA,p=P) {
+    if(!Number.isFinite(lambda)||!Number.isFinite(p)||lambda<=0||lambda>1||p<=0||p>1)
+      throw new Error('Automatic target matching requires 0 < lambda,p <= 1.');
+    target=validate(target);
+    const t=norm(target), n=t>0?scale(target,1/t):[0,0,1];
+    const r=t*p/(lambda*(1-t)+t*p);
+    const c=r*lambda;
+    const a=r*Math.sqrt(1-lambda)+(1-r)*(1-p);
+    const b=r*(1-lambda)+(1-r)*(1-p);
+    return {target,t,n,r,a,b,c,lambda,p};
+  }
+  function apply(v,ch) {
+    v=validate(v);
+    const q=(ch.b-ch.a)*dot(v,ch.n)+ch.c;
+    return v.map((x,i)=>ch.a*x+q*ch.n[i]);
+  }
+  function makeModel(initial,target,steps=100) {
+    initial=validate(initial);
+    if(!Number.isInteger(steps)||steps<1||steps>10000) throw new Error('Invalid number of iterations.');
+    const ch=channel(target);
+    const delta=sub(initial,ch.target), parallel=dot(delta,ch.n);
+    const perp=delta.map((x,i)=>x-parallel*ch.n[i]);
+    const perp2=dot(perp,perp);
+    function sample(position) {
+      if(position===Infinity) return {v:ch.target.slice(),distance:0,position};
+      if(!Number.isFinite(position)||position<0) throw new Error('Iteration must be nonnegative.');
+      const k=Math.floor(position), f=position-k;
+      // At integers: exact channel powers. Between integers: only visual
+      // linear interpolation of consecutive density matrices, not a new channel.
+      const A=Math.pow(ch.a,k)*((1-f)+f*ch.a);
+      const B=Math.pow(ch.b,k)*((1-f)+f*ch.b);
+      const v=position===0?initial.slice():ch.target.map((x,i)=>x+A*perp[i]+B*parallel*ch.n[i]);
+      // Compute distance from the decaying difference, avoiding subtraction
+      // of nearly identical matrices in late-time readouts.
+      const distance=0.5*Math.sqrt(A*A*perp2+B*B*parallel*parallel);
+      return {v,distance,position};
+    }
+    const samples=Array.from({length:steps+1},(_,k)=>sample(k));
+    return {initial,ch,steps,parallel,perp,sample,samples};
+  }
+  function editComponent(v,index,requested) {
+    v=validate(v);
+    if(!Number.isInteger(index)||index<0||index>2||!Number.isFinite(requested))
+      throw new Error('Invalid component.');
+    const out=v.slice(), value=clamp(requested,-1,1);
+    out[index]=value;
+    const other2=out.reduce((s,x,i)=>s+(i===index?0:x*x),0);
+    const available=Math.max(0,1-value*value);
+    let adjusted=Math.abs(value-requested)>1e-12;
+    // Preserve the coordinate being dragged. Rescale only the OTHER two
+    // coordinates when a drag would otherwise leave the physical Bloch ball.
+    if(other2>available+1e-14) {
+      const factor=Math.sqrt(available/other2);
+      for(let i=0;i<3;i++) if(i!==index) out[i]*=factor;
+      adjusted=true;
+    }
+    return {v:validate(out),adjusted};
+  }
+  function density(v) {
+    v=validate(v);
+    return [
+      [{re:(1+v[2])/2,im:0},{re:v[0]/2,im:-v[1]/2}],
+      [{re:v[0]/2,im:v[1]/2},{re:(1-v[2])/2,im:0}]
+    ];
+  }
+  function csv(model) {
+    const rows=['k,x,y,z,trace_distance_to_target,rho00_re,rho01_re,rho01_im,rho10_re,rho10_im,rho11_re,lambda,p,r'];
+    for(let k=0;k<=model.steps;k++) {
+      const s=model.samples[k],v=s.v,m=density(v);
+      rows.push([k,...v,s.distance,m[0][0].re,m[0][1].re,m[0][1].im,
+        m[1][0].re,m[1][0].im,m[1][1].re,model.ch.lambda,model.ch.p,model.ch.r].join(','));
+    }
+    return rows.join('\n');
+  }
+  const api={LAMBDA,P,norm,dot,sub,scale,clamp,validate,channel,apply,makeModel,editComponent,density,csv};
+  if(typeof module!=='undefined'&&module.exports) module.exports=api;
+  root.BlochEngine=api;
+})(typeof globalThis!=='undefined'?globalThis:this);
+
+</script>
+<script>
+/* UI and Canvas rendering. All computation runs locally; no dependencies. */
+(function(){
+'use strict';
+const E=BlochEngine, $=id=>document.getElementById(id), C={ink:'#16273d',muted:'#627289',blue:'#305de5',teal:'#008575',amber:'#b4660b'};
+const DEFAULT={initial:[-.6,.65,.4],target:[.4,-.2,.4]};
+const state={initial:DEFAULT.initial.slice(),target:DEFAULT.target.slice(),position:0,steps:100,playing:false,speed:4,log:true,preview:true,autostop:true};
+let model=E.makeModel(state.initial,state.target,state.steps),dirty=true,lastTime=null,toastTimer,noticeTimer;
+const view={az:-2.35,el:.36,zoom:1};
+const sphere=$('sphere'),graph=$('convergence'),sphereCtx=sphere.getContext('2d'),graphCtx=graph.getContext('2d');
+let sphereSize={w:0,h:0},graphSize={w:0,h:0};
+if(!sphereCtx||!graphCtx) { $('phase').textContent='This browser does not provide Canvas rendering.'; return; }
+const superscript=n=>String(n).replace(/[-0-9]/g,c=>({'-':'⁻','0':'⁰','1':'¹','2':'²','3':'³','4':'⁴','5':'⁵','6':'⁶','7':'⁷','8':'⁸','9':'⁹'})[c]);
+const fixed=(x,d=4)=>Math.abs(x)<.5*Math.pow(10,-d)?(0).toFixed(d):x.toFixed(d);
+const vectorText=(v,d=3)=>'('+v.map(x=>fixed(x,d)).join(', ')+')';
+function distanceText(x) {
+ if(x===0)return '0';
+ if(x>=.0001)return x.toFixed(6);
+ const power=Math.floor(Math.log10(x));
+ return (x/10**power).toFixed(3)+' × 10'+superscript(power);
+}
+function toast(text) { clearTimeout(toastTimer);$('toast').textContent=text;$('toast').classList.add('visible');toastTimer=setTimeout(()=>$('toast').classList.remove('visible'),2600); }
+function pause(snap=true) {state.playing=false;if(snap&&Number.isFinite(state.position))state.position=Math.round(state.position);dirty=true;}
+function rebuild() {model=E.makeModel(state.initial,state.target,state.steps);if(Number.isFinite(state.position))state.position=Math.min(state.position,state.steps);syncControls();dirty=true;}
+const presetOptions=[['custom','Custom coordinates'],['example','Original example'],['zero','|0⟩  ·  +z'],['one','|1⟩  ·  −z'],['plus','|+⟩  ·  +x'],['minus','|−⟩  ·  −x'],['plusi','|+i⟩  ·  +y'],['minusi','|−i⟩  ·  −y'],['center','Maximally mixed  ·  I/2'],['pure','Make this state pure'],['random','Random mixed state'],['randompure','Random pure state']];
+function randomState(pure=false) {const z=2*Math.random()-1,phi=2*Math.PI*Math.random(),rad=pure?1:Math.cbrt(Math.random());return [rad*Math.sqrt(1-z*z)*Math.cos(phi),rad*Math.sqrt(1-z*z)*Math.sin(phi),rad*z];}
+function preset(kind,name) {
+ const known={zero:[0,0,1],one:[0,0,-1],plus:[1,0,0],minus:[-1,0,0],plusi:[0,1,0],minusi:[0,-1,0],center:[0,0,0]};
+ if(known[name])return known[name];
+ if(name==='example')return DEFAULT[kind].slice();
+ if(name==='random'||name==='randompure')return randomState(name==='randompure');
+ if(name==='pure'){const t=E.norm(state[kind]);return t?E.scale(state[kind],1/t):[0,0,1];}
+ return state[kind].slice();
+}
+for(const kind of ['initial','target']) {
+ $(kind+'-preset').innerHTML=presetOptions.map(([value,text])=>'<option value="'+value+'">'+text+'</option>').join('');
+ $(kind+'-preset').addEventListener('change',e=>{if(e.target.value==='custom')return;pause();state[kind]=E.validate(preset(kind,e.target.value));state.position=0;rebuild();});
+ const parent=$(kind+'-components');
+ ['x','y','z'].forEach((component,index)=>{
+  const row=document.createElement('div');row.className='component';
+  row.innerHTML='<label for="'+kind+'-'+component+'">'+component+'</label><input type="range" id="'+kind+'-'+component+'" min="-1" max="1" step="0.001" aria-label="'+kind+' Bloch '+component+' coordinate"><input type="number" id="'+kind+'-'+component+'-number" min="-1" max="1" step="0.001" aria-label="'+kind+' Bloch '+component+' exact value">';
+  parent.appendChild(row);
+  function edit(value) {
+   if(!Number.isFinite(value)){syncControls();return;}
+   pause();const result=E.editComponent(state[kind],index,value);state[kind]=result.v;$(kind+'-preset').value='custom';
+   clearTimeout(noticeTimer);
+   $('constraint-note').textContent=result.adjusted?'Boundary reached: the other components were rescaled.':'';
+   if(result.adjusted)noticeTimer=setTimeout(()=>{$('constraint-note').textContent='';},3200);
+   rebuild();
+  }
+  $(kind+'-'+component).addEventListener('input',e=>edit(e.target.valueAsNumber));
+  $(kind+'-'+component+'-number').addEventListener('change',e=>edit(e.target.valueAsNumber));
+  $(kind+'-'+component+'-number').addEventListener('keydown',e=>{if(e.key==='Enter'){edit(e.target.valueAsNumber);e.target.blur();}});
+ });
+}
+function syncControls() {
+ for(const kind of ['initial','target']) {
+  const v=state[kind],t=E.norm(v);
+  ['x','y','z'].forEach((component,i)=>{
+   $(kind+'-'+component).value=v[i];
+   $(kind+'-'+component).setAttribute('aria-valuetext',fixed(v[i],5));
+   const input=$(kind+'-'+component+'-number');
+   input.value=fixed(v[i],4);
+  });
+  $(kind+'-radius').textContent=fixed(t);$(kind+'-purity').textContent=fixed((1+t*t)/2);
+  $(kind+'-meter').style.width=(100*t)+'%';
+  $(kind+'-type').textContent=t<1e-12?'Max. mixed':t>1-1e-10?'Pure':'Mixed';
+ }
+ const r=model.ch.r;$('r-value').textContent=fixed(r);$('ad-bar').style.width=(r*100)+'%';
+ $('ad-label').textContent=(100*r).toFixed(1)+'% damping';$('dep-label').textContent=(100*(1-r)).toFixed(1)+'% depolarizing';
+ $('scrubber').max=state.steps;$('last-step').textContent=state.steps;
+ $('decay-values').textContent='Current a = '+fixed(model.ch.a,6)+',  b = '+fixed(model.ch.b,6);
+ renderMatrix('target-matrix',state.target);
+ const first=model.samples.findIndex(s=>s.distance<1e-6);
+ $('convergence-caption').textContent=first===0?'Already within 10⁻⁶ at k = 0':first>0?'D < 10⁻⁶ after '+first+' applications':'Not below 10⁻⁶ within this plot window';
+}
+function complexText(c) {const re=fixed(c.re),im=fixed(Math.abs(c.im));if(Math.abs(c.im)<.00005)return re;return re+(c.im<0?' − ':' + ')+im+'i';}
+function renderMatrix(id,v) {$(id).innerHTML=E.density(v).flat().map(c=>'<span>'+complexText(c)+'</span>').join('');}
+function updateReadouts() {
+ const s=model.sample(state.position),limit=state.position===Infinity,integer=Number.isFinite(state.position)&&Math.abs(state.position-Math.round(state.position))<1e-8;
+ $('iteration').textContent=limit?'k → ∞':integer?'k = '+Math.round(state.position):'k = '+Math.floor(state.position)+' → '+Math.ceil(state.position);
+ $('phase').textContent=limit?'Exact analytic limit':s.distance===0?'Already at target':state.playing?'Playing · '+state.speed+' steps/s':s.distance<1e-6?'Within 10⁻⁶ · finite k':state.position===0?'Ready to evolve':'Paused · live preview';
+ $('distance').textContent=distanceText(s.distance);$('current-purity').textContent=fixed((1+E.dot(s.v,s.v))/2,6);
+ $('current-vector').textContent=vectorText(s.v,3);$('radius-small').textContent='‖vₖ‖ = '+fixed(E.norm(s.v),5);
+ $('scrubber').value=limit?state.steps:Math.round(state.position);
+ $('mobile-play').textContent=state.playing?'Ⅱ Pause':'▶ Play';$('mobile-distance').textContent='D = '+distanceText(s.distance);
+ $('play').textContent=state.playing?'Ⅱ Pause':'▶ Play';$('play').setAttribute('aria-label',state.playing?'Pause animation':'Play animation');
+ $('step').disabled=limit||state.position>=state.steps;
+ $('limit').style.background=limit?'#e7f5f1':'';
+ $('scale-note').textContent=state.log?(s.distance===0?'D = 0 is below the log floor':'Log floor: 10⁻¹²'):'Linear scale: 0 to 1';
+ if($('details').open)renderMatrix('current-matrix',s.v);
+}
+$('details').addEventListener('toggle',()=>{dirty=true;});
+$('swap').onclick=()=>{pause();[state.initial,state.target]=[state.target,state.initial];state.position=0;for(const k of ['initial','target'])$(k+'-preset').value='custom';rebuild();};
+$('reset').onclick=()=>{pause();state.initial=DEFAULT.initial.slice();state.target=DEFAULT.target.slice();state.position=0;for(const k of ['initial','target'])$(k+'-preset').value='custom';$('constraint-note').textContent='';rebuild();};
+function stoppingPoint(){if(!state.autostop)return state.steps;const i=model.samples.findIndex(s=>s.distance<1e-6);return i<0?state.steps:i;}
+function playToggle(){
+ if(state.playing){pause();return;}
+ const end=stoppingPoint();
+ if(end===0){state.position=0;dirty=true;toast(model.sample(0).distance===0?'The initial state is already the target.':'The initial state is already within 10⁻⁶. Uncheck auto-stop to continue.');return;}
+ if(!Number.isFinite(state.position)||state.position>=end)state.position=0;
+ state.playing=true;lastTime=null;dirty=true;
+}
+$('play').onclick=playToggle;
+$('mobile-play').onclick=playToggle;
+$('mobile-restart').onclick=()=>{pause(false);state.position=0;dirty=true;};
+$('restart').onclick=()=>{pause(false);state.position=0;dirty=true;};
+$('step').onclick=()=>{pause(false);state.position=Math.min(state.steps,Math.floor(state.position+1e-8)+1);dirty=true;};
+$('limit').onclick=()=>{pause(false);state.position=Infinity;dirty=true;};
+$('scrubber').addEventListener('input',e=>{pause(false);state.position=e.target.valueAsNumber;dirty=true;});
+$('speed').onchange=e=>{state.speed=Number(e.target.value);dirty=true;};
+$('horizon').onchange=e=>{pause();state.steps=Number(e.target.value);rebuild();};
+$('preview').onchange=e=>{state.preview=e.target.checked;dirty=true;};
+$('autostop').onchange=e=>{state.autostop=e.target.checked;dirty=true;};
+for(const [id,log] of [['log-scale',true],['linear-scale',false]]) $(id).onclick=()=>{state.log=log;for(const [btn,on] of [['log-scale',log],['linear-scale',!log]]){$(btn).classList.toggle('active',on);$(btn).setAttribute('aria-pressed',String(on));}dirty=true;};
+document.addEventListener('keydown',e=>{if(e.code==='Space'&&!/INPUT|SELECT|TEXTAREA|BUTTON|SUMMARY/.test(document.activeElement.tagName)){e.preventDefault();playToggle();}});
+document.addEventListener('visibilitychange',()=>{lastTime=null;});
+function download(text,type,filename){const blob=new Blob([text],{type}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=filename;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),3000);}
+$('export-csv').onclick=()=>{download(E.csv(model),'text/csv;charset=utf-8','bloch_trajectory.csv');toast('Exported exact integer-step density matrices and trace distances.');};
+$('save-setup').onclick=()=>download(JSON.stringify({format:'bloch-channel-explorer-v1',lambda:E.LAMBDA,p:E.P,initial:state.initial,target:state.target,steps:state.steps},null,2),'application/json','bloch_setup.json');
+$('load-setup').onclick=()=>$('setup-file').click();
+$('setup-file').onchange=async e=>{
+ try{
+  const file=e.target.files[0];if(!file)return;if(file.size>100000)throw new Error('Please select a small setup JSON file.');
+  const input=JSON.parse(await file.text());
+  if(input.lambda!==E.LAMBDA||input.p!==E.P)throw new Error('This explorer fixes λ = 0.30 and p = 0.20.');
+  const initial=E.validate(input.initial),target=E.validate(input.target);
+  if(![40,80,100,200].includes(input.steps))throw new Error('Unsupported plot horizon.');
+  pause();state.initial=initial;state.target=target;state.steps=input.steps;state.position=0;$('horizon').value=state.steps;
+  for(const k of ['initial','target'])$(k+'-preset').value='custom';rebuild();toast('Setup loaded.');
+ }catch(err){toast('Could not load setup: '+err.message);}finally{e.target.value='';}
+};
+function sizeCanvas(canvas,ctx){const box=canvas.getBoundingClientRect(),ratio=Math.min(2,window.devicePixelRatio||1);if(!box.width||!box.height)return {w:0,h:0};canvas.width=Math.round(box.width*ratio);canvas.height=Math.round(box.height*ratio);ctx.setTransform(ratio,0,0,ratio,0,0);return {w:box.width,h:box.height};}
+function resize(){sphereSize=sizeCanvas(sphere,sphereCtx);graphSize=sizeCanvas(graph,graphCtx);dirty=true;}
+// On small screens, keep the SAME live sphere above the sliders and sticky.
+// There is no duplicate simulation or second canvas.
+const stage=$('sphere-stage'),stageHome=stage.parentNode,stageAnchor=document.createComment('sphere-home');
+stageHome.insertBefore(stageAnchor,stage);
+const mobileStage=document.createElement('div');mobileStage.className='card mobile-live';mobileStage.setAttribute('aria-label','Sticky live Bloch sphere preview');
+document.querySelector('.masthead').insertAdjacentElement('afterend',mobileStage);
+const mobileQuery=window.matchMedia('(max-width: 760px)');
+function arrangeStage(){
+ if(mobileQuery.matches){if(stage.parentNode!==mobileStage)mobileStage.appendChild(stage);}
+ else if(stage.parentNode!==stageHome)stageHome.insertBefore(stage,stageAnchor.nextSibling);
+ mobileStage.hidden=!mobileQuery.matches;
+ $('trajectory-heading').textContent=mobileQuery.matches?'Playback & current state':'State trajectory';
+ requestAnimationFrame(resize);
+}
+if(mobileQuery.addEventListener)mobileQuery.addEventListener('change',arrangeStage);else mobileQuery.addListener(arrangeStage);
+arrangeStage();
+if(typeof ResizeObserver!=='undefined'){const ro=new ResizeObserver(resize);ro.observe($('sphere-stage'));ro.observe(graph.parentElement);}else window.addEventListener('resize',resize);
+const mesh=[];
+function addCurve(points){for(let i=1;i<points.length;i++)mesh.push([points[i-1],points[i]]);}
+for(let phi=0;phi<2*Math.PI-.001;phi+=Math.PI/12){const points=[];for(let j=0;j<=64;j++){const th=-Math.PI/2+j*Math.PI/64;points.push([Math.cos(th)*Math.cos(phi),Math.cos(th)*Math.sin(phi),Math.sin(th)]);}addCurve(points);}
+for(let deg=-75;deg<=75;deg+=15){const points=[],th=deg*Math.PI/180;for(let j=0;j<=96;j++){const phi=2*Math.PI*j/96;points.push([Math.cos(th)*Math.cos(phi),Math.cos(th)*Math.sin(phi),Math.sin(th)]);}addCurve(points);}
+function projector(){
+ const {w,h}=sphereSize,ca=Math.cos(view.az),sa=Math.sin(view.az),ce=Math.cos(view.el),se=Math.sin(view.el),r=Math.min(w*.43,h*.39)*view.zoom,cx=w*.5,cy=h*.53;
+ const right=[-sa,ca,0],up=[-se*ca,-se*sa,ce],normal=[ce*ca,ce*sa,se];
+ return {cx,cy,r,project:v=>({x:cx+r*E.dot(v,right),y:cy-r*E.dot(v,up),d:E.dot(v,normal)})};
+}
+function line3(ctx,points,project,color,width=1,dash=[]){if(points.length<2)return;ctx.save();ctx.strokeStyle=color;ctx.lineWidth=width;ctx.setLineDash(dash);ctx.beginPath();points.forEach((v,i)=>{const p=project(v);if(i)ctx.lineTo(p.x,p.y);else ctx.moveTo(p.x,p.y);});ctx.stroke();ctx.restore();}
+function textAt(ctx,text,p,color,dx=0,dy=0,size=12){ctx.save();ctx.font='500 '+size+'px system-ui, sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.lineWidth=4;ctx.strokeStyle='rgba(255,255,255,.94)';ctx.strokeText(text,p.x+dx,p.y+dy);ctx.fillStyle=color;ctx.fillText(text,p.x+dx,p.y+dy);ctx.restore();}
+function drawSphere(){
+ const ctx=sphereCtx,{w,h}=sphereSize;if(!w||!h)return;ctx.clearRect(0,0,w,h);
+ const {cx,cy,r,project}=projector();
+ const fill=ctx.createRadialGradient(cx-r*.28,cy-r*.35,0,cx,cy,r);fill.addColorStop(0,'rgba(240,246,255,.16)');fill.addColorStop(.8,'rgba(224,236,255,.12)');fill.addColorStop(1,'rgba(216,228,248,.22)');ctx.fillStyle=fill;ctx.beginPath();ctx.arc(cx,cy,r,0,Math.PI*2);ctx.fill();
+ const projected=mesh.map(seg=>seg.map(project));
+ function meshLayer(front){ctx.beginPath();for(const [u,v] of projected){if((u.d+v.d>=0)!==front)continue;ctx.moveTo(u.x,u.y);ctx.lineTo(v.x,v.y);}ctx.strokeStyle=front?'rgba(127,155,197,.35)':'rgba(156,175,204,.13)';ctx.lineWidth=.7;ctx.stroke();}
+ meshLayer(false);
+ for(const [axis,name] of [[[1,0,0],'x'],[[0,1,0],'y'],[[0,0,1],'z · |0⟩']]){
+  line3(ctx,[E.scale(axis,-1.12),E.scale(axis,1.14)],project,'rgba(89,114,148,.3)',.85,[3,4]);
+  const p=project(E.scale(axis,1.19));textAt(ctx,name,p,C.muted,0,0,12);
+ }
+ textAt(ctx,'|1⟩',project([0,0,-1.15]),C.muted,0,2,12);
+ meshLayer(true);
+ ctx.beginPath();ctx.arc(cx,cy,r,0,Math.PI*2);ctx.strokeStyle='rgba(133,157,193,.31)';ctx.lineWidth=1;ctx.stroke();
+ const zero=project([0,0,0]);ctx.fillStyle='#8c9bb0';ctx.beginPath();ctx.arc(zero.x,zero.y,2.2,0,Math.PI*2);ctx.fill();
+ if(model.ch.t>1e-12)line3(ctx,[[0,0,0],E.scale(model.ch.n,1.03)],project,'rgba(0,133,117,.45)',1.2,[5,5]);
+ const sample=model.sample(state.position),all=model.samples.map(s=>s.v);
+ if(state.preview)line3(ctx,all,project,'rgba(48,93,229,.3)',2,[4,4]);
+ const upto=state.position===Infinity?state.steps:Math.floor(state.position);
+ const traveled=all.slice(0,upto+1);traveled.push(sample.v);
+ line3(ctx,traveled,project,C.blue,2.9);
+ line3(ctx,[[0,0,0],sample.v],project,'rgba(48,93,229,.22)',1.1);
+ // Show discrete channel applications, suppressing dots closer than 4px.
+ let previous=null;
+ for(let k=0;k<=Math.min(state.steps,50);k++){
+  if(!state.preview&&k>upto)break;const p=project(all[k]);if(previous&&Math.hypot(p.x-previous.x,p.y-previous.y)<4)continue;
+  ctx.fillStyle=k<=upto?'#305de5':'#a1b7ee';ctx.beginPath();ctx.arc(p.x,p.y,2.25,0,2*Math.PI);ctx.fill();previous=p;
+ }
+ const init=project(state.initial),target=project(state.target),current=project(sample.v);
+ // Shape + color identify the states even where markers overlap.
+ ctx.beginPath();ctx.arc(init.x,init.y,7.2,0,2*Math.PI);ctx.fillStyle='#fff';ctx.fill();ctx.lineWidth=2.6;ctx.strokeStyle=C.amber;ctx.stroke();
+ ctx.beginPath();ctx.moveTo(target.x,target.y-9);ctx.lineTo(target.x+9,target.y);ctx.lineTo(target.x,target.y+9);ctx.lineTo(target.x-9,target.y);ctx.closePath();ctx.fillStyle='#fff';ctx.fill();ctx.strokeStyle=C.teal;ctx.lineWidth=2.7;ctx.stroke();
+ ctx.shadowColor='rgba(48,93,229,.2)';ctx.shadowBlur=10;ctx.beginPath();ctx.arc(current.x,current.y,5.3,0,Math.PI*2);ctx.fillStyle=C.blue;ctx.fill();ctx.shadowBlur=0;ctx.strokeStyle='#fff';ctx.lineWidth=1.5;ctx.stroke();
+ const closeIT=Math.hypot(init.x-target.x,init.y-target.y)<32;
+ textAt(ctx,'ρ₀',init,C.amber,-15,-16,14);
+ textAt(ctx,'ρ★',target,C.teal,17,closeIT?16:-14,14);
+ if(Math.min(Math.hypot(current.x-init.x,current.y-init.y),Math.hypot(current.x-target.x,current.y-target.y))>30)textAt(ctx,'ρₖ',current,C.blue,16,-14,14);
+ if(state.position===Infinity){ctx.save();ctx.fillStyle=C.teal;ctx.font='12px system-ui';ctx.textAlign='center';ctx.fillText('Analytic limit: ρ∞ = ρ★',w/2,h-12);ctx.restore();}
+}
+function graphGeometry(){const {w,h}=graphSize;return {w,h,l:50,r:13,t:12,b:33,pw:Math.max(1,w-63),ph:Math.max(1,h-45)};}
+function drawGraph(){
+ const ctx=graphCtx,g=graphGeometry();if(!g.w||!g.h)return;ctx.clearRect(0,0,g.w,g.h);ctx.font='10px system-ui';
+ const X=k=>g.l+g.pw*k/state.steps,Y=d=>g.t+g.ph*(state.log?-Math.log10(Math.max(1e-12,Math.min(1,d)))/12:1-Math.max(0,Math.min(1,d)));
+ const ticks=state.log?[1,1e-3,1e-6,1e-9,1e-12]:[1,.75,.5,.25,0];
+ for(const v of ticks){const y=Y(v);ctx.strokeStyle='#e8edf4';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(g.l,y);ctx.lineTo(g.w-g.r,y);ctx.stroke();ctx.fillStyle=C.muted;ctx.textAlign='right';ctx.textBaseline='middle';ctx.fillText(state.log?'10'+superscript(Math.round(Math.log10(v))):v.toFixed(v===0||v===1?0:2),g.l-9,y);}
+ for(let j=0;j<=5;j++){const k=state.steps*j/5,x=X(k);ctx.strokeStyle='#f0f3f8';ctx.beginPath();ctx.moveTo(x,g.t);ctx.lineTo(x,g.h-g.b);ctx.stroke();ctx.fillStyle=C.muted;ctx.textAlign='center';ctx.textBaseline='top';ctx.fillText(k.toString(),x,g.h-g.b+8);}
+ ctx.fillStyle=C.muted;ctx.textAlign='center';ctx.textBaseline='bottom';ctx.fillText('Channel applications, k',g.l+g.pw/2,g.h);
+ if(state.autostop&&state.log){ctx.strokeStyle='rgba(0,133,117,.45)';ctx.setLineDash([4,4]);ctx.beginPath();ctx.moveTo(g.l,Y(1e-6));ctx.lineTo(g.w-g.r,Y(1e-6));ctx.stroke();ctx.setLineDash([]);}
+ ctx.save();ctx.beginPath();ctx.rect(g.l-1,g.t-1,g.pw+2,g.ph+2);ctx.clip();ctx.beginPath();model.samples.forEach((s,k)=>{if(k)ctx.lineTo(X(k),Y(s.distance));else ctx.moveTo(X(k),Y(s.distance));});ctx.strokeStyle=C.blue;ctx.lineWidth=2.2;ctx.lineJoin='round';ctx.stroke();ctx.restore();
+ if(state.position!==Infinity){const s=model.sample(state.position),x=X(state.position),y=Y(s.distance);ctx.strokeStyle='#718abf';ctx.lineWidth=1;ctx.setLineDash([3,4]);ctx.beginPath();ctx.moveTo(x,g.t);ctx.lineTo(x,g.h-g.b);ctx.stroke();ctx.setLineDash([]);ctx.beginPath();ctx.arc(x,y,4.5,0,2*Math.PI);ctx.fillStyle=C.blue;ctx.fill();ctx.lineWidth=1.5;ctx.strokeStyle='#fff';ctx.stroke();}
+ if(model.sample(0).distance===0){ctx.fillStyle=C.muted;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('Already at target: D = 0 for every k',g.l+g.pw/2,g.t+g.ph*.32);}
+ if(state.position===Infinity){ctx.fillStyle=C.teal;ctx.textAlign='right';ctx.textBaseline='top';ctx.fillText('Limit: D = 0',g.w-g.r-4,g.t+6);}
+}
+function dragCanvas(canvas,onMove){let pointer=null,last=null;canvas.addEventListener('pointerdown',e=>{if(e.button!==0&&e.pointerType==='mouse')return;pointer=e.pointerId;last={x:e.clientX,y:e.clientY};canvas.setPointerCapture(e.pointerId);if(canvas===graph)onMove(0,0,e);});canvas.addEventListener('pointermove',e=>{if(e.pointerId!==pointer)return;onMove(e.clientX-last.x,e.clientY-last.y,e);last={x:e.clientX,y:e.clientY};dirty=true;});const up=e=>{if(pointer===e.pointerId){pointer=null;last=null;}};canvas.addEventListener('pointerup',up);canvas.addEventListener('pointercancel',up);canvas.addEventListener('lostpointercapture',up);}
+dragCanvas(sphere,(dx,dy)=>{view.az-=dx*.009;view.el=E.clamp(view.el+dy*.009,-Math.PI/2+.02,Math.PI/2-.02);});
+dragCanvas(graph,(_dx,_dy,e)=>{pause(false);const box=graph.getBoundingClientRect(),g=graphGeometry();state.position=Math.round(E.clamp((e.clientX-box.left-g.l)/g.pw,0,1)*state.steps);dirty=true;});
+sphere.addEventListener('wheel',e=>{e.preventDefault();view.zoom=E.clamp(view.zoom*Math.exp(-e.deltaY*.001),.6,1.65);dirty=true;},{passive:false});
+sphere.addEventListener('keydown',e=>{const keys=['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','+','=','-'];if(!keys.includes(e.key))return;e.preventDefault();if(e.key==='ArrowLeft')view.az-=.1;if(e.key==='ArrowRight')view.az+=.1;if(e.key==='ArrowUp')view.el=E.clamp(view.el+.1,-1.55,1.55);if(e.key==='ArrowDown')view.el=E.clamp(view.el-.1,-1.55,1.55);if(e.key==='+'||e.key==='=')view.zoom=Math.min(1.65,view.zoom*1.1);if(e.key==='-')view.zoom=Math.max(.6,view.zoom/1.1);dirty=true;});
+$('view3d').onclick=()=>{Object.assign(view,{az:-2.35,el:.36,zoom:1});dirty=true;};
+const cross=(a,b)=>[a[1]*b[2]-a[2]*b[1],a[2]*b[0]-a[0]*b[2],a[0]*b[1]-a[1]*b[0]];
+$('facepath').onclick=()=>{let n=cross(state.initial,state.target);if(E.norm(n)<1e-9){const v=E.norm(state.initial)>1e-9?state.initial:state.target;if(E.norm(v)<1e-9){$('view3d').click();return;}let axis=[1,0,0];if(Math.abs(v[0])/E.norm(v)>.9)axis=[0,1,0];n=cross(v,axis);}n=E.scale(n,1/E.norm(n));if(n[2]<0)n=E.scale(n,-1);view.az=Math.atan2(n[1],n[0]);view.el=Math.asin(E.clamp(n[2],-1,1));view.zoom=1;dirty=true;};
+$('expand').onclick=async()=>{try{if(document.fullscreenElement){await document.exitFullscreen();}else if($('sphere-stage').requestFullscreen){await $('sphere-stage').requestFullscreen();}else toast('Fullscreen is unavailable in this browser; rotate the sphere in place.');}catch(_err){toast('Fullscreen is unavailable here.');}};
+document.addEventListener('fullscreenchange',resize);
+function frame(time){
+ if(state.playing){const dt=lastTime===null?0:Math.min(.15,(time-lastTime)/1000);state.position+=dt*state.speed;const end=stoppingPoint();if(state.position>=end){state.position=end;state.playing=false;}dirty=true;}
+ lastTime=time;
+ if(dirty){updateReadouts();drawSphere();drawGraph();dirty=false;}
+ requestAnimationFrame(frame);
+}
+// Small public read-only interface for programmatic verification and teaching.
+window.BlochExplorer={engine:E,snapshot:()=>({initial:state.initial.slice(),target:state.target.slice(),r:model.ch.r,a:model.ch.a,b:model.ch.b,position:state.position,playing:state.playing,steps:state.steps,current:model.sample(state.position),view:{...view}})};
+syncControls();resize();requestAnimationFrame(frame);
+})();
+
+</script>
+</body>
+</html>
