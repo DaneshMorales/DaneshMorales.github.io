@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- List every public page here; update <lastmod> when a page changes substantially. -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://daneshmorales.github.io/</loc>
+    <lastmod>2026-10-04</lastmod>
+  </url>
+  <url>
+    <loc>https://daneshmorales.github.io/publications.html</loc>
+    <lastmod>2026-10-04</lastmod>
+  </url>
+  <url>
+    <loc>https://daneshmorales.github.io/blog/</loc>
+    <lastmod>2026-10-04</lastmod>
+  </url>
+  <url>
+    <loc>https://daneshmorales.github.io/blog/posts/fixed-point-qubit-channels.html</loc>
+    <lastmod>2026-10-04</lastmod>
+  </url>
+  <url>
+    <loc>https://daneshmorales.github.io/blog/posts/cycle-benchmarking-intro.html</loc>
+    <lastmod>2026-10-04</lastmod>
+  </url>
+</urlset>

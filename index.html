@@ -4,9 +4,71 @@
   <meta charset="UTF-8">
   <script>(function(){var t=localStorage.getItem('theme');if(t==='dark'||(t===null&&window.matchMedia('(prefers-color-scheme: dark)').matches)){document.documentElement.setAttribute('data-theme','dark');}})();</script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Danesh Morales Hashemi – Master's student in Quantum Information at the University of Waterloo and researcher at the Institute for Quantum Computing.">
+  <meta name="description" content="Danesh Morales Hashemi is a Master's student at the University of Waterloo and the Institute for Quantum Computing, researching quantum error correction under non-Markovian noise.">
   <title>Danesh Morales Hashemi | Quantum Information</title>
   <link rel="icon" type="image/svg+xml" href="icon.svg?v=2">
+  <meta name="author" content="Danesh Morales Hashemi">
+  <link rel="canonical" href="https://daneshmorales.github.io/">
+  <link rel="alternate" type="application/rss+xml" title="Danesh Morales Hashemi — Blog" href="/feed.xml">
+  <!-- Link previews (LinkedIn, X, Slack, ...) -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Danesh Morales Hashemi">
+  <meta property="og:title" content="Danesh Morales Hashemi">
+  <meta property="og:description" content="Danesh Morales Hashemi is a Master's student at the University of Waterloo and the Institute for Quantum Computing, researching quantum error correction under non-Markovian noise.">
+  <meta property="og:url" content="https://daneshmorales.github.io/">
+  <meta property="og:image" content="https://daneshmorales.github.io/assets/social/og-default.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Danesh Morales Hashemi">
+  <meta name="twitter:card" content="summary_large_image">
+  <!-- Structured data: lets search engines connect this site to the profiles below -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Danesh Morales Hashemi",
+    "alternateName": [
+      "Danesh Morales-Hashemi",
+      "D. Morales-Hashemi"
+    ],
+    "givenName": "Danesh",
+    "familyName": "Morales Hashemi",
+    "url": "https://daneshmorales.github.io/",
+    "image": "https://daneshmorales.github.io/assets/photo.jpg",
+    "email": "mailto:danesh.moraleshashemi@uwaterloo.ca",
+    "jobTitle": "Master's Student in Quantum Information",
+    "affiliation": [
+      {
+        "@type": "CollegeOrUniversity",
+        "name": "University of Waterloo",
+        "url": "https://uwaterloo.ca/"
+      },
+      {
+        "@type": "ResearchOrganization",
+        "name": "Institute for Quantum Computing",
+        "url": "https://uwaterloo.ca/institute-for-quantum-computing/"
+      }
+    ],
+    "alumniOf": {
+      "@type": "CollegeOrUniversity",
+      "name": "University of Waterloo"
+    },
+    "knowsAbout": [
+      "Quantum error correction",
+      "Fault-tolerant quantum computing",
+      "Non-Markovian dynamics",
+      "Open quantum systems",
+      "Quantum error mitigation",
+      "Quantum error characterization"
+    ],
+    "sameAs": [
+      "https://scholar.google.com/citations?user=f_ltr8oAAAAJ",
+      "https://orcid.org/0009-0005-1223-0772",
+      "https://github.com/DaneshMorales",
+      "https://www.linkedin.com/in/daneshmh/"
+    ]
+  }
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
@@ -45,6 +107,8 @@
     .badge { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; padding: 0.2rem 0.55rem; border-radius: 99px; }
     .badge-project { background: #ede9fe; color: #5b21b6; }
     [data-theme="dark"] .badge-project { background: #2e1065; color: #c4b5fd; }
+    .badge-thesis { background: #ccfbf1; color: #115e59; }
+    [data-theme="dark"] .badge-thesis { background: #042f2e; color: #5eead4; }
     .paper-title { font-size: 1.05rem; font-weight: 600; margin-bottom: 0.35rem; }
     .paper-authors { font-size: 0.875rem; color: var(--text-muted); margin-bottom: 0.25rem; }
     .paper-venue { font-size: 0.85rem; color: var(--accent); font-style: italic; margin-bottom: 0.75rem; }
@@ -104,15 +168,11 @@
 
         <div class="nav-meta">
           <div class="nav-socials">
-            <a href="https://scholar.google.com/citations?hl=en&user=f_ltr8oAAAAJ" class="social-icon" aria-label="Google Scholar" title="Google Scholar" target="_blank" rel="noopener">
-              <i class="fas fa-graduation-cap"></i>
-            </a>
-            <a href="https://www.linkedin.com/in/daneshmh/" class="social-icon" aria-label="LinkedIn" title="LinkedIn" target="_blank" rel="noopener">
-              <i class="fab fa-linkedin-in"></i>
-            </a>
-            <a href="mailto:danesh.moraleshashemi@uwaterloo.ca" class="social-icon" aria-label="Email" title="Email">
-              <i class="fas fa-envelope"></i>
-            </a>
+            <a href="https://scholar.google.com/citations?hl=en&user=f_ltr8oAAAAJ" class="social-icon" aria-label="Google Scholar" title="Google Scholar" target="_blank" rel="noopener"><i class="fas fa-graduation-cap"></i></a>
+            <a href="https://orcid.org/0009-0005-1223-0772" class="social-icon" aria-label="ORCID" title="ORCID" target="_blank" rel="noopener"><i class="fab fa-orcid"></i></a>
+            <a href="https://github.com/DaneshMorales" class="social-icon" aria-label="GitHub" title="GitHub" target="_blank" rel="noopener"><i class="fab fa-github"></i></a>
+            <a href="https://www.linkedin.com/in/daneshmh/" class="social-icon" aria-label="LinkedIn" title="LinkedIn" target="_blank" rel="noopener"><i class="fab fa-linkedin-in"></i></a>
+            <a href="mailto:danesh.moraleshashemi@uwaterloo.ca" class="social-icon" aria-label="Email" title="Email"><i class="fas fa-envelope"></i></a>
           </div>
         </div>
       </div>
@@ -140,15 +200,24 @@
           </p>
 
           <p class="about-bio">
-            I am a Masters student at the
+            I am a Master's student at the
             University of Waterloo and a researcher at the
             Institute for Quantum Computing,
             under the supervision of
             <a href="https://gsbsmith.ca/" target="_blank" rel="noopener">Prof. Graeme Smith</a>.
-            <!-- TODO: describe your specific research focus -->
             My research focuses on quantum error correction under non-Markovian noise. Using the process tensor framework, I study how QEC codes interact with temporally correlated errors and whether error correction can effectively suppress or Markovianize the noise process.
           </p>
-          <p class="about-bio">
+
+          <div class="news">
+            <h3>News</h3>
+            <!-- Newest first; keep the 4-6 most recent items -->
+            <ul class="news-list">
+              <li><time datetime="2026-09">Sep 2026</time><span>New blog post: <a href="blog/posts/fixed-point-qubit-channels.html">Constructing Qubit Channels with Arbitrary Fixed Points</a>, with an interactive Bloch-sphere explorer.</span></li>
+              <li><time datetime="2025-12">Dec 2025</time><span>New blog post: <a href="blog/posts/cycle-benchmarking-intro.html">Introduction to Cycle Benchmarking for Quantum Error Diagnostics</a>.</span></li>
+              <li><time datetime="2025-05">May 2025</time><span>Started my Master's in Applied Mathematics (Quantum Information) at the University of Waterloo and IQC, supervised by Prof. Graeme Smith.</span></li>
+              <li><time datetime="2025-04">Apr 2025</time><span>Graduated with a BMath in Mathematical Physics, with Distinction and Dean's Honours, after completing my <a href="files/Undergraduate_Thesis.pdf" target="_blank" rel="noopener">undergraduate thesis</a> on circuit benchmarking.</span></li>
+            </ul>
+          </div>
 
           <div class="interests">
             <h3>Research Interests</h3>
@@ -189,18 +258,18 @@
   <section id="publications" class="section section-alt">
     <div class="container">
       <h2 class="section-title">Publications</h2>
-      <p class="section-sub">Selected papers, preprints, and school projects</p>
+      <p class="section-sub">Thesis and selected course projects</p>
 
       <div class="paper-list">
 
         <div class="paper-card compact">
           <div class="paper-header">
             <span class="paper-year">2025</span>
-            <span class="badge badge-project">School Project</span>
+            <span class="badge badge-project">Course Project</span>
           </div>
           <h3 class="paper-title">Introduction to Cycle Benchmarking for Quantum Error Diagnostics</h3>
           <p class="paper-authors">
-            <strong>Danesh Morales Hashemi</strong>
+            <strong>Danesh Morales-Hashemi</strong>
           </p>
           <p class="paper-venue">Theory of Quantum Information &mdash; Final Project, University of Waterloo, Fall 2025</p>
           <p class="paper-abstract">
@@ -223,25 +292,25 @@
         <div class="paper-card compact">
           <div class="paper-header">
             <span class="paper-year">2025</span>
-            <span class="badge badge-project">School Project</span>
+            <span class="badge badge-thesis">Thesis</span>
           </div>
-          <h3 class="paper-title">Predicting Major League Baseball Playoffs Using Quantum Machine Learning</h3>
+          <h3 class="paper-title">Demonstrating Circuit Benchmarking for Efficient and Scalable Fidelity Estimation</h3>
           <p class="paper-authors">
-            <strong>Danesh Morales Hashemi</strong>, Jonathan Zhu
+            <strong>Danesh Morales-Hashemi</strong>
           </p>
-          <p class="paper-venue">Quantum Machine Learning &mdash; Final Project, University of Waterloo, Fall 2025</p>
+          <p class="paper-venue">PHYS 437B &mdash; Undergraduate Thesis, University of Waterloo, Winter 2025</p>
           <p class="paper-abstract">
-            This project explores the application of Quantum Machine Learning (QML) to predict the outcomes of Major League Baseball (MLB) games, specifically the Postseason
-            matches that took place throughout the month of October.
-            Using features such as team batting averages, pitching performance, and game context (e.g. home vs. away), we implemented
-            two QML algorithms: the Quantum Support Vector Machine (QSVM) and the Variational Quantum Classifier (VQC), using the Qiskit framework. We then compared these quantum
-            classifiers to their classical counterparts, namely the Support Vector Machine (SVM) and a classical neural network, the Multi-Layer Perceptron (MLP) Classifier. We found that the QML
-            algorithms achieved prediction accuracies comparable to those of the classical algorithms; however, training the QML models was significantly more time-consuming. We therefore conclude
-            that, in this setting, there is no quantum advantage, and that classical prediction models remain the preferable choice.
+            In this project, we will illustrate the theoretical concept of circuit benchmarking, an
+            efficient and scalable protocol to “lower bound” the process fidelity of a circuit. Finding a
+            lower bound to the process fidelity is crucial because it tells us what is the worst-case error
+            rate in our quantum circuit. We will exhaustively run simulations on quantum circuits with
+            different error models and error strengths to measure the closeness of the theoretical bound
+            imposed by the circuit benchmarking theory with respect to the actual process fidelity. We
+            will find that in several cases there is a minimal or zero gap, and thus not only we have
+            found a lower bound, but rather a good approximation to the process fidelity.
           </p>
           <div class="paper-links">
-            <a href="files/QML_Project.pdf" class="paper-link" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i> PDF</a>
-            <a href="https://github.com/DaneshMorales/QML_project" class="paper-link" target="_blank" rel="noopener"><i class="fab fa-github"></i> GitHub</a>
+            <a href="files/Undergraduate_Thesis.pdf" class="paper-link" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i> PDF</a>
             <button class="toggle-abstract">Abstract <i class="fas fa-chevron-down"></i></button>
           </div>
         </div>
@@ -249,11 +318,11 @@
         <div class="paper-card compact">
           <div class="paper-header">
             <span class="paper-year">2024</span>
-            <span class="badge badge-project">School Project</span>
+            <span class="badge badge-project">Course Project</span>
           </div>
           <h3 class="paper-title">Introduction to Superoperator Representations and Characterization of Completely Positive Maps</h3>
           <p class="paper-authors">
-            <strong>Danesh Morales Hashemi</strong>
+            <strong>Danesh Morales-Hashemi</strong>
           </p>
           <p class="paper-venue">Open Quantum Systems &mdash; Final Project, University of Waterloo, Spring 2024</p>
           <p class="paper-abstract">
@@ -371,6 +440,14 @@
               <i class="fas fa-graduation-cap"></i>
               <span>Google Scholar</span>
             </a>
+            <a href="https://orcid.org/0009-0005-1223-0772" class="social-link-row" target="_blank" rel="noopener">
+              <i class="fab fa-orcid"></i>
+              <span>ORCID</span>
+            </a>
+            <a href="https://github.com/DaneshMorales" class="social-link-row" target="_blank" rel="noopener">
+              <i class="fab fa-github"></i>
+              <span>GitHub</span>
+            </a>
             <a href="https://www.linkedin.com/in/daneshmh/" class="social-link-row" target="_blank" rel="noopener">
               <i class="fab fa-linkedin-in"></i>
               <span>LinkedIn</span>
@@ -380,16 +457,8 @@
               <span>Email</span>
             </a>
             <!-- <a href="#" class="social-link-row" target="_blank" rel="noopener">
-              <i class="fab fa-github"></i>
-              <span>GitHub</span>
-            </a> -->
-            <!-- <a href="#" class="social-link-row" target="_blank" rel="noopener">
               <i class="fab fa-twitter"></i>
               <span>Twitter / X</span>
-            </a> -->
-            <!-- <a href="#" class="social-link-row" target="_blank" rel="noopener">
-              <i class="ai ai-orcid"></i>
-              <span>ORCID</span>
             </a> -->
           </div>
         </div>
@@ -401,7 +470,7 @@
   <!-- ===== FOOTER ===== -->
   <footer class="footer">
     <div class="container footer-inner">
-      <p>&copy; 2026 Danesh Morales</p>
+      <p>&copy; 2026 Danesh Morales Hashemi</p>
       <p class="footer-sub">
         Hosted on <a href="https://pages.github.com" target="_blank" rel="noopener">GitHub Pages</a>
       </p>

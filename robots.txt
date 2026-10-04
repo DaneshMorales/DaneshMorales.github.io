@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://daneshmorales.github.io/sitemap.xml

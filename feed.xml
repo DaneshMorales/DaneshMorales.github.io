@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Blog RSS feed. When you publish a post, add an <item> at the top (newest first)
+     and update <lastBuildDate>. -->
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Danesh Morales Hashemi — Blog</title>
+    <link>https://daneshmorales.github.io/blog/</link>
+    <atom:link href="https://daneshmorales.github.io/feed.xml" rel="self" type="application/rss+xml"/>
+    <description>Notes on quantum information, mathematics, and research.</description>
+    <language>en</language>
+    <lastBuildDate>Sun, 04 Oct 2026 12:00:00 -0400</lastBuildDate>
+    <item>
+      <title>Constructing Qubit Channels with Arbitrary Fixed Points</title>
+      <link>https://daneshmorales.github.io/blog/posts/fixed-point-qubit-channels.html</link>
+      <guid isPermaLink="true">https://daneshmorales.github.io/blog/posts/fixed-point-qubit-channels.html</guid>
+      <pubDate>Fri, 25 Sep 2026 16:30:00 -0400</pubDate>
+      <category>Quantum Channels</category>
+      <description>Motivated by the Banach fixed-point theorem, we construct a single-qubit channel, a rotated convex combination of the depolarizing and amplitude damping channels, whose repeated application drives any initial state to any chosen target state. Includes an interactive Bloch-sphere explorer of the trajectory.</description>
+    </item>
+    <item>
+      <title>Introduction to Cycle Benchmarking for Quantum Error Diagnostics</title>
+      <link>https://daneshmorales.github.io/blog/posts/cycle-benchmarking-intro.html</link>
+      <guid isPermaLink="true">https://daneshmorales.github.io/blog/posts/cycle-benchmarking-intro.html</guid>
+      <pubDate>Mon, 01 Dec 2025 12:00:00 -0500</pubDate>
+      <category>Error Characterization</category>
+      <description>A scalable, SPAM-robust protocol for estimating the process fidelity of a fixed cycle of parallel gates. We introduce the CB protocol, explain how randomized compiling tailors noise into Pauli channels, and analyze when the gate-independence assumption can be relaxed.</description>
+    </item>
+  </channel>
+</rss>

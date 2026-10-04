@@ -4,9 +4,23 @@
   <meta charset="UTF-8">
   <script>(function(){var t=localStorage.getItem('theme');if(t==='dark'||(t===null&&window.matchMedia('(prefers-color-scheme: dark)').matches)){document.documentElement.setAttribute('data-theme','dark');}})();</script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Publications – Danesh Morales Hashemi">
+  <meta name="description" content="Thesis, papers, and projects by Danesh Morales Hashemi on quantum error correction, benchmarking, and open quantum systems.">
   <title>Publications — Danesh Morales Hashemi</title>
   <link rel="icon" type="image/svg+xml" href="icon.svg?v=2">
+  <meta name="author" content="Danesh Morales Hashemi">
+  <link rel="canonical" href="https://daneshmorales.github.io/publications.html">
+  <link rel="alternate" type="application/rss+xml" title="Danesh Morales Hashemi — Blog" href="/feed.xml">
+  <!-- Link previews (LinkedIn, X, Slack, ...) -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Danesh Morales Hashemi">
+  <meta property="og:title" content="Publications — Danesh Morales Hashemi">
+  <meta property="og:description" content="Thesis, papers, and projects by Danesh Morales Hashemi on quantum error correction, benchmarking, and open quantum systems.">
+  <meta property="og:url" content="https://daneshmorales.github.io/publications.html">
+  <meta property="og:image" content="https://daneshmorales.github.io/assets/social/og-default.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Publications — Danesh Morales Hashemi">
+  <meta name="twitter:card" content="summary_large_image">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
@@ -125,15 +139,11 @@
         </div>
         <div class="nav-meta">
           <div class="nav-socials">
-            <a href="https://scholar.google.com/citations?hl=en&user=f_ltr8oAAAAJ" class="social-icon" aria-label="Google Scholar" title="Google Scholar" target="_blank" rel="noopener">
-              <i class="fas fa-graduation-cap"></i>
-            </a>
-            <a href="https://www.linkedin.com/in/daneshmh/" class="social-icon" aria-label="LinkedIn" title="LinkedIn" target="_blank" rel="noopener">
-              <i class="fab fa-linkedin-in"></i>
-            </a>
-            <a href="mailto:danesh.moraleshashemi@uwaterloo.ca" class="social-icon" aria-label="Email" title="Email">
-              <i class="fas fa-envelope"></i>
-            </a>
+            <a href="https://scholar.google.com/citations?hl=en&user=f_ltr8oAAAAJ" class="social-icon" aria-label="Google Scholar" title="Google Scholar" target="_blank" rel="noopener"><i class="fas fa-graduation-cap"></i></a>
+            <a href="https://orcid.org/0009-0005-1223-0772" class="social-icon" aria-label="ORCID" title="ORCID" target="_blank" rel="noopener"><i class="fab fa-orcid"></i></a>
+            <a href="https://github.com/DaneshMorales" class="social-icon" aria-label="GitHub" title="GitHub" target="_blank" rel="noopener"><i class="fab fa-github"></i></a>
+            <a href="https://www.linkedin.com/in/daneshmh/" class="social-icon" aria-label="LinkedIn" title="LinkedIn" target="_blank" rel="noopener"><i class="fab fa-linkedin-in"></i></a>
+            <a href="mailto:danesh.moraleshashemi@uwaterloo.ca" class="social-icon" aria-label="Email" title="Email"><i class="fas fa-envelope"></i></a>
           </div>
         </div>
       </div>
@@ -145,15 +155,18 @@
   <div class="pub-hero">
     <div class="container">
       <h1>Publications</h1>
-      <p>A complete list of my publications and preprints. See also my <a href="https://scholar.google.com/citations?hl=en&user=f_ltr8oAAAAJ" target="_blank" rel="noopener">Google Scholar profile</a> for citation metrics.</p>
+      <p>My papers, thesis, and course projects. See also my <a href="https://scholar.google.com/citations?hl=en&user=f_ltr8oAAAAJ" target="_blank" rel="noopener">Google Scholar</a> and <a href="https://orcid.org/0009-0005-1223-0772" target="_blank" rel="noopener">ORCID</a> profiles.</p>
 
       <!-- Filter buttons -->
       <div class="pub-filters">
         <span style="font-size:0.8rem;color:var(--text-muted);margin-right:0.25rem;">Filter:</span>
         <button class="filter-btn active" data-filter="all">All</button>
+        <!-- Re-enable once there is at least one of each:
         <button class="filter-btn" data-filter="preprint">Preprints</button>
         <button class="filter-btn" data-filter="publication">Publications</button>
-        <button class="filter-btn" data-filter="project">School Projects</button>
+        -->
+        <button class="filter-btn" data-filter="thesis">Thesis</button>
+        <button class="filter-btn" data-filter="project">Course Projects</button>
         <button class="filter-btn" data-filter="2025">2025</button>
         <button class="filter-btn" data-filter="2024">2024</button>
       </div>
@@ -169,14 +182,14 @@
         <div class="pub-year-label">2025</div>
         <div class="pub-list">
 
-          <div class="paper-card compact" data-type="project" data-year="2025">
+          <div class="paper-card compact" data-type="thesis" data-year="2025">
             <div class="paper-header">
               <span class="paper-year">2025</span>
-              <span class="badge badge-project">School Project</span>
+              <span class="badge badge-thesis">Thesis</span>
             </div>
             <h3 class="paper-title">Demonstrating Circuit Benchmarking for Efficient and Scalable Fidelity Estimation</h3>
             <p class="paper-authors">
-              <strong>Danesh Morales Hashemi</strong>
+              <strong>Danesh Morales-Hashemi</strong>
             </p>
             <p class="paper-venue">PHYS 437B &mdash; Undergraduate Thesis, University of Waterloo, Winter 2025</p>
             <p class="paper-abstract">
@@ -198,11 +211,11 @@
           <div class="paper-card compact" data-type="project" data-year="2025">
             <div class="paper-header">
               <span class="paper-year">2025</span>
-              <span class="badge badge-project">School Project</span>
+              <span class="badge badge-project">Course Project</span>
             </div>
             <h3 class="paper-title">Introduction to Cycle Benchmarking for Quantum Error Diagnostics</h3>
             <p class="paper-authors">
-              <strong>Danesh Morales Hashemi</strong>
+              <strong>Danesh Morales-Hashemi</strong>
             </p>
             <p class="paper-venue">Theory of Quantum Information &mdash; Final Project, University of Waterloo, Fall 2025</p>
             <p class="paper-abstract">
@@ -225,11 +238,11 @@
           <div class="paper-card compact" data-type="project" data-year="2025">
             <div class="paper-header">
               <span class="paper-year">2025</span>
-              <span class="badge badge-project">School Project</span>
+              <span class="badge badge-project">Course Project</span>
             </div>
             <h3 class="paper-title">Predicting Major League Baseball Playoffs Using Quantum Machine Learning</h3>
             <p class="paper-authors">
-              <strong>Danesh Morales Hashemi</strong>, Jonathan Zhu
+              <strong>Danesh Morales-Hashemi</strong>, Jonathan Zhu
             </p>
             <p class="paper-venue">Quantum Machine Learning &mdash; Final Project, University of Waterloo, Fall 2025</p>
             <p class="paper-abstract">
@@ -266,16 +279,16 @@
           <div class="paper-card compact" data-type="project" data-year="2024">
             <div class="paper-header">
               <span class="paper-year">2024</span>
-              <span class="badge badge-project">School Project</span>
+              <span class="badge badge-project">Course Project</span>
             </div>
             <h3 class="paper-title">Introduction to Superoperator Representations and Characterization of Completely Positive Maps</h3>
             <p class="paper-authors">
-              <strong>Danesh Morales Hashemi</strong>
+              <strong>Danesh Morales-Hashemi</strong>
             </p>
             <p class="paper-venue">Open Quantum Systems &mdash; Final Project, University of Waterloo, Spring 2024</p>
             <p class="paper-abstract">
-              We introduce the concept of superoperators, which are math ematical constructs used to describe the evolution of quantum states. We will
-              we focus on completely positive and trace-preserving maps, which are essential in
+              We introduce the concept of superoperators, which are mathematical constructs used to describe the evolution of quantum states. We will
+              focus on completely positive and trace-preserving maps, which are essential in
               quantum information theory as they represent the most general form of physical
               quantum operations. Next, we delve into different representations of superoperators. We define each
               of these representations in detail and prove several theorems that demonstrate
@@ -303,7 +316,7 @@
   <!-- ===== FOOTER ===== -->
   <footer class="footer">
     <div class="container footer-inner">
-      <p>&copy; 2026 Danesh Morales</p>
+      <p>&copy; 2026 Danesh Morales Hashemi</p>
       <p class="footer-sub">Hosted on <a href="https://pages.github.com" target="_blank" rel="noopener">GitHub Pages</a></p>
     </div>
   </footer>
