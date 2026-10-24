@@ -183,19 +183,25 @@
 \newcommand\insertseriesline{\ig@series
   \ifx\ig@issue\@empty\else\ \textperiodcentered\ \ig@issue\fi}
 % "3 / 7": counts carousel pages, so overlay steps count too
-\newcommand\insertslideof{\insertpagenumber\,/\,\insertdocumentendpage}
+% The slide number and total the chrome shows.  Normally the PDF page and
+% page count; \igslidenumber{5}{11} pins them, e.g. for the frames of a
+% video that will be slide 5 of an 11-slide carousel.
+\def\ig@pg{\the\c@page}
+\def\ig@tot{\insertdocumentendpage}
+\newcommand\igslidenumber[2]{\def\ig@pg{#1}\def\ig@tot{#2}}
+\newcommand\insertslideof{\ig@pg\,/\,\ig@tot}
 % "03" and "07", for themes that print two-digit page numbers
-\newcommand\insertpagetwo{\ifnum\c@page<10 0\fi\the\c@page}
-\newcommand\inserttotaltwo{\ifnum\insertdocumentendpage<10 0\fi\insertdocumentendpage}
+\newcommand\insertpagetwo{\ifnum\ig@pg<10 0\fi\ig@pg}
+\newcommand\inserttotaltwo{\ifnum\ig@tot<10 0\fi\ig@tot}
 % "06 / 08"
 \newcommand\insertslideoftwo{\insertpagetwo\ /\ \inserttotaltwo}
 \newif\ifiglastpage
 % true on the last page of the carousel (after the second LaTeX run)
-\newcommand\ig@checklast{\ifnum\c@page<\insertdocumentendpage\relax
+\newcommand\ig@checklast{\ifnum\ig@pg<\ig@tot\relax
   \iglastpagefalse\else\iglastpagetrue\fi}
 % \igsetprogress: \igfrac = progress through the carousel (0..1)
 \newcommand\igsetprogress{%
-  \pgfmathsetmacro\igfrac{min(1,\the\c@page/max(1,\insertdocumentendpage))}}
+  \pgfmathsetmacro\igfrac{min(1,\ig@pg/max(1,\ig@tot))}}
 % \igprogress{x0}{x1}{y}{height}{fill}{track}: a bar in a tikzpicture
 % drawn with x=1mm,y=1mm (themes use it in their background canvas)
 \newcommand\igprogress[6]{%
@@ -203,8 +209,8 @@
   \fill[#6] (#1,#3) rectangle (#2,#3+#4);
   \fill[#5] (#1,#3) rectangle ({#1+(#2-#1)*\igfrac},#3+#4);}
 % Roman numerals in small caps: iii / vii
-\newcommand\insertpageroman{\textsc{\romannumeral\c@page}}
-\newcommand\inserttotalroman{\textsc{\romannumeral\insertdocumentendpage}}
+\newcommand\insertpageroman{\textsc{\romannumeral\ig@pg}}
+\newcommand\inserttotalroman{\textsc{\romannumeral\ig@tot}}
 
 % ---------------------------------------------------------------------
 %  Running text

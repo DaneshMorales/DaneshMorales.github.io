@@ -95,6 +95,7 @@ pdftoppm -png -scale-to-x 1080 -scale-to-y 1350 post.pdf slide
 | `pullquote{who}` | A quotation with attribution |
 | `\aside{remark}` | Short remark pushed to the right margin |
 | `\refmark{1}` | Small reference mark |
+| `\igslidenumber{n}{total}` | Pin the counter and progress bar (for video frames) |
 | `\begin{axis}[ig axis]` | pgfplots axes in the theme's colours (`ig curve`, `ig data` for plots) |
 
 Physics shorthands match the blog's MathJax setup, so equations paste across
@@ -110,6 +111,20 @@ time. Everything that highlights also takes an overlay:
 when they appear.
 
 Instagram allows 20 slides per post, and every overlay step counts as one.
+
+### Video slides
+
+A slide can also become an MP4 (1080 × 1350, 30 fps) rendered from the same
+`.tex`, so it matches the static slides exactly. `qubits-desde-cero-03.tex`
+and `anim-qubits-desde-cero-03.py` show the pattern:
+
+- Mark the slide with `% @anim sNN` … `% @end`.
+- Put whatever moves behind "knob" macros (`\anSomething`) whose default is
+  the final state, so the static build shows the last frame.
+- Fade text with `\fade{opacity}{…}` and boxes with `\fadebox{opacity}{…}`.
+- The script sets the knobs for every frame, compiles once, and joins the
+  frames with ffmpeg. `\igslidenumber{5}{11}` pins the counter and the
+  progress bar, so the video shows its place in the carousel.
 
 ### Keeping it readable on a phone
 

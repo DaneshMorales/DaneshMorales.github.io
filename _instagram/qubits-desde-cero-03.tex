@@ -1,6 +1,12 @@
 % Qubits desde cero · 03 -- ¿Cómo describimos un qubit?
 % Tema: Signature (serie principal)
 % Build:  ./build.sh qubits-desde-cero-03.tex   (o en Overleaf con pdfLaTeX)
+% Vídeos: python3 anim-qubits-desde-cero-03.py
+%
+% Este archivo da las 11 diapositivas fijas y es también la fuente de los
+% vídeos.  Lo que se anima son las "perillas" \an... de abajo; aquí valen lo
+% que muestra el último fotograma.  Las diapositivas animadas van entre
+% "% @anim sNN" y "% @end".
 \documentclass[12pt]{beamer}
 \usetheme{igsignature}
 
@@ -22,15 +28,49 @@
 \newcommand\sgblock[1]{% salida - bloqueada
   \draw[igMuted, line width=0.8pt] (#1+7,-2.1) -- (#1+10,-2.1);
   \draw[igMuted, line width=1.6pt] (#1+10,-3.6) -- (#1+10,-0.6);}
+\tikzset{badge/.style={anchor=west, fill=igHL, draw=igTrack, rounded corners=1.2mm,
+  text=igAccent, font=\small, inner sep=1mm}}
 \newcommand\sgout[3]{% las dos salidas del último imán, con sus etiquetas
   \draw[igAccentB, line width=0.8pt] (#1+7,2.1) -- (#1+10,4.5);
   \draw[igAccentB, line width=0.8pt] (#1+7,-2.1) -- (#1+10,-4.5);
-  \node[anchor=west, fill=igHL, draw=igTrack, rounded corners=1.2mm, text=igAccent,
-    font=\small, inner sep=1mm] at (#1+10,4.5) {#2};
-  \node[anchor=west, fill=igHL, draw=igTrack, rounded corners=1.2mm, text=igAccent,
-    font=\small, inner sep=1mm] at (#1+10,-4.5) {#3};}
+  \node[badge] at (#1+10,4.5) {#2};
+  \node[badge] at (#1+10,-4.5) {#3};}
+% salidas cuyas etiquetas cambian de A a B (#6 = 0 muestra A, 1 muestra B;
+% A se va en la primera mitad y B entra en la segunda)
+\newcommand\sgoutx[6]{%
+  \draw[igAccentB, line width=0.8pt] (#1+7,2.1) -- (#1+10,4.5);
+  \draw[igAccentB, line width=0.8pt] (#1+7,-2.1) -- (#1+10,-4.5);
+  \pgfmathsetmacro\sginv{max(0,1-2*#6)}%
+  \pgfmathsetmacro\sgfwd{max(0,2*#6-1)}%
+  \foreach \y/\a/\b in {4.5/{#2}/{#4}, -4.5/{#3}/{#5}}{
+    \node[badge, minimum width=7.4mm, minimum height=5.4mm, text opacity=0] (xb) at (#1+10,\y) {};
+    \node[text=igAccent, font=\small, opacity=\sginv] at (xb.center) {\a};
+    \node[text=igAccent, font=\small, opacity=\sgfwd] at (xb.center) {\b};}}
 % etiqueta de fila, en gris, a la derecha de un vector columna
 \newcommand\rowlabel[1]{\text{\small\color{igMuted}$\leftarrow$ #1}}
+% un átomo de plata en vuelo
+\newcommand\atom[2]{\fill[igFG, opacity=0.22] (#1,#2) circle (1.15); \fill[igFG] (#1,#2) circle (0.6);}
+
+% --- Perillas de animación (valor final = carrusel fijo) -------------------
+\newcommand\fade[2]{{\transparent{#1}#2}}                 % opacidad, contenido
+% las cajas (defbox, thmbox...) fijan su propia opacidad: se la pasamos
+\newcommand\fadebox[2]{{\tcbset{every box/.append style={opacityfill=#1,
+  opacitytext=#1, opacitytitle=#1}}#2}}
+\newcommand\fhl[2]{#2\mathllap{\transparent{#1}\mhl{#2}}}  % el resaltado aparece
+\newcommand\fhlb[2]{#2\mathllap{\transparent{#1}\mhl*{#2}}}
+% s02  sistema y estado
+\def\anAtomsA{\foreach \x in {9,13,17,21} {\fill[igFG] (\x,0) circle (0.45);}}
+\def\anSistema{1}\def\anEstado{1}
+% s03  dos etiquetas
+\def\anAtomsB{}\def\anLabels{1}\def\anNombre{1}\def\anBase{1}
+% s05  el ket
+\def\anLineB{1}\def\anLineC{1}\def\anHl{1}\def\anRows{1}\def\anAmp{1}
+% s07  el ejemplo
+\def\anSqA{1}\def\anSqB{1}\def\anPctA{1}\def\anPctB{1}\def\anBar{1}\def\anBarLbl{1}\def\anNota{1}
+% s08  filtro +z
+\def\anAtomsC{}\def\anUpC{100\,\%}\def\anDnC{0\,\%}\def\anTxtA{1}\def\anTxtB{1}
+% s09  filtro +x
+\def\anAtomsD{}\def\anUpD{50\,\%}\def\anDnD{50\,\%}\def\anTxtC{1}\def\anTxtD{1}
 
 \begin{document}
 
@@ -38,50 +78,56 @@
   {¿Cómo describimos un qubit?}
   {Del imán de Stern--Gerlach a un vector de dos números.}
 
-% ---------------------------------------------------------------------------
+% @anim s02 -------------------------------------------------------------------
 \begin{frame}{Sistema y estado}{Dos ideas distintas}
 \begin{center}
 \begin{tikzpicture}[x=1mm,y=1mm,scale=1.2,transform shape]
+  \useasboundingbox (-6,-9) rectangle (52,7);
   \node[draw=igMuted, fill=igPanel, rounded corners=1mm, minimum width=11mm,
         minimum height=7mm, text=igMuted, font=\footnotesize] at (0,0) {horno};
   \draw[igAccentB, line width=0.8pt] (5.5,0) -- (25,0);
-  \foreach \x in {9,13,17,21} \fill[igFG] (\x,0) circle (0.45);
   \pic at (32,0) {sg={z/90/igAccentB}};
   \sgout{32}{?}{?}
+  \anAtomsA
 \end{tikzpicture}
 \end{center}
+\fadebox{\anSistema}{%
 \begin{defbox}[Sistema]
 Lo que medimos: el espín de un átomo de plata. Siempre es el mismo y el
 imán solo puede dar \key{dos resultados}.
-\end{defbox}
+\end{defbox}}
+\fadebox{\anEstado}{%
 \begin{thmbox}[Estado]
 Cómo lo hemos preparado: qué filtros atravesó. Cambia de un experimento a
 otro y decide las \hl{probabilidades}.
-\end{thmbox}
+\end{thmbox}}
 \end{frame}
+% @end
 
-% ---------------------------------------------------------------------------
+% @anim s03 -------------------------------------------------------------------
 \begin{frame}{Dos salidas, dos etiquetas}{Del imán a la notación}
 \begin{center}
 \begin{tikzpicture}[x=1mm,y=1mm,scale=1.45,transform shape]
   \useasboundingbox (-1,-9) rectangle (52,7);
   \draw[igAccentB, line width=0.8pt] (0,0) -- (21,0);
   \pic at (28,0) {sg={z/90/igAccentB}};
-  \sgout{28}{\alt<2->{$\ket{0}$}{$+z$}}{\alt<2->{$\ket{1}$}{$-z$}}
+  \sgoutx{28}{$+z$}{$-z$}{$\ket{0}$}{$\ket{1}$}{\anLabels}
+  \anAtomsB
 \end{tikzpicture}
 \end{center}
 El analizador en $z$ solo tiene dos salidas: arriba ($+z$) o abajo ($-z$).
 
-\uncover<2->{Les ponemos nombre:
+\fade{\anNombre}{Les ponemos nombre:
 \[
   +z \;\longrightarrow\; \ket{0},
   \qquad
   -z \;\longrightarrow\; \ket{1}.
-\]
-Elegir el analizador es elegir la \hl{base} en la que describimos el qubit.}
+\]}%
+\fade{\anBase}{Elegir el analizador es elegir la \hl{base} en la que
+describimos el qubit.}
 \end{frame}
+% @end
 
-% ---------------------------------------------------------------------------
 \begin{frame}{Cada etiqueta es un vector}{La base}
 {\large
 \[
@@ -95,21 +141,21 @@ $\ket{0}$ lo tiene todo en la primera componente, la de la salida $+z$;
 $\ket{1}$, en la segunda, la de la salida $-z$.
 \end{frame}
 
-% ---------------------------------------------------------------------------
+% @anim s05 -------------------------------------------------------------------
 \begin{frame}{Cualquier estado}{El ket}
 {\large
 \begin{align*}
   \ket{\psi} &= \alpha\ket{0} + \beta\ket{1}\\
-  &\uncover<2->{= \alpha\begin{pmatrix} 1 \\ 0 \end{pmatrix}
+  &\fade{\anLineB}{= \alpha\begin{pmatrix} 1 \\ 0 \end{pmatrix}
                  + \beta\begin{pmatrix} 0 \\ 1 \end{pmatrix}}\\
-  &\uncover<3->{= \begin{pmatrix} \mhl{\alpha} \\ \mhl*{\beta} \end{pmatrix}
-     \begin{matrix} \rowlabel{salida $+z$} \\ \rowlabel{salida $-z$} \end{matrix}}
+  &\fade{\anLineC}{= \begin{pmatrix} \fhl{\anHl}{\alpha} \\ \fhlb{\anHl}{\beta} \end{pmatrix}}
+     \fade{\anRows}{\begin{matrix} \rowlabel{salida $+z$} \\ \rowlabel{salida $-z$} \end{matrix}}
 \end{align*}}%
-\uncover<3->{$\alpha$ y $\beta$ son las \key{amplitudes}: dos números
+\fade{\anAmp}{$\alpha$ y $\beta$ son las \key{amplitudes}: dos números
 \hl{complejos}, $\alpha,\beta\in\mathbb{C}$. No son probabilidades.}
 \end{frame}
+% @end
 
-% ---------------------------------------------------------------------------
 \begin{frame}{De amplitudes a probabilidades}{Normalización}
 Si medimos con el imán en $z$:
 \[
@@ -125,7 +171,7 @@ El átomo siempre sale por algún lado, así que el estado está
 \keyeq{|\alpha|^2 + |\beta|^2 = 1}
 \end{frame}
 
-% ---------------------------------------------------------------------------
+% @anim s07 -------------------------------------------------------------------
 \begin{frame}{Un ejemplo}{Con números}
 {\large
 \[
@@ -143,49 +189,57 @@ El átomo siempre sale por algún lado, así que el estado está
   \node[anchor=base, text=igFG] at (39,-12) {$\dfrac{3}{5}$};
   \node[anchor=base west, text=igFG] at (0,-24) {$-z \to \ket{1}$};
   \node[anchor=base, text=igFG] at (39,-24) {$\dfrac{4i}{5}$};
-  % probabilidades (segundo paso)
-  \node<2->[anchor=base, text=igFG] at (58,-12) {$\dfrac{9}{25}$};
-  \node<2->[anchor=base, text=igFG] at (58,-24) {$\dfrac{16}{25}$};
-  \node<2->[anchor=base, fill=igHL, draw=igTrack, rounded corners=1.2mm, text=igAccent,
-            inner sep=1.2mm] at (78,-12) {36\,\%};
-  \node<2->[anchor=base, fill=igHL, draw=igTrack, rounded corners=1.2mm, text=igAccent,
-            inner sep=1.2mm] at (78,-24) {64\,\%};
-  % barra: fracción de átomos en cada salida
-  \fill<2->[igAccentB, rounded corners=0.8mm] (0,-35) rectangle (31.4,-31);
-  \fill<2->[igAccent, rounded corners=0.8mm] (32.0,-35) rectangle (88,-31);
-  \node<2->[anchor=north west, text=igAccentB, font=\footnotesize] at (0,-35.6) {$\ket{0}$: 36\,\%};
-  \node<2->[anchor=north east, text=igAccent, font=\footnotesize] at (88,-35.6) {$\ket{1}$: 64\,\%};
+  % módulos al cuadrado y probabilidades
+  \node[anchor=base, text=igFG, opacity=\anSqA] at (58,-12) {$\dfrac{9}{25}$};
+  \node[anchor=base, text=igFG, opacity=\anSqB] at (58,-24) {$\dfrac{16}{25}$};
+  \node[badge, anchor=base, inner sep=1.2mm, font=\normalsize, opacity=\anPctA] at (78,-12) {36\,\%};
+  \node[badge, anchor=base, inner sep=1.2mm, font=\normalsize, opacity=\anPctB] at (78,-24) {64\,\%};
+  % barra: fracción de átomos en cada salida, crece de 0 a 88 mm
+  \pgfmathsetmacro\barend{88*\anBar}
+  \ifdim\barend pt>0.5pt
+    \fill[igAccentB, rounded corners=0.8mm] (0,-35) rectangle ({min(\barend,31.4)},-31);
+  \fi
+  \ifdim\barend pt>32.5pt
+    \fill[igAccent, rounded corners=0.8mm] (32.0,-35) rectangle (\barend,-31);
+  \fi
+  \node[anchor=north west, text=igAccentB, font=\footnotesize, opacity=\anBarLbl] at (0,-35.6) {$\ket{0}$: 36\,\%};
+  \node[anchor=north east, text=igAccent, font=\footnotesize, opacity=\anBarLbl] at (88,-35.6) {$\ket{1}$: 64\,\%};
 \end{tikzpicture}
 \end{center}
-\uncover<2->{La $i$ no afecta a la probabilidad: $|4i/5|^2 = 16/25$.}
+\fade{\anNota}{La $i$ no afecta a la probabilidad: $|4i/5|^2 = 16/25$.}
 \end{frame}
+% @end
 
-% ---------------------------------------------------------------------------
+% @anim s08 -------------------------------------------------------------------
 \begin{frame}{Filtro $+z$, medimos $z$}{El post 02 en vectores}
 \begin{center}
 \begin{tikzpicture}[x=1mm,y=1mm,scale=1.3,transform shape]
+  \useasboundingbox (-1,-9) rectangle (68,7);
   \draw[igAccentB, line width=0.8pt] (0,0) -- (8,0);
   \pic at (15,0) {sg={z/90/igAccentB}};
   \sgblock{15}
   \sgpass{15}{43}
   \pic at (43,0) {sg={z/90/igAccentB}};
-  \sgout{43}{100\,\%}{0\,\%}
+  \sgout{43}{\anUpC}{\anDnC}
+  \anAtomsC
 \end{tikzpicture}
 \end{center}
-Después del filtro, el estado es $\ket{0}$:
+\fade{\anTxtA}{Después del filtro, el estado es $\ket{0}$:
 \[
   \ket{\psi} = \begin{pmatrix} 1 \\ 0 \end{pmatrix}
   \;\Longrightarrow\;
   P(0) = 1,\quad P(1) = 0 .
-\]
-La tabla de probabilidades dice \hl{100\,\% y 0\,\%}, lo mismo que vimos
-con los imanes.
+\]}%
+\fade{\anTxtB}{La tabla de probabilidades dice \hl{100\,\% y 0\,\%}, lo mismo
+que vimos con los imanes.}
 \end{frame}
+% @end
 
-% ---------------------------------------------------------------------------
+% @anim s09 -------------------------------------------------------------------
 \begin{frame}{Filtro $+x$, medimos $z$}{El post 02 en vectores}
 \begin{center}
 \begin{tikzpicture}[x=1mm,y=1mm,scale=1.15,transform shape]
+  \useasboundingbox (-3,-9) rectangle (75,7);
   \draw[igAccentB, line width=0.8pt] (-2,0) -- (0,0);
   \pic at (7,0) {sg={z/90/igAccentB}};
   \sgblock{7}
@@ -194,19 +248,20 @@ con los imanes.
   \sgblock{31}
   \sgpass{31}{55}
   \pic at (55,0) {sg={z/90/igAccentB}};
-  \sgout{55}{50\,\%}{50\,\%}
+  \sgout{55}{\anUpD}{\anDnD}
+  \anAtomsD
 \end{tikzpicture}
 \end{center}
-Lo que sale del filtro $+x$, escrito en la base $z$, es
+\fade{\anTxtC}{Lo que sale del filtro $+x$, escrito en la base $z$, es
 \[
   \ket{\psi} = \begin{pmatrix} 1/\sqrt{2} \\[0.5mm] 1/\sqrt{2} \end{pmatrix}
   \;\Longrightarrow\;
   P(0) = P(1) = \Big|\frac{1}{\sqrt{2}}\Big|^2 = \frac12 .
-\]
-\hl{Mismo sistema, otro estado}: otra tabla de probabilidades.
+\]}%
+\fade{\anTxtD}{\hl{Mismo sistema, otro estado}: otra tabla de probabilidades.}
 \end{frame}
+% @end
 
-% ---------------------------------------------------------------------------
 \begin{frame}{Del imán a las matemáticas}{Resumen}
 \begin{center}
 \begin{tikzpicture}[x=1mm,y=1mm]
