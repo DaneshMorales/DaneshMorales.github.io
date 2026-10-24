@@ -25,6 +25,10 @@ so you can switch a post's look by changing one line.
 Each theme has a sample post, `example-<theme>.tex`. `starter.tex` is a short,
 commented post that uses every command; copy it to start a new one.
 
+`GUIA_AGENTE.md` (in Spanish) is a guide for another agent: which theme to pick
+for which kind of post, how to write the `.tex`, and what to check before
+delivering.
+
 Every theme shows the same five things, each in its own style:
 the handle, the `06 / 08` counter, the series line (`QUBITS DESDE CERO · 02`),
 a `desliza →` cue (hidden on the last slide) and a progress bar that fills as
