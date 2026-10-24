@@ -1,0 +1,166 @@
+% =====================================================================
+%  Chalkboard -- a slate board in a wooden frame
+%  Chalk-white text, yellow/pink/blue chalk accents, hand-drawn boxes
+%  around highlighted terms.  Pairs well with \pause and \uncover to
+%  build a derivation one line per swipe.
+%  Best for: derivations, step-by-step proofs, "board work".
+% =====================================================================
+\ProvidesPackage{beamerthemeigchalkboard}[2026/10/24]
+\RequirePackage{igpost}
+
+\definecolor{igBG}{HTML}{26332D}      % slate
+\definecolor{igBGlight}{HTML}{31423A}
+\definecolor{igBGdark}{HTML}{1E2924}
+\definecolor{igWood}{HTML}{5C3F2A}
+\definecolor{igFG}{HTML}{EEF0EA}      % chalk white
+\definecolor{igMuted}{HTML}{A7B4AC}
+\definecolor{igAccent}{HTML}{F4D35E}  % yellow chalk
+\definecolor{igAccentB}{HTML}{F5A3B7} % pink chalk
+\definecolor{igChalkBlue}{HTML}{93CDEB}
+\definecolor{igHL}{HTML}{5B5B37}      % yellow chalk rubbed into slate
+\definecolor{igHLB}{HTML}{5E4249}
+\definecolor{igOnHL}{HTML}{FFFFFF}
+\definecolor{igNote}{HTML}{93CDEB}
+\definecolor{igRule}{HTML}{A7B4AC}
+\definecolor{igBoxBG}{HTML}{2B3832}
+\definecolor{igBoxFrame}{HTML}{EEF0EA}
+\igapplycolors
+\setbeamercolor{frametitle}{fg=igFG}
+\setbeamercolor{framesubtitle}{fg=igChalkBlue}
+
+\setbeamersize{text margin left=10mm, text margin right=10mm}
+
+\tikzset{
+  chalk/.style={decorate, decoration={random steps, segment length=1.4pt, amplitude=0.32pt},
+    line cap=round, line join=round},
+}
+
+% --- the board ----------------------------------------------------------
+\setbeamertemplate{background canvas}{%
+  \begin{tikzpicture}[x=1mm,y=1mm]
+    \useasboundingbox (0,0) rectangle (108,135);
+    \fill[igWood] (0,0) rectangle (108,135);
+    \shade[inner color=igBGlight, outer color=igBGdark] (2.6,2.6) rectangle (105.4,132.4);
+    % eraser smudges: same within a frame, different on every frame
+    \pgfmathsetseed{\number\numexpr 7*\c@framenumber+3\relax}
+    \foreach \k in {1,2,3}{
+      \pgfmathsetmacro\sx{15+rnd*78}\pgfmathsetmacro\sy{18+rnd*100}
+      \pgfmathsetmacro\sr{rnd*50-25}
+      \fill[white, opacity=0.06, path fading=circle with fuzzy edge 15 percent,
+        rotate around={\sr:(\sx,\sy)}] (\sx,\sy) ellipse (28 and 10);
+    }
+    \draw[black, opacity=0.35, line width=0.5pt] (2.6,2.6) rectangle (105.4,132.4);
+    % progress: a stroke of yellow chalk along the bottom of the board
+    \igsetprogress
+    \pgfmathsetseed{19}
+    \draw[chalk, white, opacity=0.13, line width=2.4pt] (2.6,4.4) -- (105.4,4.4);
+    \draw[chalk, igAccent, line width=2.4pt] (2.6,4.4) -- ({2.6+102.8*\igfrac},4.4);
+    \ifigcover
+      % faint, half-erased leftovers from the last lecture
+      \node[text=white, opacity=0.06, rotate=-4, font=\Large] at (44,25)
+        {$\dot\rho = -i[H,\rho] + \sum_k \gamma_k \mathcal{D}[L_k]\rho$};
+      \node[text=white, opacity=0.06, rotate=4, font=\large] at (80,121)
+        {$e^{i\pi} + 1 = 0$};
+    \fi
+  \end{tikzpicture}}
+
+% --- head: handle | counter;  foot: series | swipe cue ---------------------
+\setbeamertemplate{headline}{%
+  \vspace*{7.5mm}%
+  \hbox to\paperwidth{\hspace{10mm}%
+    {\footnotesize\color{igMuted}\inserthandle}\hfill
+    {\footnotesize\color{igFG}\insertslideoftwo}\hspace{10mm}}}
+
+% --- page titles: blue kicker, white title, a stroke of yellow chalk -----
+\newsavebox\ig@titlebox
+\setbeamertemplate{frametitle}{%
+  \vspace*{5mm}%
+  \ifx\insertframesubtitle\@empty\else
+    {\small\color{igChalkBlue}\textls[120]{\textsc{\MakeLowercase{\insertframesubtitle}}}\par}\vspace{0.6mm}%
+  \fi
+  {\LARGE\color{igFG}\insertframetitle\par}%
+  \sbox\ig@titlebox{\LARGE\insertframetitle}%
+  \pgfmathsetlengthmacro\ig@stroke{min(\wd\ig@titlebox,\linewidth)}%
+  \vspace{0.4mm}%
+  \tikz{\pgfmathsetseed{11}%
+    \draw[chalk, igAccent, line width=1.1pt] (0,0) -- (\ig@stroke,0.4pt);}\par
+  \vspace{1mm}}
+
+\setbeamertemplate{footline}{%
+  \hbox to\paperwidth{\hspace{10mm}%
+    {\footnotesize\color{igChalkBlue}\textls[100]{\textsc{\MakeLowercase{\insertseriesline}}}}\hfill
+    {\small\color{igAccent}\insertswipe}\hspace{10mm}}%
+  \vspace*{8.5mm}}
+
+% --- lists ------------------------------------------------------------
+\setbeamertemplate{itemize item}{\raisebox{0.15em}{\tikz{\pgfmathsetseed{5}%
+  \fill[igAccent] (0,0) circle (0.85pt);}}}
+\setbeamertemplate{enumerate item}{\tikz[baseline=(n.base)]{\pgfmathsetseed{3}%
+  \node[inner sep=1.2pt, text=igAccent, font=\small\bfseries] (n) {\insertenumlabel};
+  \draw[chalk, igAccent, line width=0.5pt] (n) circle (2.1mm);}}
+
+% --- highlights: running text is underlined in yellow chalk, ------------
+%     terms in equations get a chalk box drawn around them
+\renewcommand<>{\hl}[1]{\alt#2{{\setulcolor{igAccent}\setul{0.25ex}{0.2ex}\ul{#1}}}{#1}}
+\tikzset{ig mhl/.style={igAccent}, ig mhl*/.style={igAccentB}}
+\renewcommand\igmhlpainter[3]{%
+  \pgfmathsetseed{17}%
+  \fill[ig mhl now, opacity=0.16] (-\igmhlpad,-#3-\igmhlpad) rectangle (#1+\igmhlpad,#2+\igmhlpad);
+  \draw[ig mhl now, chalk, line width=0.6pt]
+    (-\igmhlpad-0.4pt,-#3-\igmhlpad) rectangle (#1+\igmhlpad+0.3pt,#2+\igmhlpad+0.4pt);}
+
+% --- boxes: chalk outlines, title written on the board ------------------
+\tcbset{
+  ig/base/.append style={frame hidden, interior hidden, arc=0pt,
+    left=3.5mm, right=3.5mm, top=2.2mm, bottom=2.2mm,
+    detach title, before upper={\ifx\tcbtitletext\@empty\else
+      {\footnotesize\color{igAccent}\textls[120]{\textsc{\MakeLowercase{\tcbtitletext}}}}\par\vspace{0.8mm}\fi},
+    overlay={\pgfmathsetseed{23}%
+      \fill[white, opacity=0.035] (frame.south west) rectangle (frame.north east);
+      \draw[chalk, igFG, opacity=0.85, line width=0.55pt]
+        (frame.south west) rectangle (frame.north east);}},
+  ig/thm/.style={overlay={\pgfmathsetseed{29}%
+      \fill[igAccent, opacity=0.06] (frame.south west) rectangle (frame.north east);
+      \draw[chalk, igAccent, line width=0.7pt] (frame.south west) rectangle (frame.north east);}},
+  ig/note/.style={overlay={\pgfmathsetseed{31}%
+      \draw[chalk, igChalkBlue, line width=0.7pt] ([xshift=0.5mm]frame.north west) -- ([xshift=0.5mm]frame.south west);},
+    left=4mm, fontupper=\small},
+  ig/eq/.style={overlay={\pgfmathsetseed{37}%
+      \fill[igAccent, opacity=0.07] (frame.south west) rectangle (frame.north east);
+      \draw[chalk, igAccent, line width=0.7pt] (frame.south west) rectangle (frame.north east);
+      \draw[chalk, igAccent, line width=0.5pt] ([shift={(0.8mm,0.8mm)}]frame.south west) rectangle ([shift={(-0.8mm,-0.8mm)}]frame.north east);}},
+}
+
+% --- cover ------------------------------------------------------------
+\setbeamertemplate{ig cover}{%
+  \vspace*{7.5mm}%
+  {\footnotesize\color{igMuted}\inserthandle\par}%
+  \vspace*{17mm}%
+  {\small\color{igAccent}\textls[150]{\textsc{\MakeLowercase{\insertcoverkicker}}}\par}%
+  \vspace{5mm}%
+  {\fontsize{30}{34}\selectfont\color{igFG}\insertcovertitle\par}%
+  \vspace{3mm}%
+  \tikz{\pgfmathsetseed{41}%
+    \draw[chalk, igAccent, line width=1.4pt] (0,0) -- (0.62\linewidth,0.6pt);
+    \draw[chalk, igAccent, line width=0.9pt] (0.04\linewidth,-2.2pt) -- (0.5\linewidth,-1.6pt);}\par
+  \vspace{6mm}%
+  {\large\color{igChalkBlue}\insertcoversubtitle\par}%
+  \ifcoverblurb{\vspace{6mm}{\color{igMuted}\insertcoverblurb\par}}%
+  \vfill
+  {\footnotesize\color{igChalkBlue}\textls[100]{\textsc{\MakeLowercase{\insertseriesline}}}\hfill
+   \large\color{igAccent}\insertswipe\par}%
+  \vspace*{8.5mm}}
+
+\setbeamertemplate{ig closing}{%
+  \vfill
+  {\small\color{igChalkBlue}\textls[150]{\textsc{\igstr{se acabó la clase}{class dismissed}}}\par}\vspace{3mm}%
+  {\fontsize{26}{30}\selectfont\insertclosinghead\par}\vspace{2mm}%
+  \tikz{\pgfmathsetseed{43}\draw[chalk, igAccent, line width=1.2pt] (0,0) -- (0.45\linewidth,0.5pt);}\par
+  \vspace{5mm}%
+  {\large\insertclosingtext\par}\vspace{9mm}%
+  \igctarow[igAccent]\par\vspace{3mm}%
+  {\small\color{igFG}\inserthandle\par}\vspace{1mm}%
+  {\footnotesize\color{igChalkBlue}\textls[100]{\textsc{\MakeLowercase{\insertseriesline}}}\par}%
+  \vfill\vspace*{6mm}}
+
+\endinput

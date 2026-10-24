@@ -1,0 +1,120 @@
+% =====================================================================
+%  Flashcard -- index cards on a mustard desk
+%  Every slide is a white index card with a red top line and a tab for
+%  the kicker ("Pregunta", "Pista", "Respuesta"); the cover is a small
+%  deck.  Playful, high contrast, invites people to answer.
+%  Best for: quizzes, "test yourself", question -> hint -> answer.
+% =====================================================================
+\ProvidesPackage{beamerthemeigflashcard}[2026/10/24]
+\RequirePackage{igpost}
+
+\definecolor{igDesk}{HTML}{F2B134}
+\definecolor{igDeskIn}{HTML}{F6C255}
+\definecolor{igDeskOut}{HTML}{E5A221}
+\definecolor{igDeskInk}{HTML}{3B2A06}
+\definecolor{igBG}{HTML}{FFFEFA}      % the card
+\definecolor{igFG}{HTML}{222222}
+\definecolor{igMuted}{HTML}{777777}
+\definecolor{igAccent}{HTML}{D64545}  % index-card red
+\definecolor{igAccentB}{HTML}{1F6FB2} % ballpoint blue
+\definecolor{igHL}{HTML}{FFE58A}
+\definecolor{igHLB}{HTML}{CFE6FF}
+\definecolor{igOnHL}{HTML}{222222}
+\definecolor{igNote}{HTML}{1F6FB2}
+\definecolor{igRule}{HTML}{D64545}
+\definecolor{igBoxBG}{HTML}{FFF6D2}
+\definecolor{igBoxFrame}{HTML}{D64545}
+\igapplycolors
+\setbeamercolor{frametitle}{fg=igFG}
+\setbeamerfont{explain}{size=\footnotesize,shape=\upshape}
+
+\setbeamersize{text margin left=12.5mm, text margin right=12.5mm}
+
+\tikzset{ig card/.style={fill=igBG, rounded corners=2.5mm},
+         ig card shadow/.style={blur shadow={shadow blur steps=10, shadow xshift=0mm,
+           shadow yshift=-1mm, shadow opacity=28}}}
+
+% --- desk, card, tab, desk labels, progress bar ----------------------------
+\setbeamertemplate{background canvas}{%
+  \begin{tikzpicture}[x=1mm,y=1mm]
+    \useasboundingbox (0,0) rectangle (108,135);
+    \clip (0,0) rectangle (108,135);
+    \shade[inner color=igDeskIn, outer color=igDeskOut] (-20,-20) rectangle (128,155);
+    \ifigcover
+      \fill[ig card, fill=igBG!92!igDesk, ig card shadow, rotate around={4.5:(54,66)}] (6,13) rectangle (102,121);
+      \fill[ig card, fill=igBG!96!igDesk, ig card shadow, rotate around={-3:(54,66)}] (6,13) rectangle (102,121);
+    \fi
+    % the tab carries the page's kicker
+    \ifigcover\def\ig@tab{\insertcoverkicker}\else\let\ig@tab\insertframesubtitle\fi
+    \ifx\ig@tab\@empty\else\ifigclosing\else
+      \node[anchor=south west, fill=igBG, rounded corners=1.6mm, inner xsep=3mm,
+            inner ysep=1.5mm, minimum height=9mm, text=igAccent, font=\small\bfseries]
+        at (11,118) {\raisebox{1.4mm}{\textls[100]{\MakeUppercase{\ig@tab}}}};
+    \fi\fi
+    \fill[ig card, ig card shadow] (6,13) rectangle (102,121);
+    \draw[igAccent, line width=0.8pt] (6,111.5) -- (102,111.5);
+    \draw[igAccentB!30, line width=0.4pt] (6,110.3) -- (102,110.3);
+    \node[anchor=base west, text=igDeskInk, font=\scriptsize\bfseries] at (8,6.2)
+      {\textls[120]{\MakeUppercase{\insertseriesline}}};
+    \node[anchor=base east, text=igDeskInk, font=\small\bfseries] at (100,6.2) {\insertswipe};
+    \igprogress{0}{108}{0}{1.6}{igDeskInk}{igDeskOut!85!black}
+  \end{tikzpicture}}
+
+% --- head (inside the card): handle | counter ------------------------------
+\setbeamertemplate{headline}{%
+  \vspace*{17.5mm}%
+  \hbox to\paperwidth{\hspace{12.5mm}%
+    {\footnotesize\color{igMuted}\inserthandle}\hfill
+    {\footnotesize\color{igFG}\insertslideoftwo}\hspace{12.5mm}}%
+  \vspace{5.5mm}}
+
+\setbeamertemplate{footline}{\vbox to 19mm{}}
+
+\setbeamertemplate{frametitle}{%
+  \vspace*{1.5mm}%
+  {\LARGE\bfseries\color{igFG}\insertframetitle\par}%
+  \vspace{1mm}}
+
+% --- lists ------------------------------------------------------------
+\setbeamertemplate{itemize item}{\color{igAccent}\bfseries\textendash}
+\setbeamertemplate{enumerate item}{\color{igAccentB}\bfseries\insertenumlabel}
+\setbeamertemplate{enumerate mini template}{\color{igAccentB}\bfseries\insertenumlabel}
+
+% --- boxes ----------------------------------------------------------------
+\tcbset{
+  ig/base/.append style={arc=1.6mm, boxrule=0pt, frame hidden, colback=igBoxBG,
+    left=3mm, right=3mm, top=2.2mm, bottom=2.2mm,
+    detach title, before upper={\ifx\tcbtitletext\@empty\else
+      {\small\bfseries\color{igAccent}\tcbtitletext}\par\vspace{0.6mm}\fi}},
+  % hint: dashed blue
+  ig/note/.style={colback=igAccentB!6, frame code={\draw[igAccentB, line width=0.6pt,
+      dash pattern=on 3pt off 2pt, rounded corners=1.6mm] (frame.south west) rectangle (frame.north east);},
+    before upper={{\small\bfseries\color{igAccentB}\faLightbulb[regular]\
+      \ifx\tcbtitletext\@empty\igstr{Pista}{Hint}\else\tcbtitletext\fi}\par\vspace{0.6mm}}},
+  % answer / result: red frame
+  ig/thm/.style={colback=igBG, frame code={\draw[igAccent, line width=0.8pt, rounded corners=1.6mm]
+      (frame.south west) rectangle (frame.north east);}},
+  ig/eq/.style={colback=igAccentB!8, top=1.8mm, bottom=1.8mm},
+}
+
+% --- cover: a small deck ----------------------------------------------------
+\setbeamertemplate{ig cover}{%
+  \vspace*{17.5mm}%
+  {\footnotesize\color{igMuted}\inserthandle\par}%
+  \vspace{16mm}%
+  {\fontsize{27}{32}\selectfont\bfseries\color{igFG}\insertcovertitle\par}%
+  \vspace{6mm}%
+  {\large\color{igAccentB}\insertcoversubtitle\par}%
+  \ifcoverblurb{\vspace{5mm}{\color{igMuted}\insertcoverblurb\par}}%
+  \vfill}
+
+\setbeamertemplate{ig closing}{%
+  \vspace*{17.5mm}%
+  {\footnotesize\color{igMuted}\inserthandle\par}%
+  \vfill
+  {\fontsize{28}{33}\selectfont\bfseries\insertclosinghead\par}\vspace{5mm}%
+  {\large\insertclosingtext\par}\vspace{9mm}%
+  \igctarow[igAccent]\par
+  \vfill\vspace*{24mm}}
+
+\endinput

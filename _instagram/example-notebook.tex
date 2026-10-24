@@ -1,0 +1,86 @@
+% Theme: Notebook  --  best for worked exercises, problem + solution
+% Build:  ./build.sh example-notebook.tex   (or compile on Overleaf)
+\documentclass[12pt]{beamer}
+\usetheme{ignotebook}
+
+\ighandle{@quantum_danesh}
+\igseries{Ejercicios resueltos}
+\igissue{04}
+
+\begin{document}
+
+\coverslide{Ejercicio resuelto}
+  {¿Es el amortiguamiento de amplitud un canal?}
+  {Completitud, acción sobre $\rho$ y punto fijo, paso a paso.}
+
+\begin{frame}{El enunciado}{Ejercicio 2.4}
+Dados los operadores de Kraus
+\[
+  K_0 = \begin{pmatrix} 1 & 0 \\ 0 & \sqrt{1-\gamma} \end{pmatrix},
+  \qquad
+  K_1 = \begin{pmatrix} 0 & \sqrt{\gamma} \\ 0 & 0 \end{pmatrix},
+\]
+con $0 < \gamma \le 1$:
+\begin{enumerate}[(a)]
+  \item Comprueba que $\sum_i K_i^\dagger K_i = \id$.
+  \item Calcula $\mathcal{A}_\gamma(\rho)$ para un $\rho$ general.
+  \item Encuentra su punto fijo.
+\end{enumerate}
+\end{frame}
+
+\begin{frame}{Completitud}{Apartado (a)}
+\[
+  K_0^\dagger K_0 = \begin{pmatrix} 1 & 0 \\ 0 & 1-\gamma \end{pmatrix},
+  \qquad
+  K_1^\dagger K_1 = \begin{pmatrix} 0 & 0 \\ 0 & \gamma \end{pmatrix}
+\]
+\[
+  K_0^\dagger K_0 + K_1^\dagger K_1 = \mhl{\id}
+\]
+Así que preserva la traza. \aside{\checkmark\ correcto}
+\begin{notebox}[Ojo]
+No olvides la daga:
+$K_1\rho K_1^\dagger \neq K_1^\dagger\rho K_1$.
+\end{notebox}
+\end{frame}
+
+\begin{frame}{Acción sobre $\rho$}{Apartado (b)}
+Con $\rho = \begin{pmatrix} a & b \\ b^* & 1-a \end{pmatrix}$:
+\begin{align*}
+  K_0\rho K_0^\dagger &= \begin{pmatrix} a & \sqrt{1-\gamma}\,b \\ \sqrt{1-\gamma}\,b^* & (1-\gamma)(1-a) \end{pmatrix}\\
+  K_1\rho K_1^\dagger &= \begin{pmatrix} \gamma(1-a) & 0 \\ 0 & 0 \end{pmatrix}
+\end{align*}
+\uncover<2->{Sumando:
+\keyeq{\mathcal{A}_\gamma(\rho) = \begin{pmatrix} a + \mhl{\gamma(1-a)} & \mhl*{\sqrt{1-\gamma}}\,b \\
+  \mhl*{\sqrt{1-\gamma}}\,b^* & (1-\gamma)(1-a) \end{pmatrix}}}
+\end{frame}
+
+\begin{frame}{Punto fijo}{Apartado (c)}
+Imponemos $\mathcal{A}_\gamma(\rho^\star) = \rho^\star$:
+\begin{gather*}
+  \sqrt{1-\gamma}\,b = b \;\Rightarrow\; b = 0,\\
+  a + \gamma(1-a) = a \;\Rightarrow\; a = 1 .
+\end{gather*}
+\keyeq{\rho^\star = \ketbra{0}}
+Iterando, $1-a_n = (1-\gamma)^n(1-a_0)$ y $b_n = (1-\gamma)^{n/2}\, b_0$:
+la población \hl{cae al estado fundamental} y las coherencias se apagan.
+\end{frame}
+
+\begin{frame}{Errores típicos}{Repaso}
+\begin{itemize}
+  \item Confundir $K_1\rho K_1^\dagger$ con $K_1^\dagger\rho K_1$.
+  \item Olvidar que $\gamma \in [0,1]$ es una probabilidad.
+  \item Creer que el punto fijo depende de $\rho_0$: aquí no.
+\end{itemize}
+\begin{thmbox}[Comprobación final]
+\(
+  \Tr\mathcal{A}_\gamma(\rho) = a + \gamma(1-a) + (1-\gamma)(1-a) = 1
+\)
+\end{thmbox}
+\end{frame}
+
+\closingslide{¿Y si lo mezclamos?}
+  {Combinado con el canal despolarizante, el punto fijo puede quedar en
+   cualquier punto entre el centro y el polo norte. Lo cuento en el blog.}
+
+\end{document}

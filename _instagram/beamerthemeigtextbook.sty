@@ -1,0 +1,134 @@
+% =====================================================================
+%  Textbook -- a modern maths textbook
+%  Chapter-opener cover, numbered sections, teal Definition boxes,
+%  ochre Theorem boxes with a tab, quiet Remark boxes, a running head.
+%  Best for: definitions, theorems and short proofs; formal posts.
+% =====================================================================
+\ProvidesPackage{beamerthemeigtextbook}[2026/10/24]
+\RequirePackage{igpost}
+
+\definecolor{igBG}{HTML}{FFFFFF}
+\definecolor{igFG}{HTML}{1E1E1E}
+\definecolor{igMuted}{HTML}{6A6A66}
+\definecolor{igAccent}{HTML}{0F5E63}  % teal
+\definecolor{igAccentB}{HTML}{B7791F} % ochre
+\definecolor{igHL}{HTML}{FBE3B4}
+\definecolor{igHLB}{HTML}{D3ECEB}
+\definecolor{igOnHL}{HTML}{1E1E1E}
+\definecolor{igNote}{HTML}{0F5E63}
+\definecolor{igRule}{HTML}{0F5E63}
+\definecolor{igBoxBG}{HTML}{EAF3F3}
+\definecolor{igBoxFrame}{HTML}{0F5E63}
+\definecolor{igTrack}{HTML}{DCEAEA}
+\igapplycolors
+\setbeamercolor{frametitle}{fg=igFG}
+
+% --- page, cover band, progress bar ---------------------------------------
+\setbeamertemplate{background canvas}{%
+  \begin{tikzpicture}[x=1mm,y=1mm]
+    \useasboundingbox (0,0) rectangle (108,135);
+    \fill[igBG] (0,0) rectangle (108,135);
+    \ifigcover \fill[igAccent] (0,95) rectangle (108,135); \fi
+    \igprogress{0}{108}{0}{1.2}{igAccent}{igTrack}
+  \end{tikzpicture}}
+
+% --- running head: series | counter;  foot: handle | swipe cue -------------
+\setbeamertemplate{headline}{%
+  \vspace*{6.5mm}%
+  \hbox to\paperwidth{\hspace{9mm}%
+    {\footnotesize\color{igAccent}\textls[80]{\textsc{\MakeLowercase{\insertseriesline}}}}\hfill
+    {\footnotesize\color{igMuted}\insertslideoftwo}\hspace{9mm}}%
+  \vspace{1.4mm}%
+  \hbox to\paperwidth{\hspace{9mm}{\color{igAccent}\leaders\hrule height 0.5pt\hfill}\hspace{9mm}}}
+
+\setbeamertemplate{footline}{%
+  \hbox to\paperwidth{\hspace{9mm}%
+    {\footnotesize\color{igMuted}\inserthandle}\hfill
+    {\footnotesize\itshape\color{igAccent}\insertswipe}\hspace{9mm}}%
+  \vspace*{6.5mm}}
+
+% --- titles: "4.2 | El teorema" -------------------------------------------
+\newsavebox\ig@kbox
+\setbeamertemplate{frametitle}{%
+  \vspace*{4mm}%
+  \ifx\insertframesubtitle\@empty
+    {\Large\bfseries\color{igFG}\insertframetitle\par}%
+  \else
+    \sbox\ig@kbox{\Large\bfseries\color{igAccent}\insertframesubtitle}%
+    \noindent\usebox\ig@kbox\hspace{2.4mm}{\color{igAccent}\vrule width 0.9pt}\hspace{2.4mm}%
+    \parbox[t]{\dimexpr\linewidth-\wd\ig@kbox-5.7mm}{\raggedright\Large\bfseries\color{igFG}\insertframetitle}\par
+  \fi
+  \vspace{1mm}}
+
+% --- lists ------------------------------------------------------------
+\setbeamertemplate{itemize item}{\raisebox{0.1em}{\tikz\fill[igAccent] (0,0) -- (1.5mm,0.8mm) -- (0,1.6mm) -- cycle;}}
+\setbeamertemplate{enumerate item}{\color{igAccent}\bfseries\insertenumlabel.}
+
+% --- boxes ----------------------------------------------------------------
+\tcbset{
+  ig/base/.append style={arc=1mm, boxrule=0pt, frame hidden,
+    left=3.5mm, right=3.5mm, top=2.2mm, bottom=2.2mm,
+    detach title, before upper={\ifx\tcbtitletext\@empty\else
+      {\bfseries\color{igAccent}\tcbtitletext.}\enspace\fi}},
+  % definition: teal tint, thick teal edge
+  ig/def/.style={sharp corners, colback=igBoxBG, borderline west={1.2mm}{0pt}{igAccent}},
+  % theorem: ochre frame with a tab
+  ig/thm/.style={colback=igBG, boxrule=0.8pt, colframe=igAccentB, frame style={},
+    attach title to upper={}, before upper={}, title={\tcbtitletext},
+    attach boxed title to top left={xshift=3mm, yshift=-\tcboxedtitleheight/2},
+    boxed title style={colback=igAccentB, colframe=igAccentB, arc=0.8mm,
+      left=1.5mm, right=1.5mm, top=0.6mm, bottom=0.6mm},
+    coltitle=white, fonttitle=\small\bfseries, top=3.6mm},
+  % remark: quiet grey rule
+  ig/note/.style={colback=igBG, sharp corners, borderline west={0.6pt}{0pt}{igMuted},
+    fontupper=\small, before upper={\ifx\tcbtitletext\@empty\else
+      {\itshape\bfseries\color{igMuted}\tcbtitletext.}\enspace\fi}},
+  ig/eq/.style={colback=igBG, top=2.4mm, bottom=2.4mm,
+    frame code={\draw[igAccent, line width=0.6pt, rounded corners=1mm]
+      (frame.south west) rectangle (frame.north east);}},
+}
+% the theorem box must draw its frame (the base style hides it)
+\tcbset{ig/thm/.append style={frame code={\draw[igAccentB, line width=0.8pt, rounded corners=1mm]
+  (frame.south west) rectangle (frame.north east);}}}
+\renewcommand\igmhlpainter[3]{%
+  \fill[ig mhl now, rounded corners=1.5pt] (-\igmhlpad,-#3-\igmhlpad) rectangle (#1+\igmhlpad,#2+\igmhlpad);}
+
+% a proof that ends with a square
+\newenvironment{igproof}[1][\igstr{Demostración}{Proof}]
+  {\par{\itshape\color{igAccent}#1.}\enspace}
+  {\hfill$\blacksquare$\par}
+
+% --- cover: a chapter opener ---------------------------------------------
+\setbeamertemplate{ig cover}{%
+  \vspace*{7mm}%
+  {\footnotesize\color{white}\inserthandle\par}%
+  \vspace{11mm}%
+  {\fontsize{30}{32}\selectfont\color{white}\insertcoverkicker\par}%
+  \vspace{10mm}%
+  {\fontsize{24}{28}\selectfont\bfseries\color{igFG}\insertcovertitle\par}%
+  \vspace{3.5mm}%
+  {\color{igAccentB}\rule{14mm}{1.2mm}}\par\vspace{3mm}%
+  {\large\color{igMuted}\insertcoversubtitle\par}%
+  \ifcoverblurb{\vspace{2mm}%
+    \begin{tcolorbox}[enhanced, sharp corners, frame hidden, colback=igBoxBG,
+        borderline west={1.2mm}{0pt}{igAccent}, left=3.5mm, top=2mm, bottom=2mm, halign=flush left]
+      {\small\bfseries\color{igAccent}\igstr{En este capítulo}{In this chapter}}\par\vspace{0.5mm}%
+      {\small\insertcoverblurb}
+    \end{tcolorbox}}%
+  \vfill
+  {\footnotesize\color{igMuted}\textls[80]{\textsc{\MakeLowercase{\insertseriesline}}}\hfill
+   \itshape\color{igAccent}\insertswipe\par}%
+  \vspace*{6.5mm}}
+
+\setbeamertemplate{ig closing}{%
+  \vfill
+  {\small\color{igAccent}\textls[120]{\textsc{\igstr{fin del capítulo}{end of chapter}}}\par}\vspace{3mm}%
+  {\fontsize{26}{30}\selectfont\bfseries\insertclosinghead\par}\vspace{4mm}%
+  {\color{igAccentB}\rule{14mm}{1.2mm}}\par\vspace{5mm}%
+  {\large\insertclosingtext\par}\vspace{9mm}%
+  \igctarow[igAccent]\par\vspace{4mm}%
+  {\small\color{igFG}\inserthandle\par}\vspace{0.5mm}%
+  {\footnotesize\color{igAccent}\textls[80]{\textsc{\MakeLowercase{\insertseriesline}}}\par}%
+  \vfill\vspace*{6mm}}
+
+\endinput

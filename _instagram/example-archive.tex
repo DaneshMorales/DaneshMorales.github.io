@@ -1,0 +1,89 @@
+% Theme: Archive  --  best for history, famous equations, quotes, timelines
+% Build:  ./build.sh example-archive.tex   (or compile on Overleaf)
+\documentclass[12pt]{beamer}
+\usetheme{igarchive}
+
+\ighandle{@quantum_danesh}
+\igseries{Historia cuántica}
+\igissue{02}
+
+\begin{document}
+
+\coverslide{De los archivos}
+  {1935, el año del entrelazamiento}
+  {De una objeción de Einstein a un premio Nobel.}
+
+\begin{frame}{La objeción de EPR}{Mayo de 1935}
+\lettrine{E}{instein}, Podolsky y Rosen publican en \emph{Physical Review}
+una pregunta incómoda: ¿puede considerarse \hl{completa} la descripción
+cuántica de la realidad?
+
+Su ejemplo: dos partículas tan correlacionadas que, al medir una, conoces
+la otra sin tocarla. Para ellos, eso probaba que a la teoría le faltaba
+algo.
+\vfill
+{\footnotesize\color{igMuted}Phys.\ Rev.\ \textbf{47}, 777 (1935).\par}
+\end{frame}
+
+\begin{frame}{Schrödinger le pone nombre}{1935}
+Ese mismo año, Schrödinger llama al fenómeno \key{Verschränkung}, en
+inglés \key{entanglement}, y lo describe así:
+\begin{pullquote}{E.~Schrödinger, 1935 (traducción)}
+Yo no lo llamaría \emph{un} rasgo, sino \emph{el} rasgo característico de
+la mecánica cuántica, el que impone su ruptura total con las líneas del
+pensamiento clásico.
+\end{pullquote}
+\end{frame}
+
+\begin{frame}{Un estado inseparable}{Hoy}
+\[
+  \ket{\Phi^+} = \frac{1}{\sqrt2}\big(\ket{00} + \ket{11}\big)
+\]
+Si fuera un producto
+\[
+  (\alpha_0\ket0+\alpha_1\ket1)\otimes(\beta_0\ket0+\beta_1\ket1)
+\]
+haría falta
+\[
+  \alpha_0\beta_0 = \alpha_1\beta_1 = \tfrac{1}{\sqrt2},
+  \qquad
+  \mhl{\alpha_0\beta_1 = \alpha_1\beta_0 = 0}.
+\]
+Imposible: la segunda anula un factor de la primera. Está \hl{entrelazado}.
+\end{frame}
+
+\begin{frame}{Del papel al laboratorio}{1935 -- 2022}
+\begin{center}
+\begin{tikzpicture}[x=1mm,y=1mm]
+  \draw[igFG, line width=0.5pt] (0,2) -- (0,-52);
+  \foreach \y/\yr/\txt in {0/1935/{EPR y Schrödinger: el problema},
+      -10/1964/{Bell: una desigualdad medible},
+      -20/1972/{Freedman y Clauser: primer test},
+      -30/1982/{Aspect y su equipo, en Orsay},
+      -40/2015/{Primeros tests sin lagunas},
+      -50/2022/{Nobel: Aspect, Clauser, Zeilinger}}{
+    \fill[igBG] (0,\y) circle (1.5);
+    \draw[igAccent, line width=0.6pt] (0,\y) circle (1.5);
+    \fill[igAccent] (0,\y) circle (0.6);
+    \node[anchor=base west, text=igAccent, font=\large\itshape] at (3.5,\y-1.3) {\yr};
+    \node[anchor=base west, text=igFG, font=\small] at (16.5,\y-1.3) {\txt};
+  }
+\end{tikzpicture}
+\end{center}
+\end{frame}
+
+\begin{frame}{La desigualdad CHSH}{1969}
+Con dos medidas posibles a cada lado,
+\[
+  S = \expect{A_0B_0} + \expect{A_0B_1} + \expect{A_1B_0} - \expect{A_1B_1}.
+\]
+Cualquier teoría local y realista cumple $|S| \le 2$. La mecánica cuántica
+llega más lejos:
+\keyeq{|S|_{\max} = \mhl{2\sqrt{2}}}
+Es la cota de Tsirelson (1980), y los experimentos le dan la razón.
+\end{frame}
+
+\closingslide{1935 sigue abierto}
+  {Próximo capítulo: 1982, el experimento de Aspect paso a paso.}
+
+\end{document}

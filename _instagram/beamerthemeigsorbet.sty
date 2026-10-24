@@ -1,0 +1,139 @@
+% =====================================================================
+%  Sorbet -- soft pastel cards
+%  A pastel gradient that changes from slide to slide, a white rounded
+%  card on top, pill-shaped chips and highlights, plum ink.  Friendly
+%  and calm; the gentlest way to put an equation in front of beginners.
+%  Best for: intuition posts, beginner explainers, "why does X happen?".
+% =====================================================================
+\ProvidesPackage{beamerthemeigsorbet}[2026/10/24]
+\RequirePackage{igpost}
+
+\definecolor{igBG}{HTML}{FFFFFF}
+\definecolor{igFG}{HTML}{2D2742}      % plum ink
+\definecolor{igMuted}{HTML}{7A7391}
+\definecolor{igAccent}{HTML}{6C4CF1}  % violet
+\definecolor{igAccentB}{HTML}{F0695A} % coral
+\definecolor{igMint}{HTML}{1E8A63}
+\definecolor{igHL}{HTML}{FFE7A0}      % butter
+\definecolor{igHLB}{HTML}{C6F0DC}     % mint
+\definecolor{igOnHL}{HTML}{2D2742}
+\definecolor{igNote}{HTML}{F0695A}
+\definecolor{igRule}{HTML}{6C4CF1}
+\definecolor{igBoxBG}{HTML}{F1EDFF}
+\definecolor{igBoxFrame}{HTML}{6C4CF1}
+\igapplycolors
+\setbeamercolor{frametitle}{fg=igFG}
+\setbeamercolor{alerted text}{fg=igAccentB}
+\setbeamerfont{explain}{size=\footnotesize,shape=\upshape}
+
+\setbeamersize{text margin left=13mm, text margin right=13mm}
+
+% four pastel gradients, one per frame in turn
+\definecolor{igPalA0}{HTML}{EDE6FF}\definecolor{igPalB0}{HTML}{FFE5D9}
+\definecolor{igPalA1}{HTML}{DFF5EC}\definecolor{igPalB1}{HTML}{E1EAFF}
+\definecolor{igPalA2}{HTML}{FFF2D2}\definecolor{igPalB2}{HTML}{FFE1EC}
+\definecolor{igPalA3}{HTML}{E3EDFF}\definecolor{igPalB3}{HTML}{EFE3FF}
+\newcommand\ig@pastels{%
+  \pgfmathtruncatemacro\ig@pal{mod(\c@framenumber-1,4)}%
+  \colorlet{igSkyA}{igPalA\ig@pal}\colorlet{igSkyB}{igPalB\ig@pal}}
+
+\newcommand\igpill[3]{% fill, text colour, text
+  \tikz[baseline=(p.base)]\node[fill=#1, text=#2, rounded corners=2.2mm, inner xsep=2.2mm,
+    inner ysep=1.1mm, font=\footnotesize\bfseries] (p) {#3};}
+
+% --- gradient, card, progress pill ----------------------------------------
+\setbeamertemplate{background canvas}{%
+  \ig@pastels
+  \begin{tikzpicture}[x=1mm,y=1mm]
+    \useasboundingbox (0,0) rectangle (108,135);
+    \shade[left color=igSkyA, right color=igSkyB, shading angle=135] (0,0) rectangle (108,135);
+    \fill[white, rounded corners=6mm, blur shadow={shadow blur steps=10, shadow xshift=0mm,
+      shadow yshift=-0.8mm, shadow opacity=12}] (5,6.5) rectangle (103,129.5);
+    \ifigcover
+      \begin{scope}
+        \clip[rounded corners=6mm] (5,6.5) rectangle (103,129.5);
+        \fill[igSkyB, opacity=0.9] (97,118) circle (24);
+        \fill[igSkyA, opacity=0.9] (78,128) circle (13);
+      \end{scope}
+    \fi
+    \igsetprogress
+    \fill[white, opacity=0.7, rounded corners=0.8mm] (5,2.2) rectangle (103,3.8);
+    \fill[igAccent, rounded corners=0.8mm] (5,2.2) rectangle ({5+98*\igfrac},3.8);
+  \end{tikzpicture}}
+
+% --- head: handle | counter pill;  foot: series | swipe pill ---------------
+\setbeamertemplate{headline}{%
+  \vspace*{10.5mm}%
+  \hbox to\paperwidth{\hspace{13mm}%
+    {\footnotesize\color{igMuted}\inserthandle}\hfill
+    \igpill{igAccent!12}{igAccent}{\insertslideoftwo}\hspace{13mm}}}
+
+\setbeamertemplate{footline}{%
+  \hbox to\paperwidth{\hspace{13mm}%
+    {\footnotesize\color{igMuted}\insertseriesline}\hfill
+    \ig@checklast\ifiglastpage\else\igpill{igAccentB}{white}{\igswipecue}\fi\hspace{13mm}}%
+  \vspace*{11mm}}
+
+% --- titles: kicker pill, bold title ----------------------------------------
+\setbeamertemplate{frametitle}{%
+  \vspace*{4mm}%
+  \ifx\insertframesubtitle\@empty\else
+    \igpill{igAccent!12}{igAccent}{\insertframesubtitle}\par\vspace{2mm}%
+  \fi
+  {\LARGE\bfseries\color{igFG}\insertframetitle\par}%
+  \vspace{1mm}}
+
+% --- lists ------------------------------------------------------------
+\setbeamertemplate{itemize item}{\raisebox{0.15em}{\tikz\fill[igAccent] (0,0) circle (1.4pt);}}
+\setbeamertemplate{enumerate item}{\tikz[baseline=(n.base)]\node[circle, fill=igAccent, text=white,
+  inner sep=0.5pt, minimum size=4.6mm, font=\footnotesize\bfseries] (n) {\insertenumlabel};}
+
+% --- highlights: pills ----------------------------------------------------
+\renewcommand\igmhlpainter[3]{%
+  \pgfmathsetlengthmacro\ig@r{min((#2+#3)/2+\igmhlpad,(#1)/2+\igmhlpad)}%
+  \fill[ig mhl now, rounded corners=\ig@r]
+    (-\igmhlpad-1pt,-#3-\igmhlpad) rectangle (#1+\igmhlpad+1pt,#2+\igmhlpad);}
+
+% --- boxes: soft tinted cards ----------------------------------------------
+\tcbset{
+  ig/base/.append style={arc=3mm, boxrule=0pt, frame hidden,
+    left=3.5mm, right=3.5mm, top=2.6mm, bottom=2.6mm,
+    detach title, before upper={\ifx\tcbtitletext\@empty\else
+      {\small\bfseries\color{igAccent}\tcbtitletext}\par\vspace{0.8mm}\fi}},
+  ig/def/.style={colback=igBoxBG},
+  ig/thm/.style={colback=igAccentB!12, before upper={\ifx\tcbtitletext\@empty\else
+      {\small\bfseries\color{igAccentB}\tcbtitletext}\par\vspace{0.8mm}\fi}},
+  ig/note/.style={colback=igHLB!55, before upper={%
+      {\small\bfseries\color{igMint}\faLightbulb[regular]\ \ifx\tcbtitletext\@empty Idea\else\tcbtitletext\fi}\par\vspace{0.8mm}}},
+  ig/eq/.style={colback=igBoxBG, top=3.2mm, bottom=3.2mm},
+}
+
+% --- cover ------------------------------------------------------------
+\setbeamertemplate{ig cover}{%
+  \vspace*{10.5mm}%
+  {\footnotesize\color{igMuted}\inserthandle\par}%
+  \vspace{22mm}%
+  \igpill{igAccent!12}{igAccent}{\insertcoverkicker}\par\vspace{5mm}%
+  {\fontsize{29}{34}\selectfont\bfseries\color{igFG}\insertcovertitle\par}%
+  \vspace{6mm}%
+  {\large\color{igMuted}\insertcoversubtitle\par}%
+  \ifcoverblurb{\vspace{5mm}{\color{igMuted}\insertcoverblurb\par}}%
+  \vfill
+  {\footnotesize\color{igMuted}\insertseriesline\hfill\igpill{igAccentB}{white}{\insertswipe}\par}%
+  \vspace*{11mm}}
+
+\setbeamertemplate{ig closing}{%
+  \vfill
+  \begin{center}
+    \igpill{igAccent!12}{igAccent}{\igstr{gracias por leer}{thanks for reading}}\par\vspace{5mm}%
+    {\fontsize{26}{31}\selectfont\bfseries\insertclosinghead\par}\vspace{5mm}%
+    \parbox{0.9\linewidth}{\centering\large\color{igMuted}\insertclosingtext}\par\vspace{9mm}%
+    \igpill{igAccent!12}{igAccent}{\faBookmark[regular]~\igstrsave}\hspace{1.5mm}%
+    \igpill{igAccentB!14}{igAccentB}{\faPaperPlane[regular]~\igstrsend}\hspace{1.5mm}%
+    \igpill{igHLB!70}{igMint}{\faUserPlus~\igstrfollow}\par\vspace{6mm}%
+    {\small\color{igFG}\inserthandle\par}\vspace{0.5mm}%
+    {\footnotesize\color{igMuted}\insertseriesline\par}%
+  \end{center}
+  \vfill\vspace*{8mm}}
+
+\endinput

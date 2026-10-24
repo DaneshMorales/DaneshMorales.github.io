@@ -1,0 +1,137 @@
+% =====================================================================
+%  Blueprint -- an engineering drawing sheet
+%  Prussian-blue paper with a fine grid, white linework, numbered
+%  "balloon" callouts for steps, dimension lines under titles and a
+%  title block on every page with the series, the handle and the sheet
+%  count ("hoja 3 de 9"); its bottom strip is the progress bar.
+%  Best for: protocols, algorithms, circuits, experimental procedures.
+% =====================================================================
+\ProvidesPackage{beamerthemeigblueprint}[2026/10/24]
+\RequirePackage{igpost}
+
+\definecolor{igBG}{HTML}{174A7C}
+\definecolor{igFG}{HTML}{F1F6FB}
+\definecolor{igMuted}{HTML}{A9C3DE}
+\definecolor{igAccent}{HTML}{FFFFFF}
+\definecolor{igAccentB}{HTML}{FFCF70}  % amber pencil
+\definecolor{igHL}{HTML}{2F6BA8}
+\definecolor{igHLB}{HTML}{6B5A3A}
+\definecolor{igOnHL}{HTML}{FFFFFF}
+\definecolor{igNote}{HTML}{FFCF70}
+\definecolor{igRule}{HTML}{F1F6FB}
+\definecolor{igBoxBG}{HTML}{174A7C}
+\definecolor{igBoxFrame}{HTML}{F1F6FB}
+\igapplycolors
+\setbeamercolor{framesubtitle}{fg=igFG}
+\setbeamercolor{alerted text}{fg=igAccentB}
+
+\setbeamersize{text margin left=10mm, text margin right=10mm}
+
+% --- the sheet: grid, border with zone ticks ------------------------------
+\setbeamertemplate{background canvas}{%
+  \begin{tikzpicture}[x=1mm,y=1mm]
+    \useasboundingbox (0,0) rectangle (108,135);
+    \fill[igBG] (0,0) rectangle (108,135);
+    \draw[white, opacity=0.055, line width=0.25pt, step=2.5] (0,0) grid (108,135);
+    \draw[white, opacity=0.13, line width=0.3pt, step=10] (0,0) grid (108,135);
+    \draw[igFG, line width=0.6pt] (4.5,4.5) rectangle (103.5,130.5);
+    \foreach \x in {14,24,...,94}{\draw[igFG, line width=0.4pt] (\x,130.5) -- (\x,128.8);
+                                  \draw[igFG, line width=0.4pt] (\x,4.5) -- (\x,6.2);}
+    \foreach \y in {15,25,...,125}{\draw[igFG, line width=0.4pt] (4.5,\y) -- (6.2,\y);
+                                   \draw[igFG, line width=0.4pt] (103.5,\y) -- (101.8,\y);}
+    % title block: series | handle | sheet count, progress strip below
+    \begin{scope}[shift={(4.5,4.5)}]
+      \draw[igFG, line width=0.6pt, fill=igBG] (0,0) rectangle (99,10.5);
+      \igsetprogress
+      \fill[igAccentB] (0,0) rectangle ({99*\igfrac},1.6);
+      \draw[igFG, line width=0.4pt] (0,1.6) -- (99,1.6) (39,1.6) -- (39,10.5) (71,1.6) -- (71,10.5);
+      \draw[igFG, line width=0.6pt] (0,0) rectangle (99,10.5);
+      \node[anchor=west, font=\scriptsize, text=igFG] at (1.6,6.05)
+        {\textls[90]{\textsc{\MakeLowercase{\insertseriesline}}}};
+      \node[font=\scriptsize, text=igMuted] at (55,6.05) {\textls[50]{\textsc{\inserthandle}}};
+      \node[font=\scriptsize, text=igFG] at (85,6.05)
+        {\textls[90]{\textsc{\igstr{hoja}{sheet}}}\ \insertpagetwo\ \textls[90]{\textsc{\igstr{de}{of}}}\ \inserttotaltwo};
+    \end{scope}
+    \node[anchor=south east, font=\footnotesize, text=igAccentB] at (101.6,16.6)
+      {\textls[100]{\textsc{\insertswipe}}};
+    \ifigcover
+      % a compass-drawn detail with its radius dimensioned
+      \begin{scope}[shift={(79,42)}]
+        \draw[igFG, opacity=0.5, line width=0.5pt] (0,0) circle (18);
+        \draw[igFG, opacity=0.35, line width=0.4pt, dash pattern=on 3pt off 1.5pt on 0.6pt off 1.5pt] (0,0) circle (12);
+        \draw[igFG, opacity=0.5, line width=0.3pt] (-21,0) -- (21,0) (0,-21) -- (0,21);
+        \draw[igAccentB, line width=0.45pt, -{Latex[length=1.6mm]}] (0,0) -- (135:18);
+        \node[igAccentB, font=\scriptsize, rotate=-45, anchor=south] at (135:9) {R\,18};
+      \end{scope}
+      \foreach \p in {(9,126),(99,126)}{
+        \draw[igFG, line width=0.4pt] \p ++(-2,0) -- ++(4,0) \p ++(0,-2) -- ++(0,4);
+        \draw[igFG, line width=0.4pt] \p circle (1.2);}
+    \fi
+  \end{tikzpicture}}
+
+% --- titles: tag + title + a dimension line spanning the title ------------
+\newsavebox\ig@titlebox
+\newcommand\igtag[1]{\tikz[baseline=(t.base)]\node[draw=igFG, line width=0.45pt, inner xsep=1.4mm,
+  inner ysep=0.9mm, text=igFG, font=\scriptsize] (t) {\textls[140]{\textsc{\MakeLowercase{#1}}}};}
+\setbeamertemplate{frametitle}{%
+  \vspace*{8mm}%
+  \ifx\insertframesubtitle\@empty\else\igtag{\insertframesubtitle}\par\vspace{1.6mm}\fi
+  {\LARGE\bfseries\color{igFG}\insertframetitle\par}%
+  \sbox\ig@titlebox{\LARGE\bfseries\insertframetitle}%
+  \pgfmathsetlengthmacro\ig@dim{min(\wd\ig@titlebox,\linewidth)}%
+  \vspace{0.6mm}%
+  \tikz{\draw[igAccentB, line width=0.4pt, {Latex[length=1.3mm]}-{Latex[length=1.3mm]}] (0,0) -- (\ig@dim,0);
+        \draw[igAccentB, line width=0.4pt] (0,-1.2mm) -- (0,1.2mm) (\ig@dim,-1.2mm) -- (\ig@dim,1.2mm);}\par
+  \vspace{1.5mm}}
+
+% --- footline: room for the title block drawn in the background ----------
+\setbeamertemplate{footline}{\vbox to 23mm{}}
+
+% --- lists: balloon callouts --------------------------------------------
+\setbeamertemplate{itemize item}{\raisebox{0.12em}{\tikz\draw[igFG, line width=0.5pt] (0,0) rectangle (1.4mm,1.4mm);}}
+\setbeamertemplate{enumerate item}{\tikz[baseline=(n.base)]\node[draw=igFG, circle, line width=0.5pt,
+  inner sep=0.6pt, minimum size=4.6mm, font=\footnotesize\bfseries, text=igFG] (n) {\insertenumlabel};}
+
+% --- highlights: dashed callout boxes ------------------------------------
+\tikzset{ig mhl/.style={igFG}, ig mhl*/.style={igAccentB}}
+\renewcommand\igmhlpainter[3]{%
+  \fill[ig mhl now, opacity=0.13] (-\igmhlpad,-#3-\igmhlpad) rectangle (#1+\igmhlpad,#2+\igmhlpad);
+  \draw[ig mhl now, line width=0.45pt, dash pattern=on 1.6pt off 1pt]
+    (-\igmhlpad,-#3-\igmhlpad) rectangle (#1+\igmhlpad,#2+\igmhlpad);}
+
+% --- boxes: white linework, title as a tag on the frame -------------------
+\tcbset{
+  ig/base/.append style={sharp corners, boxrule=0.5pt, colframe=igFG, colback=igBG,
+    left=3mm, right=3mm, top=3mm, bottom=2.2mm, before skip=1em,
+    attach boxed title to top left={xshift=3mm, yshift=-\tcboxedtitleheight/2},
+    boxed title style={sharp corners, boxrule=0pt, colback=igFG, colframe=igFG,
+      left=1.2mm, right=1.2mm, top=0.5mm, bottom=0.5mm},
+    coltitle=igBG, fonttitle=\footnotesize\bfseries},
+  ig/thm/.style={colframe=igAccentB, boxed title style={colback=igAccentB, colframe=igAccentB}},
+  ig/note/.style={boxrule=0.45pt, borderline={0.45pt}{0pt}{igFG, dash pattern=on 2pt off 1.2pt},
+    colframe=igBG, fontupper=\small},
+  ig/eq/.style={top=2mm, bottom=2mm, borderline={0.4pt}{1mm}{igFG}},
+}
+
+% --- cover ------------------------------------------------------------
+\setbeamertemplate{ig cover}{%
+  \vspace*{14mm}%
+  \igtag{\insertcoverkicker}\par\vspace{7mm}%
+  {\fontsize{31}{35}\selectfont\bfseries\color{igFG}\insertcovertitle\par}\vspace{3mm}%
+  \tikz{\draw[igAccentB, line width=0.45pt, {Latex[length=1.5mm]}-{Latex[length=1.5mm]}] (0,0) -- (0.7\linewidth,0);
+        \draw[igAccentB, line width=0.45pt] (0,-1.4mm) -- (0,1.4mm) (0.7\linewidth,-1.4mm) -- (0.7\linewidth,1.4mm);}\par
+  \vspace{6mm}%
+  \parbox{0.52\linewidth}{\raggedright\large\color{igMuted}\insertcoversubtitle}\par
+  \ifcoverblurb{\vspace{5mm}\parbox{0.6\linewidth}{\raggedright\small\color{igMuted}\insertcoverblurb}\par}%
+  \vfill
+  \vspace*{24mm}}
+
+\setbeamertemplate{ig closing}{%
+  \vfill
+  \igtag{\igstr{fin de la hoja}{end of sheet}}\par\vspace{6mm}%
+  {\fontsize{26}{30}\selectfont\bfseries\insertclosinghead\par}\vspace{5mm}%
+  {\large\color{igMuted}\insertclosingtext\par}\vspace{10mm}%
+  \igctarow[igAccentB]\par
+  \vfill\vspace*{24mm}}
+
+\endinput

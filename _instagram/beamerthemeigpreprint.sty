@@ -1,0 +1,124 @@
+% =====================================================================
+%  Preprint -- a typeset-paper look for paper summaries
+%  Off-white paper, black ink, one crimson accent, running heads,
+%  numbered equations and run-in theorem heads, like a journal page.
+%  Best for: "paper in N slides", journal-club notes, results with refs.
+% =====================================================================
+\ProvidesPackage{beamerthemeigpreprint}[2026/10/24]
+\RequirePackage{igpost}
+\RequirePackage{ragged2e}
+
+\definecolor{igBG}{HTML}{FBFBF8}
+\definecolor{igFG}{HTML}{1C1C1C}
+\definecolor{igMuted}{HTML}{6B6B6B}
+\definecolor{igAccent}{HTML}{8E1B2A}
+\definecolor{igAccentB}{HTML}{1C1C1C}
+\definecolor{igHL}{HTML}{FBEA9E}
+\definecolor{igHLB}{HTML}{DCE6F2}
+\definecolor{igOnHL}{HTML}{1C1C1C}
+\definecolor{igNote}{HTML}{8E1B2A}
+\definecolor{igRule}{HTML}{1C1C1C}
+\definecolor{igBoxBG}{HTML}{FBFBF8}
+\definecolor{igBoxFrame}{HTML}{1C1C1C}
+\definecolor{igTrack}{HTML}{E8E4DA}
+\igapplycolors
+\setbeamercolor{frametitle}{fg=igFG}
+
+\justifying                       % justified text, as in a paper
+\setlength\parskip{0.45em}
+
+% --- running head and foot -------------------------------------------
+%  head: series and issue | counter      foot: handle | swipe cue
+\setbeamertemplate{headline}{%
+  \vspace*{6mm}%
+  \hbox to\paperwidth{\hspace{9mm}%
+    {\footnotesize\color{igMuted}\textls[80]{\textsc{\MakeLowercase{\insertseriesline}}}}%
+    \hfill{\footnotesize\color{igMuted}\insertslideoftwo}\hspace{9mm}}%
+  \vspace{1.6mm}%
+  \hbox to\paperwidth{\hspace{9mm}{\color{igRule}\leaders\hrule height 0.4pt\hfill}\hspace{9mm}}%
+  \vspace{1mm}}
+
+\setbeamertemplate{footline}{%
+  \hbox to\paperwidth{\hspace{9mm}%
+    {\footnotesize\color{igMuted}\textls[60]{\textsc{\inserthandle}}}\hfill
+    {\footnotesize\color{igAccent}\textls[60]{\textsc{\insertswipe}}}\hspace{9mm}}%
+  \vspace*{6.5mm}}
+
+% --- page titles: "§2  The protocol" ----------------------------------
+\setbeamertemplate{frametitle}{%
+  \vspace*{3mm}%
+  {\Large\bfseries
+   \ifx\insertframesubtitle\@empty\else{\color{igAccent}\insertframesubtitle}\enspace\fi
+   \color{igFG}\insertframetitle\par}%
+  \vspace{0.5mm}}
+
+% --- lists ------------------------------------------------------------
+\setbeamertemplate{itemize item}{\color{igAccent}\textbullet}
+\setbeamertemplate{itemize subitem}{\color{igMuted}\textendash}
+\setbeamertemplate{enumerate item}{\color{igAccent}\bfseries\insertenumlabel.}
+
+% --- boxes: run-in heads between two rules ----------------------------
+\tcbset{
+  ig/base/.append style={sharp corners, boxrule=0pt, colback=igBG, frame hidden,
+    left=0mm, right=0mm, top=1.4mm, bottom=1.4mm,
+    borderline north={0.8pt}{0pt}{igRule}, borderline south={0.4pt}{0pt}{igRule},
+    coltitle=igFG, fonttitle=\bfseries, attach title to upper={.\ }, halign=justify},
+  ig/thm/.style={fontupper=\itshape},
+  ig/note/.style={no borderline, borderline west={1.2pt}{0pt}{igAccent}, left=3mm, fontupper=\small,
+    coltitle=igAccent},
+  ig/eq/.style={no borderline, borderline={0.5pt}{0pt}{igRule}, left=2mm, right=2mm, top=1.6mm, bottom=1.6mm},
+}
+\renewcommand\igmhlpainter[3]{%
+  \fill[ig mhl now] (-\igmhlpad,-#3-\igmhlpad) rectangle (#1+\igmhlpad,#2+\igmhlpad);}
+
+% --- cover: a title page ----------------------------------------------
+\setbeamertemplate{background canvas}{%
+  \begin{tikzpicture}[x=1mm,y=1mm]
+    \useasboundingbox (0,0) rectangle (108,135);
+    \fill[igBG] (0,0) rectangle (108,135);
+    \igprogress{0}{108}{0}{1.1}{igAccent}{igTrack}
+    \ifigcover
+      \node[rotate=90, font=\scriptsize, text=igMuted, anchor=center] at (5.2,67.5)
+        {\textls[60]{\textsc{\MakeLowercase{\insertseries}}}%
+         \ifx\ig@issue\@empty\else\,:\,\insertissue\fi
+         \quad[\textsc{\MakeLowercase{\insertigauthor}}]\quad\today};
+    \fi
+  \end{tikzpicture}}
+
+\setbeamertemplate{ig cover}{%
+  \setlength\parskip{0pt}%
+  \vspace*{5mm}%
+  \begin{center}
+    {\small\color{igAccent}\textls[120]{\textsc{\MakeLowercase{\insertcoverkicker}}}}\par
+    \vspace{3mm}%
+    {\color{igRule}\rule{\linewidth}{1pt}}\par\vspace{-3.2mm}%
+    {\color{igRule}\rule{\linewidth}{0.3pt}}\par
+    \vspace{5mm}%
+    {\LARGE\bfseries\color{igFG}\insertcovertitle\par}%
+    \vspace{4mm}%
+    {\itshape\color{igFG}\insertcoversubtitle\par}%
+  \end{center}
+  \ifcoverblurb{%
+    \vspace{4mm}%
+    {\centering\footnotesize\textls[120]{\textsc{\igstr{resumen}{abstract}}}\par}\vspace{1.5mm}%
+    {\leftskip=4mm\rightskip=4mm\small\insertcoverblurb\par}}%
+  \vfill
+  {\color{igRule}\rule{\linewidth}{0.4pt}}\par\vspace{1.5mm}%
+  {\footnotesize\color{igMuted}\textls[60]{\textsc{\inserthandle}}\hfill
+   \color{igAccent}\textls[60]{\textsc{\insertswipe}}\par}%
+  \vspace*{6.5mm}}
+
+\setbeamertemplate{ig closing}{%
+  \vfill
+  \begin{center}
+    {\small\color{igAccent}\textls[120]{\textsc{\igstr{fin de las notas}{end of notes}}}}\par\vspace{4mm}%
+    {\LARGE\bfseries\insertclosinghead\par}\vspace{4mm}%
+    \parbox{0.88\linewidth}{\centering\insertclosingtext\par}\par\vspace{6mm}%
+    {\color{igRule}\rule{0.6\linewidth}{0.4pt}}\par\vspace{5mm}%
+    \igctarow\par\vspace{4mm}%
+    {\small\color{igFG}\textls[60]{\textsc{\inserthandle}}}\par\vspace{1mm}%
+    {\footnotesize\color{igMuted}\textls[60]{\textsc{\MakeLowercase{\insertseriesline}}}}\par
+  \end{center}
+  \vfill\vspace*{8mm}}
+
+\endinput

@@ -1,0 +1,81 @@
+% Theme: Nocturne  --  best for one formula, explained in depth
+% Build:  ./build.sh example-nocturne.tex   (or compile on Overleaf)
+\documentclass[12pt]{beamer}
+\usetheme{ignocturne}
+
+\ighandle{@quantum_danesh}
+\igseries{Fórmula destacada}
+\igissue{07}
+
+\begin{document}
+
+\coverslide{Información cuántica}
+  {Todo canal es, en secreto, un estado}
+  {El isomorfismo de Choi--Jamio\l{}kowski}
+
+\begin{frame}{La definición}{La fórmula}
+Toma un par máximamente entrelazado y pasa \key{una mitad} por el canal
+$\Phi$. Lo que sale es la matriz de Choi:
+\keyeq{J(\Phi) = (\mathrm{id}\otimes\Phi)\big(\ketbra{\Omega}\big)}
+con el estado sin normalizar
+\[
+  \ket{\Omega} = \sum_{i=1}^{d} \ket{i}\otimes\ket{i}.
+\]
+Una sola matriz de $d^2\times d^2$ guarda todo lo que hace $\Phi$.
+\end{frame}
+
+\begin{frame}{Término a término}{Desglose}
+Al desarrollar $\ketbra{\Omega}$ aparece una matriz por bloques:
+\[
+  J(\Phi) = \sum_{i,j}
+    \explain<2->{\ket{i}\!\bra{j}}{qué bloque}
+    \otimes
+    \explain<3->{\Phi\big(\ket{i}\!\bra{j}\big)}{qué le hace $\Phi$ a $\ket{i}\!\bra{j}$}
+\]
+\uncover<4->{El bloque $(i,j)$ es la salida para la entrada $\ket{i}\!\bra{j}$.
+Por linealidad, esas $d^2$ salidas \hl{determinan $\Phi$ por completo}.}
+\end{frame}
+
+\begin{frame}{El diccionario}{Propiedades}
+Cada propiedad del canal se vuelve una propiedad de una matriz:
+\begin{align*}
+  \Phi \text{ completamente positivo} &\iff \mhl{J(\Phi) \succeq 0}\\[1mm]
+  \Phi \text{ preserva la traza}      &\iff \Tr_{\mathrm{out}} J(\Phi) = \id\\[1mm]
+  \Phi \text{ unital}                 &\iff \Tr_{\mathrm{in}} J(\Phi) = \id\\[1mm]
+  \text{rango de Kraus de } \Phi      &= \operatorname{rango} J(\Phi)
+\end{align*}
+\begin{notebox}
+La primera línea es la razón de su fama: la positividad completa, una
+afirmación sobre todas las extensiones, se reduce a calcular autovalores.
+\end{notebox}
+\end{frame}
+
+\begin{frame}{Dos extremos}{Ejemplos}
+\begin{defbox}[Canal identidad]
+$J(\mathrm{id}) = \ketbra{\Omega}$: rango uno y máximamente entrelazado.
+Un solo operador de Kraus, $K = \id$.
+\end{defbox}
+\begin{thmbox}[Totalmente despolarizante]
+$\Phi(X) = \Tr(X)\,\id/d$ da $J(\Phi) = \id\otimes\id/d$: rango completo y
+nada de entrelazamiento. Necesita $d^2$ operadores de Kraus.
+\end{thmbox}
+\end{frame}
+
+\begin{frame}{Por qué compensa}{En la práctica}
+\begin{itemize}
+  \item Ver si un mapa es un canal se reduce a calcular autovalores.
+  \item Los autovectores de $J$, reordenados como matrices $d\times d$ y
+        escalados por $\sqrt{\lambda_k}$, son operadores de Kraus.
+  \item Optimizar sobre canales se vuelve un programa semidefinido en $J$.
+\end{itemize}
+\[
+  J = \sum_k \lambda_k \ketbra{v_k}
+  \;\Longrightarrow\;
+  K_k = \sqrt{\lambda_k}\;\mhl*{\operatorname{unvec}(v_k)}
+\]
+\end{frame}
+
+\closingslide{Una matriz, todo el canal}
+  {Próxima fórmula: la dilatación de Stinespring. Sígueme para no perderla.}
+
+\end{document}

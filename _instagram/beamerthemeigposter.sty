@@ -1,0 +1,131 @@
+% =====================================================================
+%  Poster -- Swiss-style, one idea per slide
+%  White page, black type, one strong blue, a giant page number as the
+%  counter, flush-left grid, a heavy progress bar.  Loud in the feed,
+%  very readable on a phone.
+%  Best for: one concept per slide, definitions in 30 seconds, hooks.
+% =====================================================================
+\ProvidesPackage{beamerthemeigposter}[2026/10/24]
+\RequirePackage{igpost}
+
+\definecolor{igBG}{HTML}{FFFFFF}
+\definecolor{igFG}{HTML}{111111}
+\definecolor{igMuted}{HTML}{5E5E66}
+\definecolor{igAccent}{HTML}{2451E0}  % the blue of the website, a touch deeper
+\definecolor{igAccentB}{HTML}{111111}
+\definecolor{igHL}{HTML}{DCE4FF}
+\definecolor{igHLB}{HTML}{FFE79A}
+\definecolor{igOnHL}{HTML}{111111}
+\definecolor{igNote}{HTML}{2451E0}
+\definecolor{igRule}{HTML}{111111}
+\definecolor{igBoxBG}{HTML}{F2F4F9}
+\definecolor{igBoxFrame}{HTML}{111111}
+\definecolor{igTrack}{HTML}{E6E9F2}
+\igapplycolors
+\setbeamercolor{frametitle}{fg=igFG}
+\setbeamerfont{explain}{size=\footnotesize,shape=\upshape}
+
+\newcommand\igcaps[2][150]{\textls[#1]{\MakeUppercase{#2}}}
+\beamer@centeredtrue    % one idea per slide: the body floats in the space under the title
+
+% --- page, accent blocks, progress bar -----------------------------------
+\setbeamertemplate{background canvas}{%
+  \begin{tikzpicture}[x=1mm,y=1mm]
+    \useasboundingbox (0,0) rectangle (108,135);
+    \ifigclosing
+      \fill[igAccent] (0,0) rectangle (108,135);
+      \igprogress{0}{108}{0}{2.4}{white}{white!35!igAccent}
+    \else
+      \fill[igBG] (0,0) rectangle (108,135);
+      \ifigcover
+        \fill[igAccent] (0,0) rectangle (108,44);
+        \node[anchor=south west, inner sep=0, text=white, font=\scriptsize\bfseries]
+          at (9,9) {\igcaps{\insertseriesline}};
+        \node[anchor=south east, inner sep=0, text=white, font=\fontsize{22}{22}\selectfont\bfseries]
+          at (99,8) {\insertswipe};
+        \igprogress{0}{108}{0}{2.4}{white}{white!35!igAccent}
+      \else
+        \igprogress{0}{108}{0}{2.4}{igAccent}{igTrack}
+      \fi
+    \fi
+  \end{tikzpicture}}
+
+% --- head: a giant page number, the total, the handle ---------------------
+\setbeamertemplate{headline}{%
+  \begin{tikzpicture}[x=1mm,y=1mm]
+    \useasboundingbox (0,0) rectangle (108,24);
+    \node[anchor=base west, inner sep=0, text=igAccent,
+          font=\fontsize{40}{40}\selectfont\bfseries] (n) at (8.4,5) {\insertpagetwo};
+    \node[anchor=base west, inner sep=0, text=igMuted, font=\large\bfseries]
+      at ([xshift=1.3mm]n.base east) {/\,\inserttotaltwo};
+    \node[anchor=north east, inner sep=0, text=igFG, font=\footnotesize]
+      at (99,14.8) {\inserthandle};
+  \end{tikzpicture}}
+
+\setbeamertemplate{frametitle}{%
+  \ifx\insertframesubtitle\@empty\else
+    {\scriptsize\bfseries\color{igAccent}\igcaps{\insertframesubtitle}\par}\vspace{1mm}%
+  \fi
+  {\fontsize{22}{25}\selectfont\bfseries\color{igFG}\insertframetitle\par}%
+  \vspace{1.5mm}}
+
+\setbeamertemplate{footline}{%
+  \hbox to\paperwidth{\hspace{9mm}{\color{igRule}\leaders\hrule height 0.8pt\hfill}\hspace{9mm}}%
+  \vspace{2.4mm}%
+  \hbox to\paperwidth{\hspace{9mm}%
+    {\scriptsize\bfseries\color{igFG}\igcaps{\insertseriesline}}\hfill
+    {\footnotesize\bfseries\color{igAccent}\insertswipe}\hspace{9mm}}%
+  \vspace*{8mm}}
+
+% --- lists ------------------------------------------------------------
+\setbeamertemplate{itemize item}{\raisebox{0.12em}{\tikz\fill[igAccent] (0,0) rectangle (1.5mm,1.5mm);}}
+\setbeamertemplate{enumerate item}{\color{igAccent}\bfseries\insertenumlabel}
+
+% --- highlights: flat, square blocks --------------------------------------
+\renewcommand\igmhlpainter[3]{%
+  \fill[ig mhl now] (-\igmhlpad,-#3-\igmhlpad) rectangle (#1+\igmhlpad,#2+\igmhlpad);}
+
+% --- boxes ----------------------------------------------------------------
+\tcbset{
+  ig/base/.append style={sharp corners, boxrule=0pt, frame hidden, colback=igBoxBG,
+    left=3.5mm, right=3.5mm, top=2.5mm, bottom=2.5mm,
+    detach title, before upper={\ifx\tcbtitletext\@empty\else
+      {\scriptsize\bfseries\color{igAccent}\igcaps{\tcbtitletext}}\par\vspace{1mm}\fi}},
+  ig/def/.style={borderline west={2mm}{0pt}{igAccent}},
+  ig/thm/.style={colback=igBG, borderline={1pt}{0pt}{igFG},
+    before upper={\ifx\tcbtitletext\@empty\else
+      {\scriptsize\bfseries\color{igFG}\igcaps{\tcbtitletext}}\par\vspace{1mm}\fi}},
+  ig/note/.style={colback=igBG, borderline north={1pt}{0pt}{igFG}, left=0mm, right=0mm,
+    fontupper=\small},
+  ig/eq/.style={colback=igAccent, coltext=white, top=3.5mm, bottom=3.5mm,
+    before upper={\color{white}}},
+}
+
+% --- cover ------------------------------------------------------------
+\setbeamertemplate{ig cover}{%
+  \vspace*{9mm}%
+  {\footnotesize\color{igFG}\inserthandle\par}%
+  \vspace{14mm}%
+  {\scriptsize\bfseries\color{igAccent}\igcaps{\insertcoverkicker}\par}\vspace{3mm}%
+  {\fontsize{44}{44}\selectfont\bfseries\color{igFG}\insertcovertitle\par}%
+  \vspace{5mm}%
+  {\color{igAccent}\rule{16mm}{2.4mm}}\par\vspace{5mm}%
+  \parbox{0.86\linewidth}{\raggedright\fontsize{17}{21}\selectfont\color{igFG}\insertcoversubtitle}\par
+  \ifcoverblurb{\vspace{4mm}\parbox{0.86\linewidth}{\raggedright\color{igMuted}\insertcoverblurb}\par}%
+  \vfill}
+
+\setbeamertemplate{ig closing}{%
+  \color{white}%
+  \vspace*{9mm}%
+  {\footnotesize\inserthandle\par}%
+  \vfill
+  {\scriptsize\bfseries\igcaps{\igstr{gracias por leer}{thanks for reading}}\par}\vspace{3mm}%
+  {\fontsize{34}{36}\selectfont\bfseries\insertclosinghead\par}\vspace{5mm}%
+  {\color{white}\rule{16mm}{2.4mm}}\par\vspace{5mm}%
+  \parbox{0.9\linewidth}{\raggedright\large\insertclosingtext}\par\vspace{9mm}%
+  \igctarow[white]\par
+  \vfill
+  {\scriptsize\bfseries\igcaps{\insertseriesline}\par}%
+  \vspace*{9mm}}
+
+\endinput

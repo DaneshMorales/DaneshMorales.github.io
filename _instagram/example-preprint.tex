@@ -1,0 +1,96 @@
+% Theme: Preprint  --  best for paper summaries / journal-club notes
+% Build:  ./build.sh example-preprint.tex   (or compile on Overleaf)
+\documentclass[12pt]{beamer}
+\usetheme{igpreprint}
+
+\ighandle{@quantum_danesh}
+\igseries{Notas de artículos}
+\igissue{03}
+
+\begin{document}
+
+\coverblurb{El randomized benchmarking mide la calidad promedio de un
+conjunto de puertas. El cycle benchmarking hace una pregunta más precisa:
+¿cuál es la fidelidad del ciclo concreto de puertas que de verdad
+ejecutas? La responde sin fiarse de la preparación ni de la medición, con
+un coste de muestreo que no crece con el número de qubits.}
+\coverslide{Artículo comentado}
+  {Characterizing large-scale quantum computers via cycle benchmarking}
+  {A.~Erhard, J.~J.~Wallman et al.\\ Nature Communications \textbf{10}, 5347 (2019)}
+
+\begin{frame}{La pregunta}{\S1}
+El randomized benchmarking (RB) da un único número para \hl{todo un
+conjunto de puertas}, promediado sobre secuencias aleatorias de Clifford.
+
+Un algoritmo real, en cambio, ejecuta una y otra vez un \key{ciclo} fijo
+$\mathcal{G}$: una capa de puertas en paralelo. Queremos la fidelidad de
+proceso de su versión ruidosa
+\[
+  \tilde{\mathcal{G}} = \mathcal{G}\circ\Lambda ,
+\]
+medida \hl{sin fiarnos} de la preparación y la medición (SPAM).
+\end{frame}
+
+\begin{frame}{Aleatorizar el ruido}{\S2}
+Intercalar capas aleatorias de Paulis convierte $\Lambda$ en un canal de
+Pauli, que actúa de forma diagonal sobre los operadores de Pauli:
+\begin{equation}
+  \Lambda(P) = \mhl{\lambda_P}\, P , \qquad P \in \{I,X,Y,Z\}^{\otimes n}.
+\end{equation}
+La fidelidad de proceso es el promedio de estos autovalores:
+\begin{equation}
+  F(\tilde{\mathcal{G}},\mathcal{G})
+  = \frac{1}{4^n}\sum_{P}\explain{\lambda_P}{cuánto sobrevive $P$}
+\end{equation}
+Basta con estimar $\lambda_P$ para unos pocos $P$ aleatorios.
+\end{frame}
+
+\begin{frame}{El protocolo}{\S3}
+\begin{enumerate}
+  \item Elige un Pauli aleatorio $P$ y prepara un autoestado suyo de
+        autovalor $\pm1$.
+  \item Aplica $m$ rondas de \emph{capa aleatoria de Paulis y luego
+        $\mathcal{G}$}.
+  \item Mide $P$ y anota el valor esperado $f_P(m)$.
+  \item Repite con dos profundidades $m_1 < m_2$ y varios $P$ aleatorios.
+\end{enumerate}
+\begin{notebox}[Esquema]
+Para un ciclo de Clifford, $P$ recorre su órbita bajo $\mathcal{G}$, así
+que $\lambda_P^{\,m}$ representa un producto de autovalores a lo largo de
+esa órbita.
+\end{notebox}
+\end{frame}
+
+\begin{frame}{Por qué el SPAM desaparece}{\S4}
+Cada valor esperado decae geométricamente con la profundidad,
+\begin{equation}
+  f_P(m) \simeq \mhl<2->{A_P}\,\lambda_P^{\,m},
+\end{equation}
+\uncover<2->{y todo el error de SPAM queda absorbido en el prefactor $A_P$.}
+\uncover<3->{Al dividir dos profundidades, se cancela:
+\begin{equation}
+  \hat\lambda_P = \left(\frac{f_P(m_2)}{f_P(m_1)}\right)^{\!\mhl*<3->{1/(m_2-m_1)}}.
+\end{equation}}
+\end{frame}
+
+\begin{frame}{Conclusiones}{\S5}
+\begin{itemize}
+  \item Mide el \key{ciclo que de verdad ejecutas}, no un promedio sobre
+        todo el conjunto de puertas.
+  \item Robusto al SPAM: queda en $A_P$ y se cancela en el cociente.
+  \item Escalable: los Paulis que hay que muestrear para una precisión
+        fija no crecen con $n$.
+  \item Supone ruido markoviano que apenas depende de qué capa de Paulis
+        se aplicó.
+\end{itemize}
+\vspace{1mm}
+{\footnotesize\color{igMuted}
+[1] A.~Erhard et al., Nat.\ Commun.\ \textbf{10}, 5347 (2019).\par
+[2] J.~J.~Wallman, J.~Emerson, Phys.\ Rev.\ A \textbf{94}, 052325 (2016).\par}
+\end{frame}
+
+\closingslide{Lee la derivación completa}
+  {El desarrollo completo, con el álgebra de los autovalores de Pauli,
+   está en el blog.}
+
+\end{document}

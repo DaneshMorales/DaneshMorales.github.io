@@ -1,0 +1,137 @@
+% =====================================================================
+%  Archive -- a page from an old book
+%  Parchment with a soft vignette, sepia ink, oxblood accents, a double
+%  rule border with corner flourishes, old-style numerals, drop caps,
+%  small-caps titles under an ornament.
+%  Best for: history of physics, famous equations, quotes, timelines.
+% =====================================================================
+\ProvidesPackage{beamerthemeigarchive}[2026/10/24]
+\RequirePackage[oldstyle]{igpost}
+\RequirePackage{ragged2e}
+\RequirePackage{lettrine}
+\RequirePackage{pgfornament}
+
+\definecolor{igBG}{HTML}{F1E7D2}
+\definecolor{igPaperIn}{HTML}{F5EDDC}
+\definecolor{igPaperOut}{HTML}{DCC8A2}
+\definecolor{igFG}{HTML}{3A2A1C}      % sepia ink
+\definecolor{igMuted}{HTML}{7D6A55}
+\definecolor{igAccent}{HTML}{7B2D1E}  % oxblood
+\definecolor{igAccentB}{HTML}{8A6A2E} % aged gold
+\definecolor{igHL}{HTML}{EAD196}
+\definecolor{igHLB}{HTML}{E6C3B3}
+\definecolor{igOnHL}{HTML}{3A2A1C}
+\definecolor{igNote}{HTML}{7B2D1E}
+\definecolor{igRule}{HTML}{3A2A1C}
+\definecolor{igBoxBG}{HTML}{F1E7D2}
+\definecolor{igBoxFrame}{HTML}{3A2A1C}
+\definecolor{igTrack}{HTML}{CDB794}
+\igapplycolors
+\setbeamercolor{frametitle}{fg=igFG}
+\setbeamerfont{alerted text}{series=\normalfont,shape=\itshape}
+
+\setbeamersize{text margin left=12mm, text margin right=12mm}
+\justifying
+\renewcommand\LettrineFontHook{\color{igAccent}}
+\setcounter{DefaultLines}{2}
+\renewcommand\igquotemark{{\color{igAccent}\fontsize{54}{54}\selectfont\textquotedblleft}}
+
+\newcommand\igrule[1][26mm]{\pgfornament[width=#1, color=igAccent]{84}}
+
+% --- parchment, double border, corner flourishes, progress bar ------------
+\setbeamertemplate{background canvas}{%
+  \begin{tikzpicture}[x=1mm,y=1mm]
+    \useasboundingbox (0,0) rectangle (108,135);
+    \clip (0,0) rectangle (108,135);
+    \shade[inner color=igPaperIn, outer color=igPaperOut] (-22,-26) rectangle (130,161);
+    \draw[igFG, line width=1.1pt] (5,5) rectangle (103,130);
+    \draw[igFG, line width=0.35pt] (6.5,6.5) rectangle (101.5,128.5);
+    \node[anchor=north west, inner sep=0] at (7.3,127.7) {\pgfornament[width=8mm, color=igFG]{41}};
+    \node[anchor=north east, inner sep=0] at (100.7,127.7) {\pgfornament[width=8mm, color=igFG]{42}};
+    \node[anchor=south west, inner sep=0] at (7.3,7.3) {\pgfornament[width=8mm, color=igFG, symmetry=h]{41}};
+    \node[anchor=south east, inner sep=0] at (100.7,7.3) {\pgfornament[width=8mm, color=igFG, symmetry=h]{42}};
+    \igprogress{0}{108}{0}{1.2}{igAccent}{igTrack}
+  \end{tikzpicture}}
+
+% --- head: handle | counter;  foot: series | swipe cue ---------------------
+\setbeamertemplate{headline}{%
+  \vspace*{10mm}%
+  \hbox to\paperwidth{\hspace{17mm}%
+    {\footnotesize\color{igMuted}\textls[60]{\textsc{\inserthandle}}}\hfill
+    {\footnotesize\color{igMuted}\insertslideoftwo}\hspace{17mm}}}
+
+\setbeamertemplate{footline}{%
+  \hbox to\paperwidth{\hspace{17mm}%
+    {\footnotesize\color{igMuted}\textls[80]{\textsc{\MakeLowercase{\insertseriesline}}}}\hfill
+    {\small\itshape\color{igAccent}\insertswipe}\hspace{17mm}}%
+  \vspace*{10.5mm}}
+
+% --- titles: italic kicker, small-caps title, ornament ---------------------
+\setbeamertemplate{frametitle}{%
+  \vspace*{2.5mm}%
+  \begin{center}
+    \ifx\insertframesubtitle\@empty\else
+      {\large\itshape\color{igAccent}\insertframesubtitle\par}\vspace{0.6mm}%
+    \fi
+    {\Large\color{igFG}\textls[40]{\textsc{\insertframetitle}}\par}\vspace{1.6mm}%
+    \igrule\par
+  \end{center}
+  \vspace{-1.5mm}}
+
+% --- lists ------------------------------------------------------------
+\setbeamertemplate{itemize item}{\raisebox{0.18em}{\tikz\fill[igAccent] (0,0) -- (0.8mm,0.7mm) -- (1.6mm,0) -- (0.8mm,-0.7mm) -- cycle;}}
+\setbeamertemplate{enumerate item}{\color{igAccent}\textsc{\romannumeral\c@enumi}.}
+
+% --- highlights: an inked double underline --------------------------------
+\tikzset{ig mhl/.style={igHL}, ig mhl*/.style={igHLB}}
+\renewcommand\igmhlpainter[3]{%
+  \fill[ig mhl now, opacity=0.75] (-\igmhlpad,-#3-\igmhlpad) rectangle (#1+\igmhlpad,#2+\igmhlpad);
+  \draw[igAccent, line width=0.45pt] (-\igmhlpad,-#3-\igmhlpad-0.4pt) -- (#1+\igmhlpad,-#3-\igmhlpad-0.4pt);
+  \draw[igAccent, line width=0.3pt] (-\igmhlpad,-#3-\igmhlpad-1.6pt) -- (#1+\igmhlpad,-#3-\igmhlpad-1.6pt);}
+
+% --- boxes: double rules, centred small-caps heads -------------------------
+\tcbset{
+  ig/base/.append style={sharp corners, boxrule=0pt, frame hidden, interior hidden,
+    left=3mm, right=3mm, top=2.4mm, bottom=2.4mm, halign=justify,
+    borderline={0.8pt}{0pt}{igFG}, borderline={0.3pt}{0.8mm}{igFG},
+    detach title, before upper={\ifx\tcbtitletext\@empty\else
+      {\centering\small\color{igAccent}\textls[80]{\textsc{\tcbtitletext}}\par}\vspace{0.8mm}\fi}},
+  ig/note/.style={no borderline, borderline west={0.8pt}{0pt}{igFG}, borderline west={0.3pt}{0.9mm}{igFG},
+    left=4mm, fontupper=\itshape\small},
+  ig/eq/.style={no borderline, halign=center, top=2mm, bottom=2mm,
+    borderline north={0.8pt}{0pt}{igFG}, borderline north={0.3pt}{0.8mm}{igFG},
+    borderline south={0.8pt}{0pt}{igFG}, borderline south={0.3pt}{0.8mm}{igFG}},
+}
+
+% --- cover: a title page ------------------------------------------------
+\setbeamertemplate{ig cover}{%
+  \vspace*{10mm}%
+  {\centering\footnotesize\color{igMuted}\textls[60]{\textsc{\inserthandle}}\par}%
+  \vfill
+  \begin{center}
+    {\small\color{igAccent}\textls[150]{\textsc{\MakeLowercase{\insertcoverkicker}}}\par}\vspace{4mm}%
+    \pgfornament[width=34mm, color=igAccent]{75}\par\vspace{5mm}%
+    {\fontsize{27}{32}\selectfont\color{igFG}\insertcovertitle\par}\vspace{5mm}%
+    \igrule[34mm]\par\vspace{4mm}%
+    {\large\itshape\color{igFG}\insertcoversubtitle\par}%
+    \ifcoverblurb{\vspace{5mm}\parbox{0.8\linewidth}{\centering\small\itshape\color{igMuted}\insertcoverblurb}\par}%
+  \end{center}
+  \vfill
+  {\footnotesize\color{igMuted}\textls[80]{\textsc{\MakeLowercase{\insertseriesline}}}\hfill
+   \itshape\color{igAccent}\insertswipe\par}%
+  \vspace*{10.5mm}}
+
+\setbeamertemplate{ig closing}{%
+  \vfill
+  \begin{center}
+    \pgfornament[width=34mm, color=igAccent]{75}\par\vspace{5mm}%
+    {\small\color{igAccent}\textls[150]{\textsc{\igstr{continuará}{to be continued}}}\par}\vspace{3mm}%
+    {\fontsize{26}{31}\selectfont\insertclosinghead\par}\vspace{4mm}%
+    \parbox{0.86\linewidth}{\centering\itshape\insertclosingtext}\par\vspace{8mm}%
+    \igctarow[igAccent]\par\vspace{5mm}%
+    {\small\color{igFG}\textls[60]{\textsc{\inserthandle}}\par}\vspace{0.5mm}%
+    {\footnotesize\color{igMuted}\textls[80]{\textsc{\MakeLowercase{\insertseriesline}}}\par}%
+  \end{center}
+  \vfill\vspace*{8mm}}
+
+\endinput

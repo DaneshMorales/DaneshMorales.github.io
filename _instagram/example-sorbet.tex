@@ -1,0 +1,74 @@
+% Theme: Sorbet  --  best for intuition posts and beginner explainers
+% Build:  ./build.sh example-sorbet.tex   (or compile on Overleaf)
+\documentclass[12pt]{beamer}
+\usetheme{igsorbet}
+
+\ighandle{@quantum_danesh}
+\igseries{Qubits desde cero}
+\igissue{04}
+
+\begin{document}
+
+\coverslide{Intuición}
+  {¿Por qué no se puede copiar un qubit?}
+  {El teorema de no clonación, en cuatro pasos y sin miedo.}
+
+\begin{frame}{El deseo}{Paso 1}
+Queremos una máquina que copie \key{cualquier} estado:
+\[
+  U\ket{\psi}\ket{0} = \ket{\psi}\ket{\psi}
+  \qquad \text{para todo } \ket{\psi}.
+\]
+En un sistema cerrado la evolución es unitaria, así que $U$ conserva los
+productos escalares.
+\end{frame}
+
+\begin{frame}{Probamos con dos estados}{Paso 2}
+\begin{align*}
+  U\ket{\psi}\ket{0} &= \ket{\psi}\ket{\psi}\\
+  U\ket{\phi}\ket{0} &= \ket{\phi}\ket{\phi}
+\end{align*}
+Producto escalar de ambas:
+\[
+  \braket{\psi}{\phi}\,\underbrace{\braket{0}{0}}_{=\,1}
+  = \mhl<2->{\braket{\psi}{\phi}^{2}}
+\]
+\uncover<2->{A la izquierda queda $\braket{\psi}{\phi}$, a la derecha su cuadrado.}
+\end{frame}
+
+\begin{frame}{Solo dos opciones}{Paso 3}
+Si un número cumple $x = x^2$, entonces $x = 0$ o $x = 1$:
+\keyeq{\braket{\psi}{\phi} \in \{0,\,1\}}
+Solo se pueden copiar estados \hl{idénticos u ortogonales}.
+Un qubit desconocido, no.
+\end{frame}
+
+\begin{frame}{Copiar sería medir sin molestar}{Intuición}
+\begin{notebox}
+Si pudieras clonar, harías mil copias y medirías cada una. Conocerías el
+estado sin perturbarlo, y eso la mecánica cuántica no lo permite.
+\end{notebox}
+\begin{defbox}[¿Y los bits clásicos?]
+$\ket{0}$ y $\ket{1}$ son ortogonales, así que sí se copian:
+$\mathrm{CNOT}\,\ket{x}\ket{0} = \ket{x}\ket{x}$.
+\end{defbox}
+\end{frame}
+
+\begin{frame}{Por qué importa}{Paso 4}
+\begin{itemize}
+  \item \key{Criptografía cuántica}: un espía no puede copiar los qubits
+        sin dejar huella.
+  \item \key{Corrección de errores}: se reparte la información sin copiarla,
+\end{itemize}
+\[
+  \alpha\ket{0} + \beta\ket{1} \;\longmapsto\;
+  \alpha\ket{000} + \beta\ket{111} \;\neq\; \mhl*{\ket{\psi}^{\otimes 3}}
+\]
+{\footnotesize\color{igMuted}Wootters y Zurek, Nature \textbf{299}, 802 (1982);
+Dieks, Phys.\ Lett.\ A \textbf{92}, 271 (1982).\par}
+\end{frame}
+
+\closingslide{Copiar, no. Compartir, sí.}
+  {Guárdalo para cuando alguien te hable de teletransporte cuántico.}
+
+\end{document}

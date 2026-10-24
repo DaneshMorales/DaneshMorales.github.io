@@ -1,0 +1,67 @@
+% Theme: Poster  --  best for one concept per slide, quick definitions
+% Build:  ./build.sh example-poster.tex   (or compile on Overleaf)
+\documentclass[12pt]{beamer}
+\usetheme{igposter}
+
+\ighandle{@quantum_danesh}
+\igseries{Qubits desde cero}
+\igissue{03}
+
+\begin{document}
+
+\coverslide{Conceptos en 30 segundos}
+  {CPTP}
+  {Las cuatro letras detrás de todo canal cuántico.}
+
+\begin{frame}{Respeta las mezclas}{Lineal}
+{\LARGE
+\begin{align*}
+  &\Phi\big(p\rho + (1-p)\sigma\big)\\
+  &\quad= p\,\Phi(\rho) + (1-p)\,\Phi(\sigma)
+\end{align*}}%
+{\large Mezclar y luego evolucionar es lo mismo que evolucionar y luego mezclar.\par}
+\end{frame}
+
+\begin{frame}{Estados a estados}{Positivo}
+{\huge
+\[
+  \rho \succeq 0 \;\Longrightarrow\; \Phi(\rho) \succeq 0
+\]}%
+{\large Una matriz densidad nunca puede acabar dando \hl{probabilidades negativas}.\par}
+\end{frame}
+
+\begin{frame}{También con compañía}{Completamente positivo}
+{\huge
+\[
+  (\mathrm{id}_k \otimes \Phi)(\rho) \succeq 0 \quad \forall k
+\]}%
+{\large La positividad debe sobrevivir cuando $\Phi$ actúa sobre \hl{la mitad
+de un estado entrelazado}.\par}
+\begin{notebox}
+La transpuesta es positiva pero no completamente positiva. Por eso no es un
+canal.
+\end{notebox}
+\end{frame}
+
+\begin{frame}{La probabilidad total es 1}{Preserva la traza}
+{\huge
+\[
+  \Tr \Phi(\rho) = \Tr \rho
+\]}%
+{\large Lo que entra normalizado sale normalizado.\par}
+\end{frame}
+
+\begin{frame}{La forma de Kraus}{Todo junto}
+\keyeq{\Phi(\rho) = \sum_i K_i\,\rho\,K_i^\dagger,
+  \qquad \sum_i K_i^\dagger K_i = \id}
+Un mapa es CPTP \key{si y solo si} se puede escribir así.
+\begin{defbox}[Teorema de Choi y Kraus]
+Los $K_i$ no son únicos: dos conjuntos relacionados por una matriz unitaria
+dan el mismo canal.
+\end{defbox}
+\end{frame}
+
+\closingslide{Cuatro letras, un canal}
+  {Mañana: por qué la transpuesta suspende el examen.}
+
+\end{document}

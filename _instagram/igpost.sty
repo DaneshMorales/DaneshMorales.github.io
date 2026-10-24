@@ -1,0 +1,344 @@
+% =====================================================================
+%  igpost.sty  --  shared core for the Palatino Instagram carousel themes
+% =====================================================================
+%  Every theme (beamerthemeig*.sty) loads this file, so all the themes
+%  understand exactly the same commands.  Write a post once, then switch
+%  its look by changing a single line:  \usetheme{ignocturne}
+%
+%  Page:   108 mm x 135 mm (4:5).  Export at 254 dpi -> 1080 x 1350 px,
+%          i.e. 1 mm on the page = 10 px on Instagram.
+%  Fonts:  Palatino for text (newpxtext) and math (newpxmath).
+%
+%  Post settings (preamble)
+%  ------------------------
+%  \ighandle{@quantum_danesh}     Instagram handle (default shown)
+%  \igseries{Qubits desde cero}   series name ...
+%  \igissue{02}                   ... and post number: "QUBITS DESDE CERO · 02"
+%  \iglang{es} / \iglang{en}      language of the built-in words
+%                                 (desliza / swipe, Guardar / Save, ...)
+%                                 and of the hyphenation. Default: es.
+%
+%  Every theme shows the handle, the "06 / 08" counter, the series line,
+%  a swipe cue (hidden on the last page) and a progress bar that fills
+%  as you swipe.
+%
+%  Commands available in every theme
+%  ---------------------------------
+%  \coverslide{kicker}{title}{subtitle}   first page
+%  \coverblurb{text}                      optional cover text (before \coverslide)
+%  \closingslide{headline}{text}          last page (save / send / follow)
+%  \begin{frame}{Title}{Kicker} ... \end{frame}   a normal page
+%
+%  \hl{text}            marker highlight for running text
+%  \key{text}           accent colour (same as beamer's \alert)
+%  \mhl{math}           highlight a term inside an equation
+%  \mhl*{math}          ... with the second highlight colour
+%  \explain{math}{note} underbrace with a readable note
+%  \keyeq{math}         a display equation inside the key-result box
+%
+%  defbox, thmbox, notebox, eqbox   themed boxes, optional [title]
+%  pullquote{who}       a quotation;  \aside{remark} right-aligned remark
+%  \refmark{1}          reference mark;  plots: \begin{axis}[ig axis]
+%
+%  Overlays ("animations" across swipes) work on all of them:
+%  \hl<2->{...}, \mhl<3->{...}, \mhl*<2->{...}, \explain<2->{...}{...},
+%  plus beamer's own \pause, \uncover<2->{...}, \alert<2>{...}.
+%  Each overlay step becomes its own carousel page.
+% =====================================================================
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{igpost}[2026/10/24 Instagram carousel core (Palatino, 4:5)]
+
+\newif\ifig@oldstyle
+\DeclareOption{oldstyle}{\ig@oldstyletrue}
+\ProcessOptions\relax
+
+% ---------------------------------------------------------------------
+%  Page geometry
+% ---------------------------------------------------------------------
+\geometry{papersize={108mm,135mm}}
+\setbeamersize{text margin left=9mm, text margin right=9mm}
+\beamer@centeredfalse            % pages are top-aligned, like a carousel
+\setbeamertemplate{navigation symbols}{}
+
+% ---------------------------------------------------------------------
+%  Fonts: Palatino everywhere, including math
+% ---------------------------------------------------------------------
+\usefonttheme{professionalfonts}
+\usefonttheme{serif}
+\RequirePackage[T1]{fontenc}
+% Spanish hyphenation and dates; es-minimal leaves maths and shorthands alone
+\RequirePackage[english,spanish,es-minimal]{babel}
+\ifig@oldstyle
+  \RequirePackage[osf]{newpxtext}
+\else
+  \RequirePackage{newpxtext}
+\fi
+\RequirePackage{newpxmath}
+\RequirePackage{bm}
+\RequirePackage{mathtools}
+\RequirePackage{dsfont}
+\RequirePackage[tracking=true]{microtype}
+\linespread{1.06}
+
+% ---------------------------------------------------------------------
+%  Physics shorthands (same names as the blog's MathJax config, so
+%  equations can be pasted between the blog and the posts unchanged)
+% ---------------------------------------------------------------------
+\providecommand\ket[1]{\left| #1 \right\rangle}
+\providecommand\bra[1]{\left\langle #1 \right|}
+\providecommand\braket[2]{\left\langle #1 \,\middle|\, #2 \right\rangle}
+\providecommand\mel[3]{\left\langle #1 \right| #2 \left| #3 \right\rangle}
+\providecommand\ketbra[1]{\left| #1 \right\rangle\!\left\langle #1 \right|}
+\providecommand\expect[1]{\left\langle #1 \right\rangle}
+\providecommand\Vec[1]{\vec{#1}}
+\providecommand\Tr{\operatorname{Tr}}
+\providecommand\id{\mathds{1}}
+
+% ---------------------------------------------------------------------
+%  Packages for boxes, drawings and highlights
+% ---------------------------------------------------------------------
+\RequirePackage{tikz}
+\usetikzlibrary{calc,positioning,arrows.meta,decorations.pathmorphing,shadows.blur,fadings,patterns}
+\RequirePackage[most]{tcolorbox}
+\RequirePackage{soul}
+\RequirePackage{transparent}
+\RequirePackage{fontawesome5}
+\RequirePackage{xparse}
+\RequirePackage{pgfplots}
+\pgfplotsset{compat=1.18}
+% plots pick up the theme colours:  \begin{axis}[ig axis, ...]
+\pgfplotsset{
+  ig axis/.style={axis lines=left, axis line style={igFG, line width=0.5pt},
+    tick style={igFG}, every tick label/.append style={font=\footnotesize, text=igFG},
+    label style={font=\small, text=igFG},
+    tick align=outside, major tick length=1mm, clip=false},
+  ig curve/.style={igAccent, line width=1pt, no markers, smooth},
+  ig data/.style={only marks, mark=*, mark size=1.3pt, igFG},
+}
+
+% ---------------------------------------------------------------------
+%  Colour roles.  Themes redefine these, then call \igapplycolors.
+% ---------------------------------------------------------------------
+\definecolor{igBG}{HTML}{FFFFFF}     % page
+\definecolor{igFG}{HTML}{1A1A1A}     % running text
+\definecolor{igMuted}{HTML}{666666}  % captions, footers, kickers
+\definecolor{igAccent}{HTML}{1F4FA3} % titles, \key, structure
+\definecolor{igAccentB}{HTML}{B03A2E}% second accent
+\definecolor{igHL}{HTML}{FFF0A0}     % \hl and \mhl
+\definecolor{igHLB}{HTML}{CDEBFF}    % \mhl*
+\definecolor{igOnHL}{HTML}{1A1A1A}   % text drawn on top of a highlight
+\definecolor{igNote}{HTML}{B03A2E}   % \explain braces and notes
+\definecolor{igRule}{HTML}{CCCCCC}   % hairlines
+\definecolor{igBoxBG}{HTML}{F4F6FA}  % box fill
+\definecolor{igBoxFrame}{HTML}{1F4FA3}
+
+\newcommand\igapplycolors{%
+  \setbeamercolor{normal text}{fg=igFG,bg=igBG}%
+  \setbeamercolor{background canvas}{bg=igBG}%
+  \setbeamercolor{structure}{fg=igAccent}%
+  \setbeamercolor{alerted text}{fg=igAccent}%
+  \setbeamercolor{frametitle}{fg=igAccent}%
+  \setbeamercolor{framesubtitle}{fg=igMuted}%
+  \setbeamercolor{footline}{fg=igMuted}%
+  \setbeamercolor{explain}{fg=igNote}%
+  \setbeamercolor{item}{fg=igAccent}%
+  \setbeamercolor{enumerate item}{fg=igAccent}%
+  \setbeamercolor{caption}{fg=igMuted}%
+  \sethlcolor{igHL}%
+  \color{igFG}%
+}
+
+% ---------------------------------------------------------------------
+%  Language of the built-in words
+% ---------------------------------------------------------------------
+\newif\ifigenglish
+\newcommand\iglang[1]{%
+  \def\ig@tmp{#1}\def\ig@en{en}%
+  \ifx\ig@tmp\ig@en\igenglishtrue\AtBeginDocument{\selectlanguage{english}}%
+  \else\igenglishfalse\fi}
+% \igstr{spanish}{english}
+\newcommand\igstr[2]{\ifigenglish#2\else#1\fi}
+\newcommand\igstrswipe{\igstr{desliza}{swipe}}
+\newcommand\igstrsave{\igstr{Guardar}{Save}}
+\newcommand\igstrsend{\igstr{Enviar}{Send}}
+\newcommand\igstrfollow{\igstr{Seguir}{Follow}}
+
+% ---------------------------------------------------------------------
+%  Post metadata
+% ---------------------------------------------------------------------
+\def\ig@handle{\detokenize{@quantum_danesh}}
+\def\ig@author{Danesh Morales Hashemi}
+\def\ig@series{Qubits desde cero}
+\def\ig@issue{}
+% \detokenize lets the handle contain _ without escaping it
+\newcommand\ighandle[1]{\def\ig@handle{\detokenize{#1}}}
+\newcommand\igauthor[1]{\def\ig@author{#1}}
+\newcommand\igseries[1]{\def\ig@series{#1}}
+\newcommand\igissue[1]{\def\ig@issue{#1}}
+\newcommand\inserthandle{\ig@handle}
+\newcommand\insertigauthor{\ig@author}
+\newcommand\insertseries{\ig@series}
+\newcommand\insertissue{\ig@issue}
+% "Qubits desde cero · 02"
+\newcommand\insertseriesline{\ig@series
+  \ifx\ig@issue\@empty\else\ \textperiodcentered\ \ig@issue\fi}
+% "3 / 7": counts carousel pages, so overlay steps count too
+\newcommand\insertslideof{\insertpagenumber\,/\,\insertdocumentendpage}
+% "03" and "07", for themes that print two-digit page numbers
+\newcommand\insertpagetwo{\ifnum\c@page<10 0\fi\the\c@page}
+\newcommand\inserttotaltwo{\ifnum\insertdocumentendpage<10 0\fi\insertdocumentendpage}
+% "06 / 08"
+\newcommand\insertslideoftwo{\insertpagetwo\ /\ \inserttotaltwo}
+\newif\ifiglastpage
+% true on the last page of the carousel (after the second LaTeX run)
+\newcommand\ig@checklast{\ifnum\c@page<\insertdocumentendpage\relax
+  \iglastpagefalse\else\iglastpagetrue\fi}
+% \igsetprogress: \igfrac = progress through the carousel (0..1)
+\newcommand\igsetprogress{%
+  \pgfmathsetmacro\igfrac{min(1,\the\c@page/max(1,\insertdocumentendpage))}}
+% \igprogress{x0}{x1}{y}{height}{fill}{track}: a bar in a tikzpicture
+% drawn with x=1mm,y=1mm (themes use it in their background canvas)
+\newcommand\igprogress[6]{%
+  \igsetprogress
+  \fill[#6] (#1,#3) rectangle (#2,#3+#4);
+  \fill[#5] (#1,#3) rectangle ({#1+(#2-#1)*\igfrac},#3+#4);}
+% Roman numerals in small caps: iii / vii
+\newcommand\insertpageroman{\textsc{\romannumeral\c@page}}
+\newcommand\inserttotalroman{\textsc{\romannumeral\insertdocumentendpage}}
+
+% ---------------------------------------------------------------------
+%  Running text
+% ---------------------------------------------------------------------
+\setlength\parskip{0.55em}
+\setbeamerfont{normal text}{size=\normalsize}
+\setbeamerfont{explain}{size=\footnotesize,shape=\itshape}
+\setbeamerfont{alerted text}{series=\bfseries}
+
+% \key = \alert, so overlays work: \key<2->{...}
+\newcommand<>{\key}[1]{\alert#2{#1}}
+
+% \hl: soul's marker highlight, overlay-aware (\hl<2->{...})
+\let\ig@soulhl\hl
+\renewcommand<>{\hl}[1]{\alt#2{\ig@soulhl{#1}}{#1}}
+
+% small bracketed reference mark: text\refmark{2}
+\newcommand\refmark[1]{\textsuperscript{\usebeamercolor[fg]{framesubtitle}[#1]}}
+
+% \aside{remark}: ends a paragraph with a remark pushed to the right
+% margin (it drops to its own line when there is no room)
+\newcommand\aside[1]{{\unskip\nobreak\hfil\penalty50\hskip1.5em\hbox{}\nobreak\hfil
+  \usebeamerfont{explain}\usebeamercolor[fg]{explain}#1%
+  \rightskip=0pt\parfillskip=0pt\finalhyphendemerits=0\par}}
+
+% pullquote: \begin{pullquote}{Who, where, year} ... \end{pullquote}
+\newcommand\igquotemark{{\usebeamercolor[fg]{structure}\fontsize{54}{54}\selectfont\textquotedblleft}}
+\newenvironment{pullquote}[1]
+  {\def\ig@quotewho{#1}\par\vspace{1mm}%
+   \noindent\igquotemark\par\vspace{-9mm}%
+   \leftskip=6mm\itshape\large}
+  {\par\vspace{1.5mm}%
+   {\upshape\small\usebeamercolor[fg]{framesubtitle}\hfill\ig@quotewho\par}}
+
+% ---------------------------------------------------------------------
+%  Highlights inside equations
+% ---------------------------------------------------------------------
+%  \mhl{x} paints igHL behind x without changing its width, so a term
+%  can light up on a later overlay without the equation moving.
+%  Themes change the look by redefining \igmhlpainter{wd}{ht}{dp}
+%  (TikZ code; draw with the style "ig mhl now").
+\newlength\igmhlpad \setlength\igmhlpad{1.7pt}
+\newsavebox\ig@mhlbox
+\tikzset{
+  ig mhl/.style={fill=igHL},
+  ig mhl*/.style={fill=igHLB},
+  ig mhl now/.style={ig mhl},
+  ig mhl text/.style={text=igOnHL},
+  ig mhl* text/.style={text=igOnHL},
+  ig mhl now text/.style={ig mhl text},
+}
+\newcommand\igmhlpainter[3]{%
+  \fill[ig mhl now, rounded corners=2pt]
+    (-\igmhlpad,-#3-\igmhlpad) rectangle (#1+\igmhlpad,#2+\igmhlpad);}
+\newcommand\ig@mhl@@[3]{% style, star, math
+  \sbox\ig@mhlbox{$\m@th#1#3$}%
+  \IfBooleanTF{#2}{\tikzset{ig mhl now/.style={ig mhl*}, ig mhl now text/.style={ig mhl* text}}}%
+                  {\tikzset{ig mhl now/.style={ig mhl}, ig mhl now text/.style={ig mhl text}}}%
+  \tikz[baseline=0pt]{%
+    \path[use as bounding box] (0,-\dp\ig@mhlbox) rectangle (\wd\ig@mhlbox,\ht\ig@mhlbox);
+    \igmhlpainter{\wd\ig@mhlbox}{\ht\ig@mhlbox}{\dp\ig@mhlbox}%
+    % typeset again inside the node so the theme's highlight text colour applies
+    \node[inner sep=0pt,outer sep=0pt,anchor=base west,ig mhl now text] at (0,0) {$\m@th#1#3$};}}
+\newcommand\ig@mhl@[2]{\ig@mhl@@#1#2}
+\newcommand\ig@mhl[2]{\mathord{\mathpalette\ig@mhl@{{#1}{#2}}}}
+\NewDocumentCommand\mhl{s d<> m}{\ensuremath{%
+  \IfValueTF{#2}{\alt<#2>{\ig@mhl{#1}{#3}}{#3}}{\ig@mhl{#1}{#3}}}}
+
+%  \explain{math}{note}: underbrace + note in the note colour.
+%  \explain<2->{...}{...} keeps the space reserved, so nothing jumps.
+\newcommand\ig@explain[3]{% brace opacity, math, note
+  {\transparent{#1}\usebeamercolor[fg]{explain}\underbrace{{\transparent{1}\color{igFG}#2}}_{%
+    \text{\usebeamerfont{explain}\usebeamercolor[fg]{explain}#3}}}}
+\NewDocumentCommand\explain{d<> m m}{%
+  \IfValueTF{#1}%
+    {\alt<#1>{\ig@explain{1}{#2}{#3}}{\ig@explain{0}{#2}{#3}}}%
+    {\ig@explain{1}{#2}{#3}}}
+
+% ---------------------------------------------------------------------
+%  Boxes (tcolorbox).  Themes restyle them through these keys:
+%  ig/base, ig/def, ig/thm, ig/note, ig/eq
+% ---------------------------------------------------------------------
+\tcbset{
+  ig/base/.style={enhanced, breakable=false, before skip=0.7em, after skip=0.7em,
+    left=3mm, right=3mm, top=2mm, bottom=2mm, arc=1.5mm, boxrule=0.5pt,
+    colback=igBoxBG, colframe=igBoxFrame, coltext=igFG, coltitle=igBG,
+    colbacktitle=igBoxFrame, fonttitle=\bfseries\small, halign=flush left},
+  ig/def/.style={},
+  ig/thm/.style={},
+  ig/note/.style={},
+  ig/eq/.style={halign=center, top=1mm, bottom=1mm},
+}
+\NewTColorBox{defbox}{ O{Definition} }{ig/base, ig/def, title={#1}}
+\NewTColorBox{thmbox}{ O{Theorem} }{ig/base, ig/thm, title={#1}}
+\NewTColorBox{notebox}{ O{} }{ig/base, ig/note, title={#1}}
+\NewTColorBox{eqbox}{ O{} }{ig/base, ig/eq, title={#1}}
+\newcommand\keyeq[2][]{\begin{eqbox}[#1]\centering$\displaystyle #2$\par\end{eqbox}}
+
+% ---------------------------------------------------------------------
+%  Cover and closing pages.  Themes provide the two templates
+%  "ig cover" and "ig closing"; these commands only collect the text.
+% ---------------------------------------------------------------------
+\newif\ifigcover
+\newif\ifigclosing
+\def\insertcoverkicker{}\def\insertcovertitle{}\def\insertcoversubtitle{}
+% optional extra cover text (abstract, epigraph, chapter blurb ...);
+% set it before \coverslide.  Themes show it where they have room.
+\def\insertcoverblurb{}
+\newcommand\coverblurb[1]{\def\insertcoverblurb{#1}}
+\newcommand\ifcoverblurb[1]{\ifx\insertcoverblurb\@empty\else#1\fi}
+\newcommand\coverslide[3]{%
+  \def\insertcoverkicker{#1}\def\insertcovertitle{#2}\def\insertcoversubtitle{#3}%
+  \global\igcovertrue
+  \begin{frame}[plain,s]\usebeamertemplate{ig cover}\end{frame}%
+  \global\igcoverfalse}
+\def\insertclosinghead{}\def\insertclosingtext{}
+\newcommand\closingslide[2]{%
+  \def\insertclosinghead{#1}\def\insertclosingtext{#2}%
+  \global\igclosingtrue
+  \begin{frame}[plain,s]\usebeamertemplate{ig closing}\end{frame}%
+  \global\igclosingfalse}
+
+% Shared building blocks the themes use
+\newcommand\igswipecue{\igstrswipe~$\rightarrow$}
+% the swipe cue, except on the last page
+\newcommand\insertswipe{\ig@checklast\ifiglastpage\else\igswipecue\fi}
+\def\igctasize{\small}
+\newcommand\igctarow[1][igFG]{%
+  {\color{#1}\igctasize
+   \faBookmark[regular]~\igstrsave\hspace{1.5em}%
+   \faPaperPlane[regular]~\igstrsend\hspace{1.5em}%
+   \faUserPlus~\igstrfollow}}
+
+\setbeamertemplate{ig cover}{\vfill\centering{\Huge\insertcovertitle}\vfill}
+\setbeamertemplate{ig closing}{\vfill\centering{\Large\insertclosinghead}\par\insertclosingtext\vfill}
+
+\endinput

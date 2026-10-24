@@ -1,0 +1,98 @@
+% Theme: Blueprint  --  best for protocols, algorithms and circuits
+% Build:  ./build.sh example-blueprint.tex   (or compile on Overleaf)
+\documentclass[12pt]{beamer}
+\usetheme{igblueprint}
+
+\ighandle{@quantum_danesh}
+\igseries{Protocolos}
+\igissue{RB-01}
+
+\begin{document}
+
+\coverslide{Protocolo}
+  {Randomized benchmarking}
+  {Mide el error promedio de un conjunto de puertas en cuatro pasos.}
+
+\begin{frame}{Qué mide}{Especificación}
+La \key{fidelidad promedio} del ruido $\Lambda$ que afecta a las puertas,
+\[
+  F_{\mathrm{avg}}(\Lambda)
+  = \explain{\int d\psi\,\mel{\psi}{\Lambda\big(\ketbra{\psi}\big)}{\psi}}{promedio sobre todos los estados puros}
+\]
+y la tasa de error $r = 1 - F_{\mathrm{avg}}$.
+\begin{notebox}[Supone]
+Ruido markoviano igual para todas las Clifford:
+$\tilde{\mathcal{C}} = \Lambda\circ\mathcal{C}$.
+\end{notebox}
+\end{frame}
+
+\begin{frame}{Muestrea una secuencia}{Paso 01}
+Elige $m$ Cliffords al azar y añade la que las deshace todas:
+\[
+  C_{m+1} = \big(C_m \cdots C_2\, C_1\big)^{-1}.
+\]
+\begin{center}
+\begin{tikzpicture}[x=1mm,y=1mm, g/.style={draw=igFG, line width=0.5pt, fill=igBG,
+    minimum height=7mm, minimum width=8mm, inner sep=0.5mm, font=\small}]
+  \draw[igFG, line width=0.5pt] (4,0) -- (82,0);
+  \node[anchor=east, text=igFG] at (4,0) {$\ket{0}$};
+  \node[g] at (14,0) {$C_1$};
+  \node[g] at (26,0) {$C_2$};
+  \node[text=igFG] at (37,0.6) {$\cdots$};
+  \node[g] at (48,0) {$C_m$};
+  \node[g, draw=igAccentB, minimum width=11mm] at (62,0) {$C_{m+1}$};
+  \node[g, minimum width=7mm] at (76,0) {};
+  \draw[igFG, line width=0.45pt] (73.6,-1.6) arc (180:0:2.4);
+  \draw[igFG, line width=0.45pt] (76,-1.6) -- (78.2,1.8);
+  \draw[igAccentB, line width=0.4pt, {Latex[length=1.2mm]}-{Latex[length=1.2mm]}] (10,-7) -- (52,-7);
+  \node[igAccentB, font=\scriptsize, fill=igBG, inner sep=0.8mm] at (31,-7) {$m$ al azar};
+\end{tikzpicture}
+\end{center}
+Idealmente el circuito completo es la \hl{identidad}: los qubits deberían
+volver a $\ket{0}$.
+\end{frame}
+
+\begin{frame}{Ejecuta y promedia}{Paso 02}
+\begin{enumerate}
+  \item Prepara $\ket{0}$, ejecuta la secuencia y mide.
+  \item Anota la probabilidad de supervivencia $p_k(m)$ de obtener $0$.
+  \item Repite con $K$ secuencias aleatorias de la misma longitud:
+\end{enumerate}
+\[
+  \bar p(m) = \frac{1}{K}\sum_{k=1}^{K} p_k(m).
+\]
+Hazlo para varias longitudes, desde $m = 1$ hasta unos cientos.
+\end{frame}
+
+\begin{frame}{Ajusta el decaimiento}{Paso 03}
+\[
+  \bar p(m) = \explain{A}{SPAM}\,\mhl{p^{\,m}} + \explain{B}{SPAM}
+\]
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[ig axis, width=80mm, height=44mm, xmin=0, xmax=210, ymin=0.45, ymax=1.0,
+    xlabel={longitud de la secuencia $m$}, ylabel={$\bar p(m)$}, ytick={0.5,0.75,1},
+    xtick={0,100,200}, ylabel style={rotate=-90, at={(axis description cs:-0.08,0.88)}, anchor=east}]
+  \addplot[ig curve, igAccentB, domain=0:205, samples=60] {0.5 + 0.48*0.97^x};
+  \addplot[ig data] coordinates {(1,0.970) (10,0.848) (20,0.769) (40,0.637)
+    (60,0.583) (80,0.538) (100,0.526) (150,0.503) (200,0.503)};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+\end{frame}
+
+\begin{frame}{Lee el error}{Paso 04}
+Para $n$ qubits, con $d = 2^n$:
+\keyeq{r = \frac{(d-1)\,(1-p)}{d}}
+Un qubit con $p = 0.97$ da $r = 0.015$:
+\hl{un 1.5\,\% de error por Clifford}.
+\begin{thmbox}[Ruido que depende de la puerta]
+El decaimiento sigue siendo casi una sola exponencial
+{\small\color{igMuted}(Wallman, Quantum \textbf{2}, 47, 2018).}
+\end{thmbox}
+\end{frame}
+
+\closingslide{Cuatro pasos, un número}
+  {Próxima hoja: cycle benchmarking, para el error de una capa concreta.}
+
+\end{document}

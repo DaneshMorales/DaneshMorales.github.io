@@ -1,0 +1,143 @@
+% =====================================================================
+%  Nocturne -- dark mode with gold leaf
+%  Night-navy page with a soft glow, ivory text, gold and teal accents,
+%  centred italic titles and a thin gold frame.  Calm and premium; it
+%  stands out in a light feed and keeps long equations easy on the eyes.
+%  Best for: one formula or one result explained in depth.
+% =====================================================================
+\ProvidesPackage{beamerthemeignocturne}[2026/10/24]
+\RequirePackage{igpost}
+
+\definecolor{igBG}{HTML}{0F1626}
+\definecolor{igGlow}{HTML}{1C2944}
+\definecolor{igBGdark}{HTML}{0A0F1A}
+\definecolor{igFG}{HTML}{ECE6D6}      % ivory
+\definecolor{igMuted}{HTML}{8F95A6}
+\definecolor{igAccent}{HTML}{E2B850}  % gold
+\definecolor{igAccentB}{HTML}{7CC6C2} % teal
+\definecolor{igHL}{HTML}{4A3F22}
+\definecolor{igHLB}{HTML}{1E4446}
+\definecolor{igOnHL}{HTML}{FFF8E6}
+\definecolor{igNote}{HTML}{7CC6C2}
+\definecolor{igRule}{HTML}{E2B850}
+\definecolor{igBoxBG}{HTML}{131C2F}
+\definecolor{igBoxFrame}{HTML}{E2B850}
+\igapplycolors
+\setbeamercolor{frametitle}{fg=igFG}
+\setbeamercolor{framesubtitle}{fg=igAccent}
+\setbeamerfont{alerted text}{series=\normalfont,shape=\itshape}
+
+\setbeamersize{text margin left=11mm, text margin right=11mm}
+
+% a short gold rule with a diamond in the middle
+\newcommand\igornament[1][14mm]{%
+  \tikz[baseline=-0.6ex]{\draw[igAccent, line width=0.4pt] (0,0) -- (#1/2-1.4mm,0);
+    \fill[igAccent] (#1/2,0) +(-1mm,0) -- +(0,0.75mm) -- +(1mm,0) -- +(0,-0.75mm) -- cycle;
+    \draw[igAccent, line width=0.4pt] (#1/2+1.4mm,0) -- (#1,0);}}
+
+% --- night sky ------------------------------------------------------------
+\setbeamertemplate{background canvas}{%
+  \begin{tikzpicture}[x=1mm,y=1mm]
+    \useasboundingbox (0,0) rectangle (108,135);
+    \clip (0,0) rectangle (108,135);
+    \shade[inner color=igGlow, outer color=igBGdark] (-26,-20) rectangle (134,190);
+    \pgfmathsetseed{\number\numexpr 13*\c@framenumber+5\relax}
+    \foreach \k in {1,...,26}{
+      \fill[white, opacity={0.12+0.25*rnd}] (4+rnd*100,4+rnd*127) circle ({0.12+0.22*rnd});
+    }
+    \draw[igAccent, opacity=0.65, line width=0.35pt] (5,5) rectangle (103,130);
+    % progress: gold leaf laid along the bottom of the frame
+    \igprogress{5}{103}{4.55}{0.9}{igAccent}{igAccent!18!igBGdark}
+    \ifigcover
+      \draw[igAccent, opacity=0.22, line width=0.4pt] (100,118) circle (30);
+      \draw[igAccent, opacity=0.12, line width=0.4pt] (100,118) circle (42);
+    \fi
+  \end{tikzpicture}}
+
+% --- head: handle | counter;  foot: series | swipe cue ---------------------
+\setbeamertemplate{headline}{%
+  \vspace*{9mm}%
+  \hbox to\paperwidth{\hspace{11mm}%
+    {\footnotesize\color{igMuted}\textls[80]{\textsc{\inserthandle}}}\hfill
+    {\footnotesize\color{igAccent}\insertslideoftwo}\hspace{11mm}}}
+
+% --- centred italic titles ----------------------------------------------
+\setbeamertemplate{frametitle}{%
+  \vspace*{3mm}%
+  \begin{center}
+    \ifx\insertframesubtitle\@empty\else
+      {\footnotesize\color{igAccent}\textls[160]{\textsc{\MakeLowercase{\insertframesubtitle}}}\par}\vspace{1.2mm}%
+    \fi
+    {\LARGE\itshape\color{igFG}\insertframetitle\par}\vspace{2mm}%
+    \igornament\par
+  \end{center}
+  \vspace{-1mm}}
+
+\setbeamertemplate{footline}{%
+  \hbox to\paperwidth{\hspace{11mm}%
+    {\footnotesize\color{igMuted}\textls[80]{\textsc{\MakeLowercase{\insertseriesline}}}}\hfill
+    {\footnotesize\color{igAccent}\textls[80]{\textsc{\insertswipe}}}\hspace{11mm}}%
+  \vspace*{9.5mm}}
+
+% --- lists ------------------------------------------------------------
+\setbeamertemplate{itemize item}{\raisebox{0.18em}{\tikz\fill[igAccent] (0,0) -- (0.9mm,0.75mm) -- (1.8mm,0) -- (0.9mm,-0.75mm) -- cycle;}}
+\setbeamertemplate{enumerate item}{\color{igAccent}\itshape\insertenumlabel.}
+
+% --- highlights: gold leaf -----------------------------------------------
+\tikzset{ig mhl/.style={igAccent}, ig mhl*/.style={igAccentB}}
+\renewcommand\igmhlpainter[3]{%
+  \fill[ig mhl now, opacity=0.2, rounded corners=2pt]
+    (-\igmhlpad,-#3-\igmhlpad) rectangle (#1+\igmhlpad,#2+\igmhlpad);
+  \draw[ig mhl now, line width=0.4pt, rounded corners=2pt]
+    (-\igmhlpad,-#3-\igmhlpad) rectangle (#1+\igmhlpad,#2+\igmhlpad);}
+
+% --- boxes ----------------------------------------------------------------
+\tcbset{
+  ig/base/.append style={arc=1mm, boxrule=0.45pt, colback=igBoxBG, colframe=igAccent,
+    left=3.5mm, right=3.5mm, top=2.4mm, bottom=2.4mm,
+    detach title, before upper={\ifx\tcbtitletext\@empty\else
+      {\footnotesize\color{igAccent}\textls[140]{\textsc{\MakeLowercase{\tcbtitletext}}}}\par\vspace{1mm}\fi}},
+  ig/def/.style={colframe=igAccentB,
+    before upper={\ifx\tcbtitletext\@empty\else
+      {\footnotesize\color{igAccentB}\textls[140]{\textsc{\MakeLowercase{\tcbtitletext}}}}\par\vspace{1mm}\fi}},
+  ig/note/.style={frame hidden, interior hidden, left=4mm,
+    overlay={\draw[igAccent, line width=0.45pt] (frame.north west) -- (frame.south west);},
+    fontupper=\small},
+  ig/eq/.style={frame hidden, interior hidden, top=3mm, bottom=3mm,
+    overlay={\shade[inner color=igAccent!14!igBoxBG, outer color=igBoxBG, opacity=0.9]
+        (frame.south west) rectangle (frame.north east);
+      \draw[igAccent, line width=0.45pt] (frame.south west) rectangle (frame.north east);
+      \draw[igAccent, opacity=0.5, line width=0.3pt]
+        ([shift={(0.9mm,0.9mm)}]frame.south west) rectangle ([shift={(-0.9mm,-0.9mm)}]frame.north east);}},
+}
+
+% --- cover ------------------------------------------------------------
+\setbeamertemplate{ig cover}{%
+  \vspace*{9mm}%
+  {\centering\footnotesize\color{igMuted}\textls[80]{\textsc{\inserthandle}}\par}%
+  \vfill
+  \begin{center}
+    {\small\color{igAccent}\textls[200]{\textsc{\MakeLowercase{\insertcoverkicker}}}\par}\vspace{4mm}%
+    \igornament[22mm]\par\vspace{6mm}%
+    {\fontsize{30}{35}\selectfont\itshape\color{igFG}\insertcovertitle\par}\vspace{6mm}%
+    {\large\color{igAccentB}\insertcoversubtitle\par}%
+    \ifcoverblurb{\vspace{6mm}{\small\color{igMuted}\insertcoverblurb\par}}%
+  \end{center}
+  \vfill
+  {\footnotesize\color{igMuted}\textls[80]{\textsc{\MakeLowercase{\insertseriesline}}}\hfill
+   \color{igAccent}\textls[80]{\textsc{\insertswipe}}\par}%
+  \vspace*{9.5mm}}
+
+\setbeamertemplate{ig closing}{%
+  \vfill
+  \begin{center}
+    \igornament[22mm]\par\vspace{6mm}%
+    {\fontsize{26}{31}\selectfont\itshape\insertclosinghead\par}\vspace{5mm}%
+    \parbox{0.9\linewidth}{\centering\insertclosingtext}\par\vspace{9mm}%
+    \igctarow[igAccent]\par\vspace{4mm}%
+    {\small\color{igFG}\textls[80]{\textsc{\inserthandle}}\par}\vspace{1mm}%
+    {\footnotesize\color{igMuted}\textls[80]{\textsc{\MakeLowercase{\insertseriesline}}}\par}
+  \end{center}
+  \vfill\vspace*{6mm}}
+
+\endinput

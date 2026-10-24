@@ -1,0 +1,63 @@
+% =====================================================================
+%  Starter post: copy this file, pick a theme, write.
+%  Every command below works the same in all eleven themes.
+% =====================================================================
+\documentclass[12pt]{beamer}
+
+% Pick one:
+%   igsignature   igpreprint    igchalkboard  ignocturne
+%   igblueprint   ignotebook    igposter      igtextbook
+%   igsorbet      igarchive     igflashcard
+\usetheme{igsignature}
+
+\ighandle{@quantum_danesh}      % shown on every slide
+\igseries{Qubits desde cero}    % series name ...
+\igissue{05}                    % ... and post number
+% \iglang{en}                   % English UI words (swipe, Save, ...)
+
+\begin{document}
+
+% Optional extra text some covers show (abstract, chapter summary, ...)
+% \coverblurb{...}
+\coverslide{Kicker}{Título del post}{Subtítulo de una línea.}
+
+% {Title}{Kicker}: the kicker is the small label above the title
+\begin{frame}{La regla de Born}{Ejemplo}
+Si medimos $\ket{\psi} = \alpha\ket{0} + \beta\ket{1}$ en la base
+computacional, obtenemos $0$ o $1$ con probabilidades
+\[
+  P(0) = \explain{|\alpha|^2}{peso de $\ket{0}$},
+  \qquad
+  P(1) = \mhl{|\beta|^2}.
+\]
+Como el estado está normalizado, \hl{las probabilidades suman uno}:
+\keyeq{|\alpha|^2 + |\beta|^2 = 1}
+\end{frame}
+
+% Boxes: defbox, thmbox, notebox, eqbox -- all take an optional [title]
+\begin{frame}{Cajas y listas}{Componentes}
+\begin{defbox}[Definición]
+Un \key{qubit} es un sistema cuántico de dimensión $2$.
+\end{defbox}
+\begin{itemize}
+  \item Una viñeta con $\Tr\rho = 1$.
+  \item Otra viñeta, con \hl{resaltado}.
+\end{itemize}
+\begin{notebox}[Nota]
+Las notas sirven para matices y advertencias.
+\end{notebox}
+\end{frame}
+
+% Overlays: every step becomes its own carousel slide
+\begin{frame}{Paso a paso}{Animación}
+\begin{align*}
+  \rho &= \ketbra{\psi}\\
+       &\uncover<2->{= |\alpha|^2\ketbra{0} + \alpha\beta^*\ket{0}\!\bra{1} + \dots}
+\end{align*}
+\uncover<3->{Los términos cruzados son las \hl<3->{coherencias}.}
+\end{frame}
+
+\closingslide{Gracias por leer}
+  {Una frase final o lo que viene en el próximo post.}
+
+\end{document}

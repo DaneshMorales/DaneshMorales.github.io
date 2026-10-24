@@ -1,0 +1,85 @@
+% Theme: Textbook  --  best for definitions, theorems and short proofs
+% Build:  ./build.sh example-textbook.tex   (or compile on Overleaf)
+\documentclass[12pt]{beamer}
+\usetheme{igtextbook}
+
+\ighandle{@quantum_danesh}
+\igseries{Corrección de errores}
+\igissue{04}
+
+\begin{document}
+
+\coverblurb{Qué es un código, cuándo un error es corregible y cómo
+comprobarlo con una ecuación.}
+\coverslide{Capítulo 4}
+  {Las condiciones de Knill--Laflamme}
+  {¿Cuándo se puede deshacer un error?}
+
+\begin{frame}{Códigos y errores}{4.1}
+\begin{defbox}[Definición 4.1]
+Un \key{código cuántico} es un subespacio $\mathcal{C}\subseteq\mathcal{H}$
+con proyector $P$. Un conjunto de errores $\{E_a\}$ es \key{corregible} si
+existe un canal $\mathcal{R}$ tal que
+\[
+  \mathcal{R}\Big(\sum_a E_a\,\rho\,E_a^\dagger\Big) = \rho
+\]
+para todo estado $\rho$ con soporte en $\mathcal{C}$.
+\end{defbox}
+La pregunta es cómo saberlo sin construir $\mathcal{R}$.
+\end{frame}
+
+\begin{frame}{El teorema}{4.2}
+\begin{thmbox}[Teorema 4.2 (Knill--Laflamme)]
+$\{E_a\}$ es corregible en $\mathcal{C}$ si y solo si
+\[
+  P\,E_a^\dagger E_b\,P = \lambda_{ab}\,P \qquad \text{para todo } a,b,
+\]
+con $(\lambda_{ab})$ una matriz hermítica.
+\end{thmbox}
+Equivalentemente, para una base ortonormal $\{\ket{i}\}$ de $\mathcal{C}$:
+\keyeq{\mel{i}{E_a^\dagger E_b}{j} = \lambda_{ab}\,\delta_{ij}}
+\end{frame}
+
+\begin{frame}{Cómo leerlo}{4.2}
+\[
+  \mel{i}{E_a^\dagger E_b}{j}
+  = \explain<2->{\mhl<2->{\lambda_{ab}}}{igual para todo $i$}\;
+    \explain<3->{\mhl*<3->{\delta_{ij}}}{no mezcla palabras}
+\]
+\begin{itemize}
+  \item<2-> $\lambda_{ab}$ no depende de $i$: el entorno no aprende
+        \hl{nada} sobre el estado lógico.
+  \item<3-> $\delta_{ij}$: los errores mantienen ortogonales las palabras
+        código, así que se pueden distinguir.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Ejemplo: el código de repetición}{4.3}
+Sea $\mathcal{C} = \operatorname{span}\{\ket{000},\ket{111}\}$ con errores
+$\{\id, X_1, X_2, X_3\}$.
+\begin{igproof}[Comprobación]
+Si $a\neq b$, $E_a^\dagger E_b$ es un producto de una o dos $X$ y saca
+$\ket{000}$ y $\ket{111}$ del código, así que
+$\mel{i}{E_a^\dagger E_b}{j} = 0$. Si $a = b$, $E_a^\dagger E_a = \id$.
+\end{igproof}
+\keyeq{\lambda_{ab} = \delta_{ab}}
+Corrige cualquier error de un solo bit.
+\end{frame}
+
+\begin{frame}{Códigos degenerados}{4.4}
+\begin{notebox}[Observación 4.4]
+$\lambda$ no tiene por qué ser invertible. Si no lo es, el código es
+\key{degenerado}: errores distintos actúan igual sobre el código y no hace
+falta distinguirlos.
+\end{notebox}
+El código de Shor de 9 qubits es el ejemplo clásico: $Z_1$ y $Z_2$ hacen
+lo mismo sobre sus palabras código.
+\vfill
+{\footnotesize\color{igMuted}E.~Knill, R.~Laflamme, Phys.\ Rev.\ A \textbf{55}, 900 (1997).\par}
+\end{frame}
+
+\closingslide{Una ecuación para decidir}
+  {Próximo capítulo: los códigos estabilizadores, donde estas condiciones
+   se comprueban contando conmutadores.}
+
+\end{document}

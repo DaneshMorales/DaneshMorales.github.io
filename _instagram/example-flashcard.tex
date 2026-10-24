@@ -1,0 +1,70 @@
+% Theme: Flashcard  --  best for quizzes: question -> hint -> answer
+% Build:  ./build.sh example-flashcard.tex   (or compile on Overleaf)
+\documentclass[12pt]{beamer}
+\usetheme{igflashcard}
+
+\ighandle{@quantum_danesh}
+\igseries{Quiz cuántico}
+\igissue{07}
+
+\begin{document}
+
+\coverslide{Quiz 07}
+  {¿Es la transpuesta un canal cuántico?}
+  {Piensa tu respuesta antes de deslizar.}
+
+\begin{frame}{¿Cuál es correcta?}{Pregunta}
+Sea $T(\rho) = \rho^{\top}$ la transpuesta, actuando sobre un qubit.
+\begin{enumerate}[(A)]
+  \item Sí: es completamente positiva y preserva la traza.
+  \item Es positiva y preserva la traza, pero no es completamente positiva.
+  \item Ni siquiera es positiva.
+  \item Es completamente positiva, pero no preserva la traza.
+\end{enumerate}
+\end{frame}
+
+\begin{frame}{¿Sigue siendo un estado?}{Pista}
+\begin{notebox}
+Aplica $\mathrm{id}\otimes T$ a la mitad de
+\[
+  \ket{\Phi^+} = \tfrac{1}{\sqrt2}\big(\ket{00} + \ket{11}\big)
+\]
+y mira los autovalores de lo que sale.
+\end{notebox}
+Si alguno es negativo, el resultado ya no es una matriz densidad.
+\end{frame}
+
+\begin{frame}{Es la (B)}{Respuesta}
+\begin{enumerate}[(A)]
+  \item {\color{igMuted}Sí: es completamente positiva y preserva la traza.}
+  \item \hl{Es positiva y preserva la traza, pero no es completamente
+        positiva.} {\color{igAccent}\checkmark}
+  \item {\color{igMuted}Ni siquiera es positiva.}
+  \item {\color{igMuted}Es completamente positiva, pero no preserva la traza.}
+\end{enumerate}
+\end{frame}
+
+\begin{frame}{La cuenta}{Por qué}
+\begin{align*}
+  (\mathrm{id}\otimes T)\big(\ketbra{\Phi^+}\big)
+  &= \frac12\sum_{i,j}\ket{i}\!\bra{j}\otimes\ket{j}\!\bra{i}\\
+  &= \frac12\,\mathrm{SWAP}
+\end{align*}
+$\mathrm{SWAP}$ tiene autovalores $+1$ (tres veces) y $-1$ (una vez):
+\keyeq{\operatorname{spec} = \big\{\tfrac12,\ \tfrac12,\ \tfrac12,\ \mhl{-\tfrac12}\big\}}
+Un autovalor negativo: \key{no es completamente positiva}, aunque
+$\rho^{\top}$ conserve espectro y traza.
+\end{frame}
+
+\begin{frame}{Positivo no es completamente positivo}{Para recordar}
+Por eso la transpuesta no es un canal, aunque mande estados a estados.
+\begin{thmbox}[Criterio de Peres--Horodecki]
+Si la traspuesta parcial de un estado tiene un autovalor negativo, el
+estado está entrelazado. Para dos qubits, también vale al revés.
+\end{thmbox}
+\end{frame}
+
+\closingslide{¿Acertaste?}
+  {Cuéntame en los comentarios qué opción elegiste antes de deslizar.}
+
+\end{document}

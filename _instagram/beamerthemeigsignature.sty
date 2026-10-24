@@ -1,0 +1,115 @@
+% =====================================================================
+%  Signature -- the current @quantum_danesh look, set in Palatino
+%  Night background, teal linework, amber highlights, handle and
+%  counter on top, series and "desliza" below, an amber progress bar.
+%  Colours sampled from the existing posts.  Content sits centred.
+%  Best for: the main series (Qubits desde cero), diagrams + one idea.
+% =====================================================================
+\ProvidesPackage{beamerthemeigsignature}[2026/10/24]
+\RequirePackage{igpost}
+
+\definecolor{igBG}{HTML}{10141E}
+\definecolor{igPanel}{HTML}{18202D}
+\definecolor{igFG}{HTML}{E9EEF5}
+\definecolor{igMuted}{HTML}{9096A2}
+\definecolor{igAccent}{HTML}{E6B85C}  % amber
+\definecolor{igAccentB}{HTML}{78C6D2} % teal
+\definecolor{igHL}{HTML}{3A3221}      % amber badge
+\definecolor{igHLB}{HTML}{1A3741}     % teal badge
+\definecolor{igOnHL}{HTML}{E6B85C}
+\definecolor{igNote}{HTML}{78C6D2}
+\definecolor{igRule}{HTML}{2C3545}
+\definecolor{igBoxBG}{HTML}{18202D}
+\definecolor{igBoxFrame}{HTML}{78C6D2}
+\definecolor{igTrack}{HTML}{2C3545}
+\igapplycolors
+\setbeamercolor{frametitle}{fg=igFG}
+\setbeamercolor{alerted text}{fg=igAccentB}
+\setbeamerfont{alerted text}{series=\normalfont}
+\setbeamerfont{explain}{size=\footnotesize,shape=\upshape}
+
+\beamer@centeredtrue    % like the original: the content floats in the middle
+\newcommand\igcaps[2][160]{\textls[#1]{\MakeUppercase{#2}}}
+
+% \hl colours the words amber, as in the original posts
+\renewcommand<>{\hl}[1]{\alt#2{{\color{igAccent}#1}}{#1}}
+
+\setbeamertemplate{background canvas}{%
+  \begin{tikzpicture}[x=1mm,y=1mm]
+    \useasboundingbox (0,0) rectangle (108,135);
+    \fill[igBG] (0,0) rectangle (108,135);
+    \igprogress{0}{108}{0}{1.1}{igAccent}{igTrack}
+  \end{tikzpicture}}
+
+% --- head: handle | counter;  foot: series | swipe cue ---------------------
+\setbeamertemplate{headline}{%
+  \vspace*{7.2mm}%
+  \hbox to\paperwidth{\hspace{9mm}%
+    {\footnotesize\color{igMuted}\inserthandle}\hfill
+    {\footnotesize\color{igMuted}\insertslideoftwo}\hspace{9mm}}}
+
+\setbeamertemplate{footline}{%
+  \hbox to\paperwidth{\hspace{9mm}%
+    {\scriptsize\bfseries\color{igMuted}\igcaps{\insertseriesline}}\hfill
+    {\footnotesize\color{igAccent}\insertswipe}\hspace{9mm}}%
+  \vspace*{7mm}}
+
+\setbeamertemplate{frametitle}{%
+  \vspace*{5mm}%
+  \ifx\insertframesubtitle\@empty\else
+    {\scriptsize\bfseries\color{igAccentB}\igcaps{\insertframesubtitle}\par}\vspace{1.2mm}%
+  \fi
+  {\LARGE\bfseries\color{igFG}\insertframetitle\par}%
+  \vspace{1mm}}
+
+% --- lists ------------------------------------------------------------
+\setbeamertemplate{itemize item}{\raisebox{0.16em}{\tikz\fill[igAccentB] (0,0) circle (1.3pt);}}
+\setbeamertemplate{enumerate item}{\color{igAccentB}\bfseries\insertenumlabel.}
+
+% --- highlights: badges with amber (or teal) text --------------------------
+\tikzset{ig mhl text/.style={text=igAccent}, ig mhl* text/.style={text=igAccentB}}
+\renewcommand\igmhlpainter[3]{%
+  \fill[ig mhl now, rounded corners=2pt] (-\igmhlpad,-#3-\igmhlpad) rectangle (#1+\igmhlpad,#2+\igmhlpad);
+  \draw[igTrack, line width=0.4pt, rounded corners=2pt] (-\igmhlpad,-#3-\igmhlpad) rectangle (#1+\igmhlpad,#2+\igmhlpad);}
+
+% --- boxes: dark panels with teal linework -------------------------------
+\tcbset{
+  ig/base/.append style={arc=2mm, boxrule=0.6pt, colback=igPanel, colframe=igAccentB,
+    left=3.5mm, right=3.5mm, top=2.4mm, bottom=2.4mm,
+    detach title, before upper={\ifx\tcbtitletext\@empty\else
+      {\scriptsize\bfseries\color{igAccentB}\igcaps[120]{\tcbtitletext}}\par\vspace{1mm}\fi}},
+  ig/thm/.style={colframe=igAccent, before upper={\ifx\tcbtitletext\@empty\else
+      {\scriptsize\bfseries\color{igAccent}\igcaps[120]{\tcbtitletext}}\par\vspace{1mm}\fi}},
+  ig/note/.style={boxrule=0pt, frame hidden, borderline west={0.8mm}{0pt}{igAccentB},
+    arc=0mm, fontupper=\small},
+  ig/eq/.style={top=3mm, bottom=3mm},
+}
+
+% --- cover and closing ----------------------------------------------------
+\setbeamertemplate{ig cover}{%
+  \vspace*{7.2mm}%
+  {\footnotesize\color{igMuted}\inserthandle\par}%
+  \vfill
+  {\scriptsize\bfseries\color{igAccentB}\igcaps{\insertcoverkicker}\par}\vspace{4mm}%
+  {\fontsize{32}{36}\selectfont\bfseries\color{igFG}\insertcovertitle\par}\vspace{6mm}%
+  {\color{igAccent}\rule{14mm}{1.1mm}}\par\vspace{6mm}%
+  {\large\color{igMuted}\insertcoversubtitle\par}%
+  \ifcoverblurb{\vspace{5mm}{\color{igMuted}\insertcoverblurb\par}}%
+  \vfill
+  {\scriptsize\bfseries\color{igMuted}\igcaps{\insertseriesline}\hfill
+   \footnotesize\mdseries\color{igAccent}\insertswipe\par}%
+  \vspace*{7mm}}
+
+\setbeamertemplate{ig closing}{%
+  \vspace*{7.2mm}%
+  {\footnotesize\color{igMuted}\inserthandle\par}%
+  \vfill
+  {\fontsize{28}{33}\selectfont\bfseries\insertclosinghead\par}\vspace{5mm}%
+  {\color{igAccent}\rule{14mm}{1.1mm}}\par\vspace{5mm}%
+  {\large\color{igMuted}\insertclosingtext\par}\vspace{9mm}%
+  \igctarow[igAccent]\par
+  \vfill
+  {\scriptsize\bfseries\color{igMuted}\igcaps{\insertseriesline}\par}%
+  \vspace*{7mm}}
+
+\endinput

@@ -1,0 +1,140 @@
+% =====================================================================
+%  Notebook -- a page from a squared lab notebook
+%  5 mm grid paper, a red margin line and punched holes, blue-ink
+%  titles, red-pen remarks, highlighter marks and hand-boxed answers.
+%  Best for: worked exercises, "let's compute", problem + solution.
+% =====================================================================
+\ProvidesPackage{beamerthemeignotebook}[2026/10/24]
+\RequirePackage{igpost}
+
+\definecolor{igBG}{HTML}{FFFEFA}
+\definecolor{igGrid}{HTML}{D3E4F2}
+\definecolor{igMargin}{HTML}{E59C9C}
+\definecolor{igFG}{HTML}{1F2A44}      % ink
+\definecolor{igMuted}{HTML}{6B7894}
+\definecolor{igAccent}{HTML}{1D44A8}  % blue pen
+\definecolor{igAccentB}{HTML}{C62828} % red pen
+\definecolor{igHL}{HTML}{FFF06A}      % yellow highlighter
+\definecolor{igHLB}{HTML}{B8F2C8}     % green highlighter
+\definecolor{igOnHL}{HTML}{1F2A44}
+\definecolor{igNote}{HTML}{C62828}
+\definecolor{igRule}{HTML}{1D44A8}
+\definecolor{igBoxBG}{HTML}{FFFEFA}
+\definecolor{igBoxFrame}{HTML}{1D44A8}
+\definecolor{igSticky}{HTML}{FFF2A8}
+\igapplycolors
+\setbeamercolor{framesubtitle}{fg=igAccentB}
+
+\setbeamersize{text margin left=20mm, text margin right=9mm}
+
+% --- the paper ------------------------------------------------------------
+\setbeamertemplate{background canvas}{%
+  \begin{tikzpicture}[x=1mm,y=1mm]
+    \useasboundingbox (0,0) rectangle (108,135);
+    \fill[igBG] (0,0) rectangle (108,135);
+    \draw[igGrid, line width=0.3pt, step=5] (0,0) grid (108,135);
+    \draw[igMargin, line width=0.6pt] (16,0) -- (16,135);
+    \foreach \y in {12,25.5,...,128}{
+      \fill[black!10] (7,\y) circle (1.9);
+      \fill[igBG!80!black!25] (7,\y+0.25) circle (1.6);}
+    % progress: a highlighter stroke along the bottom edge
+    \igsetprogress
+    \fill[igGrid!45] (0,0) rectangle (108,2.2);
+    \fill[igHL, opacity=0.9] (0,0) -- ({108*\igfrac},0) -- ({108*\igfrac-1.2},2.2) -- (0,2.2) -- cycle;
+  \end{tikzpicture}}
+
+% --- head: handle | counter;  foot: series | swipe cue ---------------------
+\setbeamertemplate{headline}{%
+  \vspace*{7mm}%
+  \hbox to\paperwidth{\hspace{20mm}%
+    {\footnotesize\color{igMuted}\inserthandle}\hfill
+    {\footnotesize\color{igFG}\insertslideoftwo}\hspace{9mm}}}
+
+\setbeamertemplate{footline}{%
+  \hbox to\paperwidth{\hspace{20mm}%
+    {\footnotesize\color{igAccentB}\textls[80]{\textsc{\MakeLowercase{\insertseriesline}}}}\hfill
+    {\small\itshape\color{igAccent}\insertswipe}\hspace{9mm}}%
+  \vspace*{7mm}}
+
+% --- titles: red kicker, blue-ink title underlined twice ------------------
+\newsavebox\ig@titlebox
+\setbeamertemplate{frametitle}{%
+  \vspace*{4.5mm}%
+  \ifx\insertframesubtitle\@empty\else
+    {\small\itshape\color{igAccentB}\insertframesubtitle\par}\vspace{0.4mm}%
+  \fi
+  {\LARGE\color{igAccent}\insertframetitle\par}%
+  \sbox\ig@titlebox{\LARGE\insertframetitle}%
+  \pgfmathsetlengthmacro\ig@ul{min(\wd\ig@titlebox,\linewidth)}%
+  \vspace{0.3mm}%
+  \tikz{\draw[igAccent, line width=0.6pt] (0,0) -- (\ig@ul,0.2pt);
+        \draw[igAccent, line width=0.45pt] (0.5mm,-1.1mm) -- (\ig@ul-4mm,-1.0mm);}\par
+  \vspace{1.5mm}}
+
+% --- lists ------------------------------------------------------------
+\setbeamertemplate{itemize item}{\raisebox{0.18em}{\tikz\fill[igAccent] (0,0) circle (1.25pt);}}
+\setbeamertemplate{enumerate item}{\color{igAccentB}\bfseries\insertenumlabel)}
+
+% --- highlights: a highlighter stroke with slanted ends --------------------
+\renewcommand\igmhlpainter[3]{%
+  \fill[ig mhl now, opacity=0.9]
+    (-\igmhlpad-0.6pt,-#3-\igmhlpad) -- (#1+\igmhlpad,-#3-\igmhlpad)
+    -- (#1+\igmhlpad+0.8pt,#2+\igmhlpad) -- (-\igmhlpad,#2+\igmhlpad) -- cycle;}
+
+% --- boxes ----------------------------------------------------------------
+\tcbset{
+  ig/base/.append style={sharp corners, boxrule=0pt, frame hidden, colback=igBG,
+    left=3mm, right=3mm, top=2mm, bottom=2mm,
+    detach title, before upper={\ifx\tcbtitletext\@empty\else
+      {\small\bfseries\color{igAccentB}\tcbtitletext}\par\vspace{0.6mm}\fi}},
+  % definition: red margin bar
+  ig/def/.style={borderline west={1.2pt}{0pt}{igAccentB}, colback=igBG},
+  % theorem / result: blue ink frame
+  ig/thm/.style={borderline={0.6pt}{0pt}{igAccent},
+    before upper={\ifx\tcbtitletext\@empty\else
+      {\small\bfseries\color{igAccent}\tcbtitletext}\par\vspace{0.6mm}\fi}},
+  % note: a sticky note
+  ig/note/.style={colback=igSticky, drop fuzzy shadow=black!35, fontupper=\small,
+    before upper={\ifx\tcbtitletext\@empty\else
+      {\small\bfseries\color{igFG}\tcbtitletext}\par\vspace{0.6mm}\fi}},
+  % key equation: the answer, boxed twice by hand
+  ig/eq/.style={borderline={0.7pt}{0pt}{igAccent}, borderline={0.4pt}{1.1mm}{igAccent},
+    top=2.4mm, bottom=2.4mm},
+}
+
+% --- cover ------------------------------------------------------------
+\setbeamertemplate{ig cover}{%
+  \vspace*{7mm}%
+  {\footnotesize\color{igMuted}\inserthandle\hfill\itshape\today\par}%
+  \vspace{11mm}%
+  \tikz[baseline]\node[rotate=4, draw=igAccentB, double, double distance=0.6pt, line width=0.5pt,
+    inner xsep=2.5mm, inner ysep=1.4mm, text=igAccentB, font=\small\bfseries]
+    {\textls[150]{\MakeUppercase{\insertcoverkicker}}};\par
+  \vspace{7mm}%
+  {\fontsize{25}{30}\selectfont\color{igAccent}\insertcovertitle\par}%
+  \vspace{2mm}%
+  \tikz{\draw[igAccent, line width=0.7pt] (0,0) -- (0.62\linewidth,0.3pt);
+        \draw[igAccent, line width=0.5pt] (1mm,-1.3mm) -- (0.55\linewidth,-1.2mm);}\par
+  \vspace{6mm}%
+  {\large\color{igFG}\insertcoversubtitle\par}%
+  \ifcoverblurb{\vspace{5mm}{\color{igMuted}\insertcoverblurb\par}}%
+  \vfill
+  {\footnotesize\color{igAccentB}\textls[80]{\textsc{\MakeLowercase{\insertseriesline}}}\hfill
+   \large\itshape\color{igAccent}\insertswipe\par}%
+  \vspace*{7mm}}
+
+\setbeamertemplate{ig closing}{%
+  \vfill
+  \begin{tcolorbox}[enhanced, sharp corners, frame hidden, colback=igSticky,
+      drop fuzzy shadow=black!40, left=5mm, right=5mm, top=5mm, bottom=5mm, width=0.94\linewidth,
+      halign=flush left]
+    {\LARGE\color{igAccent}\insertclosinghead\par}\vspace{3mm}%
+    {\color{igFG}\insertclosingtext\par}\vspace{6mm}%
+    {\def\igctasize{\footnotesize}\igctarow[igAccentB]}\par
+  \end{tcolorbox}
+  \vspace{4mm}%
+  {\small\color{igFG}\inserthandle\par}\vspace{0.5mm}%
+  {\footnotesize\color{igAccentB}\textls[80]{\textsc{\MakeLowercase{\insertseriesline}}}\par}%
+  \vfill\vspace*{6mm}}
+
+\endinput
