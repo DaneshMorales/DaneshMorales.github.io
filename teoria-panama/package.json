@@ -1,0 +1,14 @@
+{
+  "name": "teoria-panama",
+  "private": true,
+  "description": "Sitio de una iniciativa para fortalecer la investigación teórica en física y matemática en Panamá.",
+  "scripts": {
+    "dev": "node scripts/dev.mjs",
+    "build": "node scripts/build.mjs",
+    "check": "node scripts/build.mjs && node scripts/check.mjs",
+    "check:externos": "node scripts/build.mjs && node scripts/check.mjs --externos"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
