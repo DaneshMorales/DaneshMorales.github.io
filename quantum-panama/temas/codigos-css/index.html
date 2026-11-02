@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="es" class="sin-js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>De códigos clásicos a códigos cuánticos: construcción CSS · Quantum Panama</title>
+<meta name="description" content="Tema 1 de tesis en información cuántica. ¿Cómo se transforma un código corrector clásico en uno que protege información cuántica? Muchos códigos cuánticos se construyen a partir de dos códigos clásicos. Este tema recorre esa construcción, llamada CSS (Calderbank–Shor–Steane), con el código de Steane como ejemplo central.">
+<meta name="theme-color" content="#f7f3eb">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="es_PA">
+<meta property="og:site_name" content="Quantum Panama">
+<meta property="og:title" content="De códigos clásicos a códigos cuánticos: construcción CSS">
+<meta property="og:description" content="Tema 1 de tesis en información cuántica. ¿Cómo se transforma un código corrector clásico en uno que protege información cuántica? Muchos códigos cuánticos se construyen a partir de dos códigos clásicos. Este tema recorre esa construcción, llamada CSS (Calderbank–Shor–Steane), con el código de Steane como ejemplo central.">
+<link rel="canonical" href="https://daneshmorales.github.io/quantum-panama/temas/codigos-css/">
+<meta property="og:url" content="https://daneshmorales.github.io/quantum-panama/temas/codigos-css/">
+<meta property="og:image" content="https://daneshmorales.github.io/quantum-panama/img/social.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Circuito cuántico sobre fondo marfil con el lema «Investigar en física y matemática desde Panamá».">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="../../img/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../../img/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="../../img/apple-touch-icon.png">
+<link rel="preload" href="../../fuentes/source-sans-3-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../../fuentes/domitian-bold.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../../css/estilos.css?v=5d340f4841">
+<script>document.documentElement.className='js'</script>
+<script src="../../js/sitio.js?v=f0fc0ec150" defer></script>
+</head>
+<body class="">
+<a class="saltar" href="#contenido">Saltar al contenido</a>
+<header class="cabecera">
+  <div class="envoltura cabecera__fila">
+    <a class="marca" href="../../">
+      <svg class="marca__icono" viewBox="0 0 32 32" aria-hidden="true" focusable="false"><rect width="32" height="32" rx="7" class="mi-fondo"/><path class="mi-hilo" d="M0 9.5H32M0 20.25H32"/><path class="mi-trazo" d="M16 9.5V25.5M10.75 20.25H21.25"/><circle class="mi-objetivo" cx="16" cy="20.25" r="5.25"/><circle class="mi-control" cx="16" cy="9.5" r="2.5"/></svg>
+      <span class="marca__texto"><span class="marca__nombre" lang="en">Quantum Panama</span><span class="marca__descriptor">Física, matemática e información cuántica</span></span>
+    </a>
+    <button class="menu-boton" type="button" aria-expanded="false" aria-controls="menu-principal" data-menu-boton>
+      <span class="menu-boton__icono" aria-hidden="true"></span>Menú
+    </button>
+    <nav id="menu-principal" class="menu" aria-label="Principal">
+      <ul class="menu__lista"><li><a href="../../vision/">Visión</a></li><li><a href="../../equipo/">Equipo</a></li><li><a href="../../mentoria/">Mentoría</a></li><li><a href="../../temas/" class="activo">Temas</a></li><li><a href="../../recursos/">Recursos</a></li><li><a href="../../charla/">Charla</a></li><li><a href="../../preguntas/">Preguntas</a></li></ul>
+      <a class="boton boton--pequeno menu__contacto" href="../../contacto/">Contacto</a>
+    </nav>
+  </div>
+</header>
+<main id="contenido" tabindex="-1">
+
+<article class="ficha">
+<header class="cabecera-pagina">
+  <div class="envoltura">
+    <nav class="migas" aria-label="Ruta de navegación"><ol><li><a href="../../">Inicio</a></li><li><a href="../../temas/">Temas</a></li><li><span aria-current="page">Tema 1</span></li></ol></nav>
+    <p class="etiqueta">Tema 1 de 14</p>
+    <h1>De códigos clásicos a códigos cuánticos: construcción CSS</h1>
+    
+    <p class="ficha__pregunta"><span class="ficha__pregunta-etiqueta">Pregunta de investigación</span>¿Cómo se transforma un código corrector clásico en uno que protege información cuántica?</p>
+    <ul class="chips" aria-label="Etiquetas"><li class="chip chip--interes">Matemática pura</li><li class="chip chip--interes">Programación</li><li class="chip chip--tipo">Teoría</li><li class="chip chip--tipo">Simulación y cómputo</li></ul>
+    <div class="acciones"><a class="boton boton--primario" href="../../contacto/?tema=codigos-css">Me interesa este tema</a></div>
+  </div>
+</header>
+
+<div class="envoltura ficha__rejilla">
+  <section class="ficha__resumen" aria-labelledby="pocas-palabras">
+    <h2 id="pocas-palabras">En pocas palabras</h2>
+    <p class="destacado">Muchos códigos cuánticos se construyen a partir de dos códigos clásicos. Este tema recorre esa construcción, llamada CSS (Calderbank–Shor–Steane), con el código de Steane como ejemplo central.</p>
+  </section>
+
+  <aside class="ficha__lateral" aria-label="Preparación y encaje">
+    <section class="ficha__bloque" aria-labelledby="preparacion">
+      <h2 id="preparacion">Materias y conocimientos útiles</h2>
+      <h3 class="subtitulo">Para empezar</h3>
+      <ul class="lista-simple"><li>Álgebra lineal</li><li>Algo de álgebra abstracta</li></ul>
+      <h3 class="subtitulo">Se aprende durante el proyecto</h3>
+      <ul class="lista-simple"><li>Códigos lineales binarios y matrices de chequeo</li><li>Formalismo de estabilizadores</li><li>Construcción CSS y código de Steane</li></ul>
+      <p class="ficha__perfil"><span class="tenue">Pensado para:</span> Estudiantes de Matemática con álgebra lineal y algo de álgebra abstracta.</p>
+      <p class="ficha__entrada"><strong>Buena entrada.</strong> El documento lo señala como buena entrada para estudiantes de Matemática. El curso de IBM sobre corrección de errores es un punto de partida.</p>
+    </section>
+    <section class="ficha__bloque" aria-labelledby="encaje">
+      <h2 id="encaje">Encaja con</h2>
+      <ul class="chips"><li class="chip chip--interes">Matemática pura</li><li class="chip chip--interes">Programación</li></ul>
+      <h2 class="ficha__bloque-titulo">Tipo de trabajo</h2>
+      <ul class="chips"><li class="chip chip--tipo">Teoría</li><li class="chip chip--tipo">Simulación y cómputo</li></ul>
+    </section>
+    <div class="ficha__bloque ficha__accion">
+      <p>¿Te interesa? Escríbenos con este tema ya indicado en el mensaje.</p>
+      <a class="boton boton--primario" href="../../contacto/?tema=codigos-css">Me interesa este tema</a>
+    </div>
+  </aside>
+
+  <div class="ficha__principal">
+    <section aria-labelledby="que-harias">
+      <h2 id="que-harias">Qué harías</h2>
+      <p>Desarrollarías la teoría de códigos binarios, matrices de chequeo, estabilizadores y la construcción CSS, usando el código de Steane como ejemplo central. Implementarías un programa que verifique la conmutación de los estabilizadores, el número de qubits lógicos y la distancia en ejemplos pequeños. Como extensión, estudiarías un conjunto acotado de modificaciones de las matrices de chequeo.</p>
+      <h3 class="subtitulo">Cómo se limita el alcance</h3>
+      <ul class="lista-marcada"><li>Ejemplos pequeños, verificables por computadora.</li><li>La extensión se limita a un conjunto acotado de modificaciones de las matrices de chequeo.</li></ul>
+    </section>
+
+    <section aria-labelledby="producto">
+      <h2 id="producto">Producto esperado</h2>
+      <p>Una exposición matemática rigurosa acompañada de una herramienta reproducible para analizar códigos.</p>
+      <ul class="chips" aria-label="Tipo de producto"><li class="chip chip--producto">Exposición rigurosa</li><li class="chip chip--producto">Código reproducible</li></ul>
+    </section>
+
+    
+
+    <section aria-labelledby="bibliografia">
+      <h2 id="bibliografia">Artículos y recursos iniciales</h2>
+      <ol class="referencias"><li class="referencia">
+  <span class="referencia__autores">A. R. Calderbank y P. W. Shor (1996).</span>
+  <cite lang="en">Good quantum error-correcting codes exist</cite>.
+  <span class="referencia__fuente"><em>Physical Review A</em> <strong>54</strong>, 1098.</span>
+  
+  <span class="referencia__enlaces"><a href="https://doi.org/10.1103/PhysRevA.54.1098" rel="noopener">DOI</a> · <a href="https://arxiv.org/abs/quant-ph/9512032" rel="noopener">arXiv:quant-ph/9512032</a></span>
+</li><li class="referencia">
+  <span class="referencia__autores">IBM Quantum Learning.</span>
+  <cite lang="en">Foundations of quantum error correction</cite>.
+  <span class="referencia__fuente">Curso en línea.</span>
+  <span class="referencia__nota">Estabilizadores, códigos CSS y código tórico. En inglés.</span>
+  <span class="referencia__enlaces"><a href="https://quantum.cloud.ibm.com/learning/en/courses/foundations-of-quantum-error-correction" rel="noopener">Abrir recurso</a></span>
+</li></ol>
+    </section>
+
+    <aside class="nota"><p class="nota__titulo">Un punto de partida</p><p>Este tema es una propuesta inicial: el alcance se ajusta contigo según tu preparación, tu tiempo y los requisitos de tu universidad. No es una plaza abierta ni garantiza un resultado novedoso; parte del trabajo consiste en situarlo en la literatura.</p></aside>
+
+    <div class="ficha__bloque ficha__accion ficha__accion--final">
+      <p>¿Te interesa? Escríbenos con este tema ya indicado en el mensaje.</p>
+      <a class="boton boton--primario" href="../../contacto/?tema=codigos-css">Me interesa este tema</a>
+    </div>
+  </div>
+</div>
+
+<nav class="envoltura ficha__vecinos" aria-label="Otros temas">
+  <span></span>
+  <a class="vecino vecino--todos" href="../../temas/">Todos los temas</a>
+  <a class="vecino vecino--siguiente" href="../../temas/decodificacion-adaptada/"><span class="vecino__etiqueta">Tema 2 →</span><span class="vecino__titulo">Decodificación adaptada al ruido</span></a>
+</nav>
+</article>
+</main>
+<footer class="pie">
+  <div class="envoltura pie__rejilla">
+    <div class="pie__marca">
+      <p class="pie__nombre" lang="en">Quantum Panama</p>
+      <p class="pie__descriptor">Física, matemática e información cuántica</p>
+      <p>Iniciativa académica en formación de Danesh Morales Hashemi y Marc Urcia para fortalecer la investigación teórica en Panamá.</p>
+    </div>
+    <nav class="pie__nav" aria-label="Pie de página">
+      <div class="pie__columna"><h2 class="pie__titulo">Explorar</h2><ul><li><a href="../../temas/">Temas de tesis</a></li><li><a href="../../recursos/">Recursos</a></li><li><a href="../../charla/">La charla</a></li></ul></div>
+      <div class="pie__columna"><h2 class="pie__titulo">Participar</h2><ul><li><a href="../../mentoria/">Mentoría</a></li><li><a href="../../preguntas/">Preguntas frecuentes</a></li><li><a href="../../contacto/">Contacto</a></li></ul></div>
+      <div class="pie__columna"><h2 class="pie__titulo">La iniciativa</h2><ul><li><a href="../../vision/">Visión</a></li><li><a href="../../equipo/">Quiénes somos</a></li></ul></div>
+    </nav>
+    <div class="pie__columna">
+      <h2 class="pie__titulo">Escríbenos</h2>
+      <ul><li><a href="mailto:danesh.moraleshashemi@uwaterloo.ca">danesh.moraleshashemi@uwaterloo.ca</a></li><li><a href="mailto:marc.urciasoto@uwaterloo.ca">marc.urciasoto@uwaterloo.ca</a></li></ul>
+    </div>
+  </div>
+  <div class="envoltura pie__legal">
+    <p>Las afiliaciones mencionadas describen a las personas y no implican patrocinio institucional.</p>
+    <p>Contenido revisado el 1 de noviembre de 2026.</p>
+  </div>
+</footer>
+</body>
+</html>
