@@ -1,15 +1,14 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
-  <script>(function(){var t=localStorage.getItem('theme');if(t==='dark'||(t===null&&window.matchMedia('(prefers-color-scheme: dark)').matches)){document.documentElement.setAttribute('data-theme','dark');}})();</script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Motivated by the Banach fixed-point theorem, we construct a single-qubit channel whose repeated application drives any initial state to any chosen target state, with an interactive Bloch-sphere explorer.">
   <title>Constructing Qubit Channels with Arbitrary Fixed Points — Danesh Morales Hashemi</title>
-  <link rel="icon" type="image/svg+xml" href="../../icon.svg?v=2">
+  <link rel="icon" type="image/svg+xml" href="../../icon.svg?v=3">
   <meta name="author" content="Danesh Morales Hashemi">
   <link rel="canonical" href="https://daneshmorales.github.io/blog/posts/fixed-point-qubit-channels.html">
-  <link rel="alternate" type="application/rss+xml" title="Danesh Morales Hashemi — Blog" href="/feed.xml">
+  <link rel="alternate" type="application/rss+xml" title="Danesh Morales Hashemi — Blog" href="../../feed.xml">
   <!-- Link previews (LinkedIn, X, Slack, ...) -->
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="Danesh Morales Hashemi">
@@ -39,11 +38,8 @@
     "mainEntityOfPage": "https://daneshmorales.github.io/blog/posts/fixed-point-qubit-channels.html"
   }
   </script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-  <link rel="stylesheet" href="../../styles.css?v=20261004">
+  <script src="../../script.js?v=20261120-5"></script>
+  <link rel="stylesheet" href="../../styles.css?v=20261120-7">
 
   <!-- MathJax: shared blog configuration -->
   <script src="../mathjax-config.js?v=20260925"></script>
@@ -51,64 +47,29 @@
 </head>
 <body>
 
-  <nav class="navbar" id="navbar">
-    <div class="nav-container">
-      <a href="/" class="nav-brand">Danesh Morales Hashemi</a>
-      <div class="nav-controls">
-        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
-          <span class="toggle-track"><span class="toggle-thumb"><i class="fas fa-sun"></i></span></span>
-        </button>
-        <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
-          <span></span><span></span><span></span>
-        </button>
-      </div>
-      <div class="nav-menu" id="nav-menu">
-        <div class="nav-links">
-          <button class="theme-toggle theme-toggle-desk" aria-label="Toggle dark mode">
-            <span class="toggle-track"><span class="toggle-thumb"><i class="fas fa-sun"></i></span></span>
-          </button>
-          <a href="../../index.html#about"   class="nav-link">About</a>
-          <a href="../../publications.html"  class="nav-link">Publications</a>
-          <a href="../../blog/index.html"    class="nav-link active">Blog</a>
-          <a href="../../index.html#contact" class="nav-link">Contact</a>
-          <a href="../../files/Danesh_Resume-1.pdf" class="nav-cv" target="_blank" rel="noopener noreferrer">
-            <i class="fas fa-file-alt"></i> CV
-          </a>
-        </div>
-        <div class="nav-meta">
-          <div class="nav-socials">
-            <a href="https://scholar.google.com/citations?hl=en&user=f_ltr8oAAAAJ" class="social-icon" aria-label="Google Scholar" title="Google Scholar" target="_blank" rel="noopener"><i class="fas fa-graduation-cap"></i></a>
-            <a href="https://orcid.org/0009-0005-1223-0772" class="social-icon" aria-label="ORCID" title="ORCID" target="_blank" rel="noopener"><i class="fab fa-orcid"></i></a>
-            <a href="https://github.com/DaneshMorales" class="social-icon" aria-label="GitHub" title="GitHub" target="_blank" rel="noopener"><i class="fab fa-github"></i></a>
-            <a href="https://www.linkedin.com/in/daneshmh/" class="social-icon" aria-label="LinkedIn" title="LinkedIn" target="_blank" rel="noopener"><i class="fab fa-linkedin-in"></i></a>
-            <a href="mailto:danesh.moraleshashemi@uwaterloo.ca" class="social-icon" aria-label="Email" title="Email"><i class="fas fa-envelope"></i></a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </nav>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <a class="site-name" href="../../index.html">Danesh Morales Hashemi</a>
+    <nav aria-label="Main navigation">
+      <a href="../../index.html#about">About</a>
+      <a href="../../publications.html">Publications</a>
+      <a href="../../publications.html#projects">Projects</a>
+      <a href="../index.html" aria-current="location">Blog</a>
+      <a href="../../index.html#contact">Contact</a>
+      <a href="../../files/Danesh_Resume-1.pdf">CV</a>
+    </nav>
+  </header>
 
-  <!-- Post hero -->
-  <div class="post-hero">
-    <div class="container">
-      <a href="../index.html" class="post-back">
-        <i class="fas fa-arrow-left"></i> Back to blog
-      </a>
-      <div class="post-meta-line">
-        <time class="post-date">September 2026</time>
-        <span class="post-tag">Quantum Channels</span>
-      </div>
+  <main id="main">
+    <header class="post-hero">
       <h1>Constructing Qubit Channels with Arbitrary Fixed Points</h1>
-    </div>
-  </div>
+      <p class="post-meta-line"><time datetime="2026-09-25">September 2026</time> · Quantum Channels</p>
+    </header>
 
-  <!-- Post body + sidebar TOC -->
-  <div class="post-layout">
-
-    <aside class="post-toc" id="post-toc" aria-label="Table of contents">
-      <p class="toc-label">On this page</p>
-      <nav id="toc-nav"></nav>
-    </aside>
+    <details class="post-toc" id="post-toc" hidden>
+      <summary>Contents</summary>
+      <nav id="toc-nav" aria-label="Table of contents"></nav>
+    </details>
 
     <article class="post-body">
 
@@ -468,7 +429,7 @@
       </section>
 
     </article>
-  </div>
+  </main>
 
   <!--
     ============================================================
@@ -522,13 +483,10 @@
   }
   </script>
 
-  <footer class="footer">
-    <div class="container footer-inner">
-      <p>&copy; 2026 Danesh Morales Hashemi</p>
-      <p class="footer-sub">Hosted on <a href="https://pages.github.com" target="_blank" rel="noopener">GitHub Pages</a></p>
-    </div>
+  <footer class="site-footer">
+    <span>&copy; 2026 Danesh Morales Hashemi</span>
+    <span>Hosted on <a href="https://pages.github.com">GitHub Pages</a></span>
   </footer>
 
-  <script src="../../script.js?v=20260925"></script>
 </body>
 </html>

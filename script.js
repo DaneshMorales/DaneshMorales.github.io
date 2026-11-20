@@ -1,134 +1,61 @@
-/* =============================================
-   Theme (dark / light) toggle
-   ============================================= */
-const html = document.documentElement;
-
-// On page load: apply saved theme or system preference
-function getInitialTheme() {
-  const saved = localStorage.getItem('theme');
-  if (saved) return saved;
-  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+const systemTheme = window.matchMedia('(prefers-color-scheme: dark)');
+let savedTheme;
+try {
+  savedTheme = localStorage.getItem('theme');
+} catch {
+  // A theme change can still apply to this page when storage is unavailable.
 }
 
-function applyTheme(theme) {
-  html.setAttribute('data-theme', theme);
-  localStorage.setItem('theme', theme);
+const themeControl = document.createElement('fieldset');
+themeControl.className = 'theme-control';
+themeControl.setAttribute('aria-label', 'Color theme');
+themeControl.innerHTML = `
+  <label title="Light mode">
+    <input type="radio" name="theme" value="light" aria-label="Light mode">
+    <span>
+      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <circle cx="12" cy="12" r="4"></circle>
+        <path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"></path>
+      </svg>
+    </span>
+  </label>
+  <label title="Dark mode">
+    <input type="radio" name="theme" value="dark" aria-label="Dark mode">
+    <span>
+      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path d="M20.5 14.1A8.8 8.8 0 0 1 9.9 3.5 9 9 0 1 0 20.5 14.1Z"></path>
+      </svg>
+    </span>
+  </label>
+`;
+const themeOptions = themeControl.querySelectorAll('input');
 
-  // Update both toggle icons (mobile top-bar + desktop in menu)
-  document.querySelectorAll('.theme-toggle i').forEach(icon => {
-    icon.className = theme === 'dark' ? 'fas fa-moon' : 'fas fa-sun';
-  });
+function sendThemeToEmbed(frame, theme) {
+  frame.contentWindow?.postMessage({ type: 'post-embed:theme', theme }, '*');
+}
 
-  // Keep embedded interactive figures in the same theme
+function applyTheme() {
+  const theme = savedTheme === 'dark' || savedTheme === 'light'
+    ? savedTheme
+    : (systemTheme.matches ? 'dark' : 'light');
+  document.documentElement.dataset.theme = theme;
+  themeOptions.forEach(option => { option.checked = option.value === theme; });
   document.querySelectorAll('iframe.post-embed-frame').forEach(frame => sendThemeToEmbed(frame, theme));
 }
 
-function sendThemeToEmbed(frame, theme) {
-  if (frame.contentWindow) frame.contentWindow.postMessage({ type: 'post-embed:theme', theme }, '*');
-}
-
-applyTheme(getInitialTheme());
-
-document.querySelectorAll('.theme-toggle').forEach(btn => {
-  btn.addEventListener('click', () => {
-    const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-    applyTheme(next);
-  });
+applyTheme();
+systemTheme.addEventListener('change', applyTheme);
+themeControl.addEventListener('change', event => {
+  savedTheme = event.target.value;
+  applyTheme();
+  try {
+    localStorage.setItem('theme', savedTheme);
+  } catch {
+    // The current page already reflects the new preference.
+  }
 });
 
-/* =============================================
-   Mobile hamburger menu
-   ============================================= */
-const hamburger = document.getElementById('hamburger');
-const navMenu   = document.getElementById('nav-menu');
-
-if (hamburger && navMenu) {
-  hamburger.addEventListener('click', () => {
-    const isOpen = navMenu.classList.toggle('open');
-    hamburger.classList.toggle('open', isOpen);
-    hamburger.setAttribute('aria-expanded', isOpen);
-  });
-
-  // Close menu when a nav link is clicked
-  navMenu.querySelectorAll('.nav-link, .nav-cv').forEach(link => {
-    link.addEventListener('click', () => {
-      navMenu.classList.remove('open');
-      hamburger.classList.remove('open');
-      hamburger.setAttribute('aria-expanded', 'false');
-    });
-  });
-
-  // Close on outside click
-  document.addEventListener('click', e => {
-    if (!navMenu.contains(e.target) && !hamburger.contains(e.target)) {
-      navMenu.classList.remove('open');
-      hamburger.classList.remove('open');
-      hamburger.setAttribute('aria-expanded', 'false');
-    }
-  });
-}
-
-/* =============================================
-   Active nav link on scroll (main page only)
-   ============================================= */
-const sections = document.querySelectorAll('section[id]');
-const navLinks  = document.querySelectorAll('.nav-link[href*="#"]');
-
-if (sections.length && navLinks.length) {
-  function updateActiveNav() {
-    // At the bottom of the page, activate the last section
-    if (window.innerHeight + window.scrollY >= document.body.scrollHeight - 10) {
-      const lastId = sections[sections.length - 1].id;
-      navLinks.forEach(l => l.classList.toggle('active', l.getAttribute('href').includes(lastId)));
-      return;
-    }
-    // Otherwise find the last section whose top is above the middle of the viewport
-    const mid = window.innerHeight / 2;
-    let current = sections[0].id;
-    sections.forEach(s => {
-      if (s.getBoundingClientRect().top <= mid) current = s.id;
-    });
-    navLinks.forEach(l => l.classList.toggle('active', l.getAttribute('href').includes(current)));
-  }
-
-  window.addEventListener('scroll', updateActiveNav, { passive: true });
-  updateActiveNav();
-}
-
-/* =============================================
-   Blog post citation renderer
-   =============================================
-   Usage in a post:
-     Inline:  <span class="cite" data-key="bell1964"></span>
-              <span class="cite" data-key="bell1964 nielsen2000"></span>  ← multiple
-
-     Define references (anywhere in the HTML, before </body>):
-     <script type="application/json" id="post-citations">
-     {
-       "bell1964": {
-         "authors": "J.S. Bell",
-         "title": "On the Einstein Podolsky Rosen Paradox",
-         "venue": "Physics",
-         "volume": "1",
-         "pages": "195",
-         "year": 1964,
-         "url": "https://..."
-       }
-     }
-     </script>
-
-     Place the bibliography target in the post body:
-     <section class="references-section">
-       <h2>References</h2>
-       <div id="post-references"></div>
-     </section>
-   ============================================= */
-/* =============================================
-   Citation renderer — IEEE style
-   Inline: <span class="cite" data-key="key1 key2"></span>
-   Data:   <script type="application/json" id="post-citations">{...}</script>
-   Target: <div id="post-references"></div>
-   ============================================= */
+// Citations are numbered by their first appearance in the article.
 function initCitations() {
   const dataEl = document.getElementById('post-citations');
   if (!dataEl) return;
@@ -212,7 +139,7 @@ function initCitations() {
       if (c.year)   html += ` (${c.year})`;
       html += '.';
       if (c.note)   html += ` <span class="ref-note">${c.note}</span>`;
-      if (c.url)    html += ` <a href="${c.url}" target="_blank" rel="noopener" class="ref-url">&#8599;</a>`;
+      if (c.url)    html += ` <a href="${c.url}" target="_blank" rel="noopener" class="ref-url">Source</a>`;
       html += `</span>`;
 
       li.innerHTML = html;
@@ -257,6 +184,8 @@ function initTOC() {
     tocNav.appendChild(a);
   });
 
+  tocNav.closest('details').hidden = false;
+
   // Highlight active section on scroll
   const tocLinks = tocNav.querySelectorAll('.toc-link');
   const obs = new IntersectionObserver(entries => {
@@ -295,39 +224,15 @@ function initEmbeds() {
   // The frame answers every theme message with its height, which also covers
   // frames that finished loading before this listener was attached.
   frames.forEach(frame => {
-    const sync = () => sendThemeToEmbed(frame, html.getAttribute('data-theme'));
+    const sync = () => sendThemeToEmbed(frame, document.documentElement.dataset.theme);
     frame.addEventListener('load', sync);
     sync();
   });
 }
 
-/* =============================================
-   Abstract toggle — works on any page with
-   .paper-card.compact + .toggle-abstract buttons
-   ============================================= */
-function initAbstractToggles() {
-  document.querySelectorAll('.toggle-abstract').forEach(btn => {
-    btn.addEventListener('click', () => {
-      btn.closest('.paper-card').classList.toggle('expanded');
-    });
-  });
-}
-
 document.addEventListener('DOMContentLoaded', () => {
+  document.querySelector('.site-header nav')?.before(themeControl);
   initCitations();
   initTOC();
   initEmbeds();
-  initAbstractToggles();
 });
-
-/* =============================================
-   Navbar shadow on scroll
-   ============================================= */
-const navbar = document.getElementById('navbar');
-if (navbar) {
-  window.addEventListener('scroll', () => {
-    navbar.style.boxShadow = window.scrollY > 8
-      ? '0 1px 12px rgba(0,0,0,0.12)'
-      : '';
-  }, { passive: true });
-}
