@@ -20,7 +20,7 @@
     - add an <item> to /feed.xml and a <url> to /sitemap.xml;
     - add the announcement to news.html, and keep the three newest items on index.html;
     - optionally make a 1200x630 link-preview image at assets/social/og-SLUG.png
-      (otherwise point og:image at og-default.png).
+      (for a text-only preview, omit the og:image tags and JSON-LD image field and use twitter:card="summary").
 
   Shared assets carry a version (?v=YYYYMMDD). When you change styles.css, script.js or
   blog/mathjax-config.js, bump it on the post pages (and embedded figures): GitHub Pages lets
