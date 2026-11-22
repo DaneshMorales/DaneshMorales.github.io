@@ -86,7 +86,7 @@ summary { cursor: pointer; }
   padding-bottom: .5rem;
 }
 .identity { grid-area: name; }
-/* The name looks the same on every page: a link home, in the link color. */
+/* The name looks the same on every page. */
 .site-title {
   margin: 0 0 .4rem;
   font-size: clamp(2rem, 5.3vw, 2.75rem);
@@ -94,7 +94,6 @@ summary { cursor: pointer; }
   line-height: 1.18;
   text-wrap: pretty;
 }
-.site-title a:is(:hover, :focus-visible) { text-decoration: none; }
 .profile-links, .entry-links {
   display: flex;
   flex-wrap: wrap;
