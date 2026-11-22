@@ -27,10 +27,11 @@
   --text: light-dark(#41443f, #c9c6bd);
   --muted: light-dark(#62645d, #aba99f);
   --rule: light-dark(#c5c6bc, #50514c);
-  /* Links take the hue of the Université de Sherbrooke green (#00a759), deepened for the
-     light background and softened for the dark one so they read at 5.9:1 and 7:1. */
-  --link: light-dark(#2d6641, #8fbf9c);
-  --link-hover: light-dark(#1c5130, #aed6b8);
+  /* Links take the hue of the Université de Sherbrooke green (#00a759). The body text is a
+     greenish gray, so in light mode links are as vivid as legibility allows (4.6:1) to stand
+     apart from it; in dark mode a soft sage reads at 7:1. */
+  --link: light-dark(#017b3d, #8fbf9c);
+  --link-hover: light-dark(#026031, #aed6b8);
   --tint: light-dark(#e4e3dd, #30322f);
   background: var(--bg);
   color: var(--text);
