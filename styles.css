@@ -50,18 +50,12 @@ body {
   overflow-wrap: break-word;
 }
 
-/* Links are set apart by color and underline on hover. Inside sentences a faint underline stays:
-   the link blue is close to the text color in lightness, so color alone would hide those links
-   from readers who don't see color well. */
+/* Links are set apart by color alone and underline only while hovered or focused. */
 a {
   color: var(--link);
   text-decoration: none;
   text-decoration-thickness: 1px;
   text-underline-offset: .16em;
-}
-p:not(.entry-links, .profile-links) > a, .news-list span > a, .post-body li > a {
-  text-decoration-line: underline;
-  text-decoration-color: color-mix(in srgb, currentColor 35%, transparent);
 }
 a:hover, a:focus-visible { color: var(--link-hover); text-decoration-line: underline; }
 :focus-visible { outline: 2px solid var(--link); outline-offset: 3px; }
@@ -91,9 +85,16 @@ summary { cursor: pointer; }
   margin-top: 2.8rem;
   padding-bottom: .5rem;
 }
-.site-name, .identity { grid-area: name; }
-.site-name { align-self: center; justify-self: start; font-weight: bold; color: var(--text); text-decoration: none; }
-.site-name:hover { text-decoration: underline; }
+.identity { grid-area: name; }
+/* The name looks the same on every page: a link home, in the link color. */
+.site-title {
+  margin: 0 0 .4rem;
+  font-size: clamp(2rem, 5.3vw, 2.75rem);
+  font-weight: 500;
+  line-height: 1.18;
+  text-wrap: pretty;
+}
+.site-title a:is(:hover, :focus-visible) { text-decoration: none; }
 .profile-links, .entry-links {
   display: flex;
   flex-wrap: wrap;
@@ -115,9 +116,8 @@ summary { cursor: pointer; }
   transform: translateY(-50%);
   border-inline-start: 1px solid var(--rule);
 }
-.site-header nav a:hover, .site-header nav [aria-current] { text-decoration: underline; }
+.site-header nav a:hover { text-decoration: underline; }
 .site-header nav [aria-current] { color: var(--text); }
-.identity h1 { margin-bottom: .4rem; }
 
 .theme-control {
   --choice-width: 2.35rem;
@@ -266,9 +266,7 @@ summary { cursor: pointer; }
   font-size: 1rem;
 }
 .entry-tools .entry-links { margin: 0; gap: .25rem .8rem; }
-.entry-tools details[open] { flex-basis: 100%; }
-.entry summary, .post-toc summary { width: fit-content; color: var(--link); font-size: 1rem; }
-.entry details p { margin: .5rem 0 .15rem; }
+.post-toc summary { width: fit-content; color: var(--link); font-size: 1rem; }
 /* A group with a single entry needs no "1." (numbers return when a second entry is added). */
 :is(.home-content > section, .work-group):not(:has(.entry ~ .entry, .publication-year ~ .publication-year)) .entry-list {
   padding-inline-start: 0;
@@ -354,7 +352,7 @@ summary { cursor: pointer; }
   .profile-links { gap: 0 clamp(.45rem, 2vw, 1rem); }
   .header-profiles { font-size: 1rem; }
   .entry-tools { align-items: center; }
-  .entry summary, .post-toc summary {
+  .post-toc summary {
     min-height: 2.75rem;
     padding-block: .6rem;
   }
@@ -389,7 +387,7 @@ summary { cursor: pointer; }
   @supports (animation-timeline: scroll()) {
     .site-header { animation: header-edge auto linear both; animation-timeline: scroll(); animation-range: 0 2.5rem; }
   }
-  .identity h1 { margin: 0; font-size: clamp(1rem, 5.3vw, 1.5rem); }
+  .site-title { margin: 0; font-size: clamp(1rem, 5.3vw, 1.5rem); }
   .header-profiles { display: none; }
   .theme-control { --choice-width: 2.25rem; --choice-height: 2.125rem; }
   .theme-control svg { width: 1.2rem; height: 1.2rem; }

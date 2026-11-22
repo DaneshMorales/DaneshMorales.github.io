@@ -17,18 +17,25 @@
   <meta property="og:url" content="https://daneshmorales.github.io/publications.html">
   <meta name="twitter:card" content="summary">
   <script src="script.js?v=20261121-1"></script>
-  <link rel="stylesheet" href="styles.css?v=20261121-3">
+  <link rel="stylesheet" href="styles.css?v=20261121-4">
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
   <header class="site-header">
-    <a class="site-name" href="index.html">Danesh Morales Hashemi</a>
+    <div class="identity">
+      <p class="site-title"><a href="index.html">Danesh Morales Hashemi</a></p>
+      <p class="profile-links header-profiles">
+        <a href="https://scholar.google.com/citations?hl=en&amp;user=f_ltr8oAAAAJ">Google Scholar</a>
+        <a href="https://github.com/DaneshMorales">GitHub</a>
+        <a href="https://www.linkedin.com/in/daneshmh/">LinkedIn</a>
+      </p>
+    </div>
     <nav aria-label="Main navigation">
       <a href="index.html#about">About</a>
       <a href="#publications" aria-current="page">Publications</a>
       <a href="blog/index.html">Blog</a>
       <a href="index.html#contact">Contact</a>
-      <a href="files/Danesh_Resume-1.pdf">CV</a>
+      <a href="files/Danesh_Resume-1.pdf" target="_blank" rel="noopener" aria-label="CV (PDF, opens in a new tab)">CV</a>
     </nav>
   </header>
 
@@ -51,29 +58,6 @@
                 <a href="https://arxiv.org/pdf/2610.03545">PDF</a>
                 <a href="https://scirate.com/arxiv/2610.03545">SciRate</a>
               </p>
-              <details>
-                <summary>Abstract</summary>
-                <p>
-                  What must a quantum error-correction decoder know about temporally correlated noise, and what does it
-                  cost to learn? We study this question for fixed stabilizer memory experiments with known system-environment
-                  interactions. We formulate calibration in terms of the fidelity differences that select a Pauli recovery and
-                  relate missing information to the resulting fidelity loss. Our main example uses weak coherent <em>X</em>
-                  rotations in a class of CSS codes including Shor, Steane, and odd-distance rotated surface codes. All physical
-                  qubits share a sign either fixed throughout a run or independently redrawn each interval. The two models have
-                  identical syndrome statistics and the same spatiotemporal Pauli process (SPP), obtained by Pauli-twirling every
-                  noise interval. Yet at suitable storage times, they require different logical corrections. In the weak-noise
-                  limit, each model is almost perfectly correctable when known. Without model information, even the best final
-                  recovery has a worst-case fidelity loss approaching 1/2 relative to the noise-aware optimum, despite access to
-                  the full syndrome record. For this pair of models, at fixed code and fixed positive target loss below 1/2, we
-                  prove matching calibration bounds. With logical preparation and final readout, complete QEC cycles require a
-                  number of noise intervals scaling as the inverse rotation angle raised to the code's <em>X</em> distance.
-                  Allowing two uninterrupted intervals before one extraction reduces the optimal cost to inverse-square scaling.
-                  Physical Pauli twirling of every noise interval changes both recovery performance and its information
-                  requirements. Discarding the record of applied random Pauli operations makes the SPP sufficient for optimal
-                  recovery. Keeping this record can improve the attainable fidelity, but reaching that optimum may require
-                  additional noise information.
-                </p>
-              </details>
             </div>
           </li>
         </ol>
@@ -93,19 +77,6 @@
               <p class="entry-links">
                 <a href="files/Undergraduate_Thesis.pdf">PDF</a>
               </p>
-              <details>
-                <summary>Abstract</summary>
-                <p>
-                  In this project, we will illustrate the theoretical concept of circuit benchmarking, an
-                  efficient and scalable protocol to “lower bound” the process fidelity of a circuit. Finding a
-                  lower bound to the process fidelity is crucial because it tells us what is the worst-case error
-                  rate in our quantum circuit. We will exhaustively run simulations on quantum circuits with
-                  different error models and error strengths to measure the closeness of the theoretical bound
-                  imposed by the circuit benchmarking theory with respect to the actual process fidelity. We
-                  will find that in several cases there is a minimal or zero gap, and thus not only we have
-                  found a lower bound, but rather a good approximation to the process fidelity.
-                </p>
-              </details>
             </div>
           </li>
           <li class="entry">
@@ -116,20 +87,6 @@
               <p class="entry-links">
                 <a href="files/TQI_Project.pdf">PDF</a>
               </p>
-              <details>
-                <summary>Abstract</summary>
-                <p>
-                  Cycle benchmarking is a scalable protocol used to measure the error rate of a specific cycle of
-                  quantum gates implemented in parallel. We will introduce the cycle benchmarking protocol, explain
-                  how it works, and numerically illustrate its effectiveness. We demonstrate that relaxing the assumptions
-                  required to accurately estimate the process fidelity can lead to inaccurate results; in particular, allowing
-                  gate-dependent noise on the twirling gates can cause a misestimation of the process fidelity. However, we
-                  also show that highly gate-dependent errors can still yield accurate results in certain regimes. Finally,
-                  when the gate-independent condition is relaxed, we show that it is possible to reconcile the estimated
-                  and theoretical fidelities by measuring in a different basis via a unitary transformation which depends
-                  on both the chosen error model on the twirling gates and the targeted gateset.
-                </p>
-              </details>
             </div>
           </li>
           <li class="entry">
@@ -141,25 +98,6 @@
                 <a href="files/QML_Project.pdf">PDF</a>
                 <a href="https://github.com/DaneshMorales/QML_project">GitHub</a>
               </p>
-              <details>
-                <summary>Abstract</summary>
-                <p>
-                  This project explores the application of Quantum
-                  Machine Learning (QML) to predict the outcomes of Major League Baseball (MLB) games, specifically the Postseason
-                  matches that took place throughout the month of October.
-                  Using features such as team batting averages, pitching performance, and game context (e.g. home vs. away), we implemented
-                  two QML algorithms: the Quantum Support Vector Machine
-                  (QSVM) and the Variational Quantum Classifier (VQC), using the Qiskit framework. We then compared these quantum
-                  classifiers to their classical counterparts, namely the Support
-                  Vector Machine (SVM) and a classical neural network, the Multi-
-                  Layer Perceptron (MLP) Classifier. We found that the QML
-                  algorithms achieved prediction accuracies comparable to those
-                  of the classical algorithms; however, training the QML models
-                  was significantly more time-consuming. We therefore conclude
-                  that, in this setting, there is no quantum advantage, and that
-                  classical prediction models remain the preferable choice.
-                </p>
-              </details>
             </div>
           </li>
         </ol>
@@ -175,24 +113,6 @@
               <p class="entry-links">
                 <a href="files/Superoperator.pdf">PDF</a>
               </p>
-              <details>
-                <summary>Abstract</summary>
-                <p>
-                  We introduce the concept of superoperators, which are mathematical constructs used to describe the evolution of quantum states. We will
-                  focus on completely positive and trace-preserving maps, which are essential in
-                  quantum information theory as they represent the most general form of physical
-                  quantum operations. Next, we delve into different representations of superoperators. We define each
-                  of these representations in detail and prove several theorems that demonstrate
-                  their importance. Then, we prove that all the different representations of a superoperator are
-                  equivalent. This equivalence is important because it allows us to convert between
-                  representations with ease, depending on which one is more convenient for the
-                  problem at hand. Consequently, we analyze the properties of these representations when we add
-                  the restrictions that the superoperators are trace-preserving and/or completely
-                  positive. Finally, we visualize specific quantum channels using these representations.
-                  This analysis provides a new perspective on how the representations depict the
-                  channels and allows us to examine their properties in greater detail.
-                </p>
-              </details>
             </div>
           </li>
         </ol>

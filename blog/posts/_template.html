@@ -14,7 +14,7 @@
        Palatino-style Pagella font; \begin{equation} ... \end{equation} is numbered.
     7. Optional interactive figure: <figure class="post-embed"> with an
        <iframe class="post-embed-frame"> (see script.js for the height/theme messages).
-    8. The post ends with .post-footer: links to all posts and the RSS feed.
+    8. The post ends with .post-footer: a link back to all posts.
 
   To start a post: copy this file to blog/posts/<slug>.html, fill in the placeholders
   (including SLUG, DESCRIPTION and YYYY-MM-DD in the head), then:
@@ -68,7 +68,7 @@
   }
   </script>
   <script src="../../script.js?v=20261121-1"></script>
-  <link rel="stylesheet" href="../../styles.css?v=20261121-3">
+  <link rel="stylesheet" href="../../styles.css?v=20261121-4">
 
   <!-- MathJax: shared blog configuration (+ optional post-specific macros) -->
   <script src="../mathjax-config.js?v=20261121"></script>
@@ -79,13 +79,20 @@
 
   <a class="skip-link" href="#main">Skip to content</a>
   <header class="site-header">
-    <a class="site-name" href="../../index.html">Danesh Morales Hashemi</a>
+    <div class="identity">
+      <p class="site-title"><a href="../../index.html">Danesh Morales Hashemi</a></p>
+      <p class="profile-links header-profiles">
+        <a href="https://scholar.google.com/citations?hl=en&amp;user=f_ltr8oAAAAJ">Google Scholar</a>
+        <a href="https://github.com/DaneshMorales">GitHub</a>
+        <a href="https://www.linkedin.com/in/daneshmh/">LinkedIn</a>
+      </p>
+    </div>
     <nav aria-label="Main navigation">
       <a href="../../index.html#about">About</a>
       <a href="../../publications.html">Publications</a>
       <a href="../index.html" aria-current="location">Blog</a>
       <a href="../../index.html#contact">Contact</a>
-      <a href="../../files/Danesh_Resume-1.pdf">CV</a>
+      <a href="../../files/Danesh_Resume-1.pdf" target="_blank" rel="noopener" aria-label="CV (PDF, opens in a new tab)">CV</a>
     </nav>
   </header>
 
@@ -134,7 +141,6 @@
       <footer class="post-footer">
         <nav aria-label="More from the blog">
           <a href="../index.html">All posts</a>
-          <a href="../../feed.xml">Subscribe via RSS</a>
         </nav>
       </footer>
 

@@ -63,13 +63,13 @@
   }
   </script>
   <script src="script.js?v=20261121-1"></script>
-  <link rel="stylesheet" href="styles.css?v=20261121-3">
+  <link rel="stylesheet" href="styles.css?v=20261121-4">
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
   <header class="site-header home-header">
     <div class="identity">
-      <h1>Danesh Morales Hashemi</h1>
+      <h1 class="site-title"><a href="index.html">Danesh Morales Hashemi</a></h1>
       <p class="profile-links header-profiles">
         <a href="https://scholar.google.com/citations?hl=en&amp;user=f_ltr8oAAAAJ">Google Scholar</a>
         <a href="https://github.com/DaneshMorales">GitHub</a>
@@ -81,7 +81,7 @@
       <a href="#publications">Publications</a>
       <a href="#blog">Blog</a>
       <a href="#contact">Contact</a>
-      <a href="files/Danesh_Resume-1.pdf">CV</a>
+      <a href="files/Danesh_Resume-1.pdf" target="_blank" rel="noopener" aria-label="CV (PDF, opens in a new tab)">CV</a>
     </nav>
   </header>
 
@@ -135,29 +135,6 @@
               <a href="https://arxiv.org/pdf/2610.03545">PDF</a>
               <a href="https://scirate.com/arxiv/2610.03545">SciRate</a>
             </p>
-            <details>
-              <summary>Abstract</summary>
-              <p>
-                What must a quantum error-correction decoder know about temporally correlated noise, and what does it
-                cost to learn? We study this question for fixed stabilizer memory experiments with known system-environment
-                interactions. We formulate calibration in terms of the fidelity differences that select a Pauli recovery and
-                relate missing information to the resulting fidelity loss. Our main example uses weak coherent <em>X</em>
-                rotations in a class of CSS codes including Shor, Steane, and odd-distance rotated surface codes. All physical
-                qubits share a sign either fixed throughout a run or independently redrawn each interval. The two models have
-                identical syndrome statistics and the same spatiotemporal Pauli process (SPP), obtained by Pauli-twirling every
-                noise interval. Yet at suitable storage times, they require different logical corrections. In the weak-noise
-                limit, each model is almost perfectly correctable when known. Without model information, even the best final
-                recovery has a worst-case fidelity loss approaching 1/2 relative to the noise-aware optimum, despite access to
-                the full syndrome record. For this pair of models, at fixed code and fixed positive target loss below 1/2, we
-                prove matching calibration bounds. With logical preparation and final readout, complete QEC cycles require a
-                number of noise intervals scaling as the inverse rotation angle raised to the code's <em>X</em> distance.
-                Allowing two uninterrupted intervals before one extraction reduces the optimal cost to inverse-square scaling.
-                Physical Pauli twirling of every noise interval changes both recovery performance and its information
-                requirements. Discarding the record of applied random Pauli operations makes the SPP sufficient for optimal
-                recovery. Keeping this record can improve the attainable fidelity, but reaching that optimum may require
-                additional noise information.
-              </p>
-            </details>
           </div>
         </li>
       </ol>
