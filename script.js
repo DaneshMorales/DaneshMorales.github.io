@@ -52,6 +52,40 @@ themeControl.addEventListener('change', event => {
   }
 });
 
+/* =============================================
+   Home page tabs
+   About, Publications, Blog and Contact scroll to their sections without
+   writing #top, #blog, … into the address bar or the history. Arriving from
+   another page's Contact tab (…/#contact) still lands on the section, and the
+   #contact leaves the address once the page has loaded.
+   ============================================= */
+const sectionTabs = () => [...document.querySelectorAll('.site-header nav a[href^="#"]')];
+
+document.addEventListener('click', event => {
+  const link = event.target.closest?.('.site-header nav a[href^="#"]');
+  if (!link || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+  const hash = link.getAttribute('href');
+  if (hash === '#top') {
+    event.preventDefault();
+    window.scrollTo({ top: 0 });
+    return;
+  }
+  const section = document.getElementById(hash.slice(1));
+  if (!section) return;
+  event.preventDefault();
+  section.scrollIntoView();
+  // Keyboard users carry on from the section, as they would after a plain jump link.
+  const heading = section.querySelector('h2') ?? section;
+  heading.tabIndex = -1;
+  heading.focus({ preventScroll: true });
+});
+
+window.addEventListener('load', () => {
+  if (!sectionTabs().some(link => link.getAttribute('href') === location.hash)) return;
+  // Safari reads the #section to scroll there, so it stays until loading is done.
+  setTimeout(() => history.replaceState(history.state, '', location.pathname + location.search));
+});
+
 // Citations are numbered by their first appearance in the article.
 function initCitations() {
   const dataEl = document.getElementById('post-citations');

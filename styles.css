@@ -27,8 +27,10 @@
   --text: light-dark(#41443f, #c9c6bd);
   --muted: light-dark(#62645d, #aba99f);
   --rule: light-dark(#c5c6bc, #50514c);
-  --link: light-dark(#365d72, #9ab5c4);
-  --link-hover: light-dark(#274b60, #b4c9d2);
+  /* Links take the hue of the Université de Sherbrooke green (#00a759), deepened for the
+     light background and softened for the dark one so they read at 5.9:1 and 7:1. */
+  --link: light-dark(#2d6641, #8fbf9c);
+  --link-hover: light-dark(#1c5130, #aed6b8);
   --tint: light-dark(#e4e3dd, #30322f);
   background: var(--bg);
   color: var(--text);
@@ -59,6 +61,8 @@ a {
 }
 a:hover, a:focus-visible { color: var(--link-hover); text-decoration-line: underline; }
 :focus-visible { outline: 2px solid var(--link); outline-offset: 3px; }
+/* The home page's tabs move focus to a section heading; like a plain jump link, that shows no ring. */
+[tabindex="-1"]:focus { outline: none; }
 .skip-link { position: absolute; top: -5rem; z-index: 20; padding: .4rem; background: var(--bg); }
 .skip-link:focus { top: .4rem; }
 
