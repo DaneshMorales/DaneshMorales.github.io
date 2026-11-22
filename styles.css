@@ -21,7 +21,7 @@
 }
 
 :root {
-  color-scheme: light dark;
+  color-scheme: dark; /* dark by default; the theme switch can choose light */
   --gutter: clamp(1rem, 5vw, 1.25rem);
   --bg: light-dark(#efeee8, #272927);
   --text: light-dark(#41443f, #c9c6bd);

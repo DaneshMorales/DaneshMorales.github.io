@@ -1,4 +1,3 @@
-const systemTheme = window.matchMedia('(prefers-color-scheme: dark)');
 let savedTheme;
 try {
   savedTheme = localStorage.getItem('theme');
@@ -35,16 +34,14 @@ function sendThemeToEmbed(frame, theme) {
 }
 
 function applyTheme() {
-  const theme = savedTheme === 'dark' || savedTheme === 'light'
-    ? savedTheme
-    : (systemTheme.matches ? 'dark' : 'light');
+  // Dark unless the visitor has picked light with the switch.
+  const theme = savedTheme === 'light' ? 'light' : 'dark';
   document.documentElement.dataset.theme = theme;
   themeOptions.forEach(option => { option.checked = option.value === theme; });
   document.querySelectorAll('iframe.post-embed-frame').forEach(frame => sendThemeToEmbed(frame, theme));
 }
 
 applyTheme();
-systemTheme.addEventListener('change', applyTheme);
 themeControl.addEventListener('change', event => {
   savedTheme = event.target.value;
   applyTheme();

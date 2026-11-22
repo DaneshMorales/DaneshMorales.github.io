@@ -1,16 +1,16 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <script>
     const rootElement = document.documentElement;
     rootElement.classList.toggle('embedded', window.parent !== window);
-    let initialTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    // Dark by default, like the rest of the site, unless the visitor picked light.
+    let initialTheme = 'dark';
     try {
-      const savedTheme = localStorage.getItem('theme');
-      if (savedTheme === 'light' || savedTheme === 'dark') initialTheme = savedTheme;
+      if (localStorage.getItem('theme') === 'light') initialTheme = 'light';
     } catch {
-      // The system preference also works when storage is unavailable.
+      // Dark also applies when storage is unavailable.
     }
     rootElement.dataset.theme = initialTheme;
   </script>
@@ -18,7 +18,7 @@
   <meta name="robots" content="noindex">
   <title>Bloch Channel Explorer — Danesh Morales Hashemi</title>
   <link rel="icon" type="image/svg+xml" href="../../../icon.svg?v=3">
-  <link rel="stylesheet" href="../../../styles.css?v=20261121-5">
+  <link rel="stylesheet" href="../../../styles.css?v=20261121-6">
   <style>
     /* Explorer-only colours. Text, borders, surfaces, accent and dark mode come from styles.css. */
     :root {
