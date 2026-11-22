@@ -1,5 +1,28 @@
+/* Palatino ships with macOS, iOS and Windows. Domitian, a free Palatino revival
+   (assets/fonts/OFL-Domitian.txt), is only downloaded on devices without it, such as Android.
+   The unicode-range matches the Latin subset, so symbols Palatino lacks (★, ₀) never fetch it. */
+@font-face {
+  font-family: Domitian;
+  src: url("assets/fonts/domitian-roman.woff2") format("woff2");
+  font-weight: 400; font-style: normal; font-display: swap;
+  unicode-range: U+0020-007E, U+00A0-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2190-2193, U+2212, U+2215;
+}
+@font-face {
+  font-family: Domitian;
+  src: url("assets/fonts/domitian-italic.woff2") format("woff2");
+  font-weight: 400; font-style: italic; font-display: swap;
+  unicode-range: U+0020-007E, U+00A0-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2190-2193, U+2212, U+2215;
+}
+@font-face {
+  font-family: Domitian;
+  src: url("assets/fonts/domitian-bold.woff2") format("woff2");
+  font-weight: 700; font-style: normal; font-display: swap;
+  unicode-range: U+0020-007E, U+00A0-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2190-2193, U+2212, U+2215;
+}
+
 :root {
   color-scheme: light dark;
+  --gutter: clamp(1rem, 5vw, 1.25rem);
   --bg: light-dark(#efeee8, #272927);
   --text: light-dark(#41443f, #c9c6bd);
   --muted: light-dark(#62645d, #aba99f);
@@ -9,7 +32,9 @@
   --tint: light-dark(#e4e3dd, #30322f);
   background: var(--bg);
   color: var(--text);
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: Palatino, "Palatino Linotype", "Book Antiqua", "URW Palladio L", P052, Domitian, serif;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 :root[data-theme="light"] { color-scheme: light; }
@@ -18,7 +43,7 @@
 [hidden] { display: none !important; }
 
 body {
-  width: min(52rem, calc(100% - 2.5rem));
+  width: min(52rem, calc(100% - 2 * var(--gutter)));
   margin: 0 auto;
   font-size: 1.075rem;
   line-height: 1.55;
@@ -34,7 +59,7 @@ a {
 }
 a:hover, a:focus-visible { color: var(--link-hover); text-decoration-color: currentColor; }
 :focus-visible { outline: 2px solid var(--link); outline-offset: 3px; }
-.skip-link { position: absolute; top: -5rem; padding: .4rem; background: var(--bg); }
+.skip-link { position: absolute; top: -5rem; z-index: 20; padding: .4rem; background: var(--bg); }
 .skip-link:focus { top: .4rem; }
 
 h1, h2, h3 { line-height: 1.18; text-wrap: pretty; }
@@ -43,7 +68,7 @@ h2 { margin: 0 0 .75rem; font-size: 1.55rem; }
 h3 { font-size: 1.12rem; }
 p { margin: 0 0 .8rem; }
 main { margin-top: 1.8rem; }
-main > section + section, main > section[data-year] { margin-top: 2rem; }
+main > section + section, .work-group { margin-top: 2rem; }
 .home-content > section + section {
   margin-top: clamp(1.25rem, 3vw, 1.75rem);
   padding-top: clamp(1.25rem, 3vw, 1.75rem);
@@ -245,8 +270,14 @@ summary { cursor: pointer; }
 .entry-tools details[open] { flex-basis: 100%; }
 .entry summary, .post-toc summary { width: fit-content; color: var(--link); font-size: 1rem; }
 .entry details p { margin: .5rem 0 .15rem; }
-#publication-filter { margin: 1.2rem 0 1rem; }
-#publication-filter select { margin-left: .3rem; }
+/* A group with a single entry needs no "1." (numbers return when a second entry is added). */
+:is(.home-content > section, .work-group):not(:has(.entry ~ .entry, .publication-year ~ .publication-year)) .entry-list {
+  padding-inline-start: 0;
+  list-style: none;
+}
+:is(.home-content > section, .work-group):not(:has(.entry ~ .entry, .publication-year ~ .publication-year)) .entry {
+  padding-inline-start: 0;
+}
 
 @media (max-width: 35rem) {
   .entry-heading, .publication-year { grid-template-columns: minmax(0, 1fr); }
@@ -254,18 +285,6 @@ summary { cursor: pointer; }
   .publication-year .entry { padding-top: .55rem; }
 }
 
-.education h3 { margin: 0 0 .4rem; }
-.education ul { margin: 0; padding: 0; list-style: none; }
-.education li {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  column-gap: 1rem;
-  align-items: baseline;
-}
-.education li + li { margin-top: .55rem; }
-.education li strong { font-weight: normal; }
-.education-dates, .education-detail { font-size: .95rem; color: var(--muted); }
-.education-detail { grid-column: 1 / -1; }
 @media (max-width: 36rem) {
   .wide-formula {
     display: inline-block;
@@ -273,7 +292,6 @@ summary { cursor: pointer; }
     overflow-x: auto;
     vertical-align: middle;
   }
-  .education li { grid-template-columns: minmax(0, 1fr); }
 }
 
 .post-hero { margin-bottom: 1.25rem; }
@@ -308,6 +326,9 @@ summary { cursor: pointer; }
 .ref-item:target { background: var(--tint); }
 .ref-num, .ref-note { color: var(--muted); }
 .ref-title { font-style: italic; }
+.post-footer { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--rule); }
+.post-footer p { margin: 0; }
+.post-footer nav { display: flex; flex-wrap: wrap; gap: .25rem 1.05rem; margin-top: .35rem; }
 
 .site-footer {
   display: flex;
@@ -323,21 +344,13 @@ summary { cursor: pointer; }
 .site-footer p { margin: 0; }
 
 @media (max-width: 36rem) {
-  .site-header { margin-top: 1.5rem; }
-  .site-header nav a { padding-inline: clamp(.25rem, 5vw - .7rem, .65rem); }
-  .site-header nav a:last-child { padding-inline-end: 0; }
-  .home-header { grid-template-areas: "name name" "profiles theme" "nav nav"; row-gap: .6rem; }
-  .identity { display: contents; }
-  .identity h1 { grid-area: name; margin: 0; font-size: clamp(1.7rem, 6vw, 2.1rem); }
-  .header-profiles { grid-area: profiles; align-self: center; }
-  .home-header .theme-control { align-self: center; }
   .news-list li { grid-template-columns: 4.35rem minmax(0, 1fr); gap: .55rem; }
 }
 
 @media (max-width: 36rem), (pointer: coarse) {
   .theme-control { --choice-width: 2.75rem; --choice-height: 2.75rem; }
   .theme-control svg { width: 1.4rem; height: 1.4rem; }
-  .site-header nav a, .profile-links a, .entry-links a, .list-heading > a {
+  .site-header nav a, .profile-links a, .entry-links a, .list-heading > a, .post-footer nav a, .site-footer a {
     display: inline-flex;
     align-items: center;
     min-height: 2.75rem;
@@ -346,29 +359,58 @@ summary { cursor: pointer; }
   .profile-links { gap: 0 clamp(.45rem, 2vw, 1rem); }
   .header-profiles { font-size: 1rem; }
   .entry-tools { align-items: center; }
-  #publication-filter select { min-height: 2.75rem; }
   .entry summary, .post-toc summary {
     min-height: 2.75rem;
     padding-block: .6rem;
   }
 }
 
+/* Phones: smaller type, and a compact header (name and theme switch, then the
+   tabs) that stays pinned to the top of the screen while the page scrolls. */
+@media (max-width: 36rem) {
+  /* Links to a heading stop below the pinned header; a home section's rule lands on the header's rule. */
+  :root { scroll-padding-top: 6.25rem; }
+  body { font-size: 1rem; line-height: 1.6; }
+  h1 { font-size: 1.75rem; }
+  h2 { font-size: 1.3rem; }
+  .post-hero h1 { font-size: 1.6rem; }
+  main { margin-top: 1.5rem; }
+  .home-content > section + section { margin-top: 1.5rem; padding-top: 1.5rem; scroll-margin-top: 0; }
+
+  .site-header {
+    position: sticky;
+    top: -.75rem; /* once pinned, half of the top padding stays visible */
+    z-index: 10;
+    grid-template-areas: "name theme" "nav nav";
+    align-items: center;
+    gap: .25rem .75rem;
+    margin-top: 0;
+    padding-top: 1.5rem;
+    padding-bottom: .25rem;
+    background: var(--bg);
+  }
+  .identity h1 { margin: 0; font-size: clamp(1rem, 5.3vw, 1.5rem); }
+  .header-profiles { display: none; }
+  .theme-control { --choice-width: 2.25rem; --choice-height: 2.125rem; }
+  .theme-control svg { width: 1.2rem; height: 1.2rem; }
+  /* Equal padding keeps the gaps even; the negative margin lines the words up with the text column. */
+  .site-header nav { justify-content: space-between; margin-inline: -.5rem; }
+  .site-header nav a, .site-header nav a:first-child { min-width: 0; min-height: 2.5rem; padding-inline: .5rem; }
+  .site-header nav a + a::before { content: none; }
+  .list-heading > a { min-height: 2.25rem; padding-block: 0; }
+}
+
+@media (max-width: 22rem) {
+  .site-header nav { margin-inline: -.25rem; }
+  .site-header nav a, .site-header nav a:first-child { padding-inline: .25rem; }
+}
+
 @media (max-width: 30rem) {
-  body { width: calc(100% - 2rem); }
   .entry-list { padding-inline-start: 1.7rem; }
-  .site-header nav a { flex: 1 0 auto; padding-inline: clamp(.15rem, 3vw - .5rem, .55rem); }
-  .site-header nav a:first-child { justify-content: start; }
   .news-list li { display: block; margin: .85rem 0; }
   .news-list time { display: block; padding: 0; }
   .contact-list { grid-template-columns: 1fr; row-gap: 0; }
   .contact-list dt:not(:first-child) { margin-top: .6rem; }
-}
-
-@media (max-width: 24rem) {
-  .site-header nav { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
-  .site-header nav a:first-child { justify-content: center; }
-  .site-header nav a:nth-child(3n + 1)::before { content: none; }
-  .site-header nav a:nth-child(n + 4) { border-top: 1px solid var(--rule); }
 }
 
 @media print {

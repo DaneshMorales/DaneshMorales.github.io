@@ -139,7 +139,7 @@ function initCitations() {
       if (c.year)   html += ` (${c.year})`;
       html += '.';
       if (c.note)   html += ` <span class="ref-note">${c.note}</span>`;
-      if (c.url)    html += ` <a href="${c.url}" target="_blank" rel="noopener" class="ref-url">Source</a>`;
+      if (c.url)    html += ` <a href="${c.url}" class="ref-url">Source</a>`;
       html += `</span>`;
 
       li.innerHTML = html;

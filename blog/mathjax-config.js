@@ -1,10 +1,11 @@
 /* =============================================
    Shared MathJax configuration for blog posts
    =============================================
-   Load in the post <head>, BEFORE the MathJax script:
+   Load in the post <head>, BEFORE the MathJax script. MathJax is pinned to an
+   exact version, so a new release on the CDN can't change how existing posts render:
 
      <script src="../mathjax-config.js"></script>
-     <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+     <script src="https://cdn.jsdelivr.net/npm/mathjax@4.1.3/tex-chtml-nofont.js" async></script>
 
    Post-specific macros can be added in between:
 
@@ -29,5 +30,8 @@ window.MathJax = {
       mathds: ['{\\mathbb{#1}}', 1],
     }
   },
+  /* Palatino-style math (TeX Gyre Pagella) to match the Palatino text. The -nofont
+     MathJax build loads it from the CDN at MathJax's own version, so it is pinned too. */
+  output: { font: 'mathjax-pagella' },
   options: { skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre'] }
 };
