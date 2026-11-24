@@ -41,7 +41,6 @@
   <script>
     Object.assign(MathJax.tex.macros, {
       C: '{\\mathcal{C}}',
-      cA: '{\\mathcal{A}}',
       cE: '{\\mathcal{E}}',
       cI: '{\\mathcal{I}}',
       cP: '{\\mathcal{P}}',
@@ -338,20 +337,20 @@
           Average the error of random sequences of four dressed gates. With
           $(GR)_{4:1} = (GR_4)(GR_3)(GR_2)(GR_1)$ for independent random $R_1, \dots, R_4 \in \bR$, let
           \begin{equation}
-            \cA = \mathbb{E}\left[\phi\big((GR)_{4:1}\big)^\dagger \circ \nu\big((GR)_{4:1}\big)\right].
+            \Phi = \mathbb{E}\left[\phi\big((GR)_{4:1}\big)^\dagger \circ \nu\big((GR)_{4:1}\big)\right].
             \label{eq:average-channel}
           \end{equation}
           This channel is the identity when the gates are noiseless.
         </li>
-        <li>Compute the Choi matrix $\Phi_\cA$ of $\cA$.</li>
+        <li>Compute its Choi matrix $J(\Phi)$.</li>
         <li>
-          Find the eigenvector $\ket{a_1}$ of $\Phi_\cA$ with the largest eigenvalue. Since $\cA$ is close
-          to the identity, this eigenvalue dominates: it is close to $1$ once $\Phi_\cA$ is normalized to
+          Find the eigenvector $\ket{a_1}$ of $J(\Phi)$ with the largest eigenvalue. Since $\Phi$ is close
+          to the identity, this eigenvalue dominates: it is close to $1$ once $J(\Phi)$ is normalized to
           unit trace.
         </li>
         <li>
           Un-vectorize it, $\vect{A_1} = \ket{a_1}$, to obtain the leading Kraus operator $A_1$ of
-          $\cA$<span class="cite" data-key="carignan-dugas_polar_2019"></span>.
+          $\Phi$<span class="cite" data-key="carignan-dugas_polar_2019"></span>.
         </li>
         <li>Take the polar decomposition $A_1 = UP$, with $U$ unitary and $P \geq 0$. The unitary $U$ is the gauge.</li>
         <li>
