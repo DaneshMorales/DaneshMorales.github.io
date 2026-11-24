@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="When the randomizing gates of cycle benchmarking have gate-dependent errors, its estimates fall far below their targets. A self-consistent gauge, built from the leading Kraus operator of an averaged channel, closes much of the gap.">
+  <meta name="description" content="When the randomizing gates of cycle benchmarking have gate-dependent errors, its estimates fall far below their targets. We explain this through gauge freedom and show how to compute a self-consistent gauge from the leading Kraus operator of an averaged channel.">
   <title>Self-Consistent Gauges for Cycle Benchmarking — Danesh Morales Hashemi</title>
   <link rel="icon" type="image/svg+xml" href="../../icon.svg?v=4">
   <meta name="author" content="Danesh Morales Hashemi">
@@ -13,18 +13,18 @@
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="Danesh Morales Hashemi">
   <meta property="og:title" content="Self-Consistent Gauges for Cycle Benchmarking under Gate-Dependent Noise">
-  <meta property="og:description" content="When the randomizing gates of cycle benchmarking have gate-dependent errors, its estimates fall far below their targets. A self-consistent gauge, built from the leading Kraus operator of an averaged channel, closes much of the gap.">
+  <meta property="og:description" content="When the randomizing gates of cycle benchmarking have gate-dependent errors, its estimates fall far below their targets. We explain this through gauge freedom and show how to compute a self-consistent gauge from the leading Kraus operator of an averaged channel.">
   <meta property="og:url" content="https://daneshmorales.github.io/blog/posts/self-consistent-gauge-cycle-benchmarking.html">
   <meta name="twitter:card" content="summary">
-  <meta property="article:published_time" content="2025-11">
+  <meta property="article:published_time" content="2025-12">
   <meta property="article:author" content="https://daneshmorales.github.io/">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
     "headline": "Self-Consistent Gauges for Cycle Benchmarking under Gate-Dependent Noise",
-    "description": "When the randomizing gates of cycle benchmarking have gate-dependent errors, its estimates fall far below their targets. A self-consistent gauge, built from the leading Kraus operator of an averaged channel, closes much of the gap.",
-    "datePublished": "2025-11",
+    "description": "When the randomizing gates of cycle benchmarking have gate-dependent errors, its estimates fall far below their targets. We explain this through gauge freedom and show how to compute a self-consistent gauge from the leading Kraus operator of an averaged channel.",
+    "datePublished": "2025-12",
     "author": {
       "@type": "Person",
       "name": "Danesh Morales Hashemi",
@@ -82,7 +82,7 @@
   <main id="main">
     <header class="post-hero">
       <h1>Self-Consistent Gauges for Cycle Benchmarking under Gate-Dependent Noise</h1>
-      <p class="post-meta-line"><time datetime="2025-11">November 2025</time> · Error Characterization</p>
+      <p class="post-meta-line"><time datetime="2025-12">December 2025</time> · Error Characterization</p>
     </header>
 
     <details class="post-toc" id="post-toc" hidden>
@@ -106,12 +106,12 @@
 
       <p>
         This post looks at that gap through gauge freedom. Noisy gates are only defined up to a gauge
-        transformation, and the fidelity to a fixed ideal gate is not gauge invariant. Comparing the noisy
-        gates to a <em>gauge-rotated</em> target, computed from the leading Kraus operator of an averaged
-        channel, closes much of the gap. Section 2 sets up the notation of the cycle error reconstruction
+        transformation, and the fidelity to a fixed ideal gate is not gauge invariant. This suggests
+        comparing the noisy gates to a <em>gauge-rotated</em> target, computed from the leading Kraus
+        operator of an averaged channel<span class="cite" data-key="sannamoth_easier_2025"></span>. Section 2 sets up the notation of the cycle error reconstruction
         (CER) paper<span class="cite" data-key="carignan-dugas_error_2023"></span> and recalls cycle
         benchmarking and randomized compiling (RC)<span class="cite" data-key="wallman_noise_2016"></span>.
-        Section 3 describes the problem and the self-consistent gauge, with numerical results. Section 4
+        Section 3 describes the problem and how to compute this self-consistent gauge. Section 4
         turns to the analytical side: it shows why RC still tailors gate-dependent noise on the easy gates
         into Pauli channels, and rewrites the corresponding bound of the RC paper in the language of the
         CER paper.
@@ -193,8 +193,9 @@
 
       <p>
         the process fidelity of $G$ dressed with a randomizing gate $R$, averaged over a set $\bR$ of
-        randomizing gates that twirls the noise into a stochastic Pauli channel. The set depends on the
-        gate:
+        randomizing gates that twirls the noise into a stochastic Pauli channel. (My
+        <a href="cycle-benchmarking-intro.html">introduction to cycle benchmarking</a> covers the protocol
+        in more detail.) The set depends on the gate:
       </p>
 
       \begin{equation}
@@ -327,7 +328,10 @@
 
       <h3>3.2 Computing the Gauge</h3>
 
-      <p>For a gate of interest $G$ with randomizing set $\bR$, the self-consistent gauge (SCG) $U$ is computed as follows.</p>
+      <p>
+        For a gate of interest $G$ with randomizing set $\bR$, the self-consistent gauge (SCG) $U$ is
+        constructed as follows<span class="cite" data-key="sannamoth_easier_2025"></span>.
+      </p>
 
       <ol>
         <li>
@@ -359,90 +363,10 @@
         </li>
       </ol>
 
-      <h3>3.3 Results</h3>
-
-      <p>
-        In my simulations, the rotated targets explain the CB estimates much better: the gap
-        $|\hat F_{\text{CB}} - F^{U}_{\text{CB}}|$ is smaller than $|\hat F_{\text{CB}} - F_{\text{CB}}|$.
-        At the circuit level, giving each dressed gate its own gauge $U_{ij}$, define
-      </p>
-
-      \begin{equation}
-        F^{U}_{\text{naive}}(\tilde\C, \C) = \prod_{i=0}^{m}\prod_j F^{U_{ij}}_{\text{CB}}\big((D_i)_j\big).
-      \end{equation}
-
-      <p>For every error model I tried,</p>
-
-      \begin{equation}
-        \hat F_{\C} \leq F^{U}_{\text{naive}} \leq F_{\text{naive}},
-        \label{eq:chain}
-      \end{equation}
-
-      <p>
-        although I have no proof that this holds in general. When the randomizing gates have
-        gate-independent errors, the computed gauge is $U = \mathds{1}$, in line with
-        $\eqref{eq:cb-theorem}$, and the closer $U$ is to the identity, the smaller the gap between
-        $\hat F_{\C}$ and $F_{\text{naive}}$.
-      </p>
-
-      <p>
-        To see how much the gauge matters, I computed $F_{\text{naive}} - F^{U}_{\text{naive}}$ for random
-        circuits of 15 to 50 dressed cycles, with over-rotation strengths on the easy gates between $0$
-        and $2.27 \times 10^{-2}$. The difference is zero without over-rotations, and it grows steadily
-        with both the number of dressed cycles and the over-rotation strength. At the largest strength it
-        is about $0.03$ for 15 dressed cycles and about $0.07$ for 50.
-      </p>
-
-      <p>
-        I expect a one-to-one relation between the size of this gap and how far the gauge is from the
-        identity. Measuring that distance by the process infidelity
-        $1 - F(U, \mathds{1}) = 1 - |\Tr U|^2/d^2$ gives the following.
-      </p>
-
-      <div class="table-scroll">
-        <table>
-          <caption>Process infidelity $1 - F(U, \mathds{1})$ of the self-consistent gauge for each hard gate, in units of $10^{-5}$. Strength is the over-rotation strength of the easy gates, in units of $10^{-3}$.</caption>
-          <thead>
-            <tr>
-              <th scope="col">Strength</th>
-              <th scope="col"><i>H</i></th>
-              <th scope="col"><i>T</i></th>
-              <th scope="col">Identity</th>
-              <th scope="col">CNOT</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><th scope="row">0</th><td>0</td><td>0</td><td>0</td><td>0</td></tr>
-            <tr><th scope="row">5.68</th><td>1.49</td><td>0.270</td><td>1.49</td><td>2.98</td></tr>
-            <tr><th scope="row">11.4</th><td>5.97</td><td>1.08</td><td>5.96</td><td>11.9</td></tr>
-            <tr><th scope="row">17.0</th><td>13.4</td><td>2.43</td><td>13.4</td><td>26.9</td></tr>
-            <tr><th scope="row">22.7</th><td>23.9</td><td>4.32</td><td>23.9</td><td>47.8</td></tr>
-          </tbody>
-        </table>
-      </div>
-
-      <p>
-        The stronger the over-rotation, the further the gauge is from the identity. The growth is
-        quadratic: doubling the strength multiplies the infidelity by about four, as expected if $U$ is a
-        rotation by an angle proportional to the strength. The CNOT gauge is twice as far from the
-        identity as the gauges of the single-qubit Hadamard and identity gates, consistent with one such
-        rotation on each of its qubits, and the $T$ gauge is the closest.
-      </p>
-
-      <p>
-        The way the single-qubit gates are compiled matters. In earlier simulations that compiled them
-        with a ZXZXZ decomposition, the estimates matched their targets very well, and at comparable error
-        strengths the gauges were much closer to the identity: process infidelities of
-        $1.43 \times 10^{-8}$ for the Hadamard gate, $1.04 \times 10^{-7}$ for CNOT and exactly $0$ for the
-        identity, with $3.13 \times 10^{-5}$ for the $T$ gate. This is probably why the estimates were so
-        accurate there.
-      </p>
-
       <h2>4. Randomized Compiling with Gate-Dependent Easy Gates</h2>
 
       <p>
-        So far we have looked at gate-dependent noise on the easy gates numerically. This section looks at
-        it analytically, by translating the bound of the RC paper<span class="cite" data-key="wallman_noise_2016"></span>
+        This section looks at gate-dependent noise on the easy gates analytically, by translating the bound of the RC paper<span class="cite" data-key="wallman_noise_2016"></span>
         into the effective dressed cycles of the CER paper<span class="cite" data-key="carignan-dugas_error_2023"></span>.
         Here the hard cycles are Clifford, so that every twirling and correction cycle is a Pauli cycle.
         The argument should extend to circuits with $T$ gates, but we do not pursue that here.
@@ -659,9 +583,9 @@
           gate-dependent over-rotations, my simulations showed CB estimates far below their targets.
         </li>
         <li>
-          Comparing against the gauge-rotated targets $U(GR)U^\dagger$, where $U$ is the unitary part of
-          the leading Kraus operator of an averaged channel, closes much of this gap. The gap between the
-          naive and gauge-corrected circuit fidelities grows with the distance of $U$ from the identity.
+          Gauge freedom suggests comparing the noisy gates against rotated targets $U(GR)U^\dagger$, where
+          the self-consistent gauge $U$ is the unitary part of the leading Kraus operator of an averaged
+          channel.
         </li>
         <li>
           Randomized compiling still tailors gate-dependent easy-gate noise into effective Pauli channels,
@@ -671,11 +595,6 @@
         </li>
       </ul>
 
-      <p>
-        Two questions remain open: whether the chain $\eqref{eq:chain}$ holds for every error model, and
-        how to make the relation between the distance of the gauge from the identity and the size of the
-        gap precise.
-      </p>
 
       <section class="references-section">
         <h2>References</h2>
@@ -743,6 +662,14 @@
       "year": 2019,
       "url": "https://doi.org/10.48550/arXiv.1904.08897",
       "note": "arXiv:1904.08897 [quant-ph]"
+    },
+    "sannamoth_easier_2025": {
+      "authors": "D. Sannamoth, K. Boone, A. Carignan-Dugas, A. Hashim, I. Siddiqi, K. Mayer, J. Emerson",
+      "title": "Easier randomizing gates provide more accurate fidelity estimation",
+      "venue": "arXiv",
+      "year": 2025,
+      "url": "https://doi.org/10.48550/arXiv.2512.24744",
+      "note": "arXiv:2512.24744 [quant-ph]"
     }
   }
   </script>
