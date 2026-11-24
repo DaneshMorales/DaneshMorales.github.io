@@ -196,11 +196,14 @@ function initTOC() {
     .filter(h => !h.closest('.references-section'));
   if (!headings.length) return;
 
+  // Section numbers such as "1. " and "3.1 " are left out of the contents and the ids.
+  const sectionNumber = /^(?:\d+\.)+\d*\s+/;
+
   headings.forEach((h, i) => {
     if (!h.id) {
       h.id = h.textContent
         .toLowerCase()
-        .replace(/^\d+\.\s*/, '')   // strip leading "1. "
+        .replace(sectionNumber, '')
         .replace(/[^a-z0-9\s]/g, '')
         .trim()
         .replace(/\s+/g, '-')
@@ -210,8 +213,7 @@ function initTOC() {
     const a = document.createElement('a');
     a.href      = `#${h.id}`;
     a.className = `toc-link toc-${h.tagName.toLowerCase()}`;
-    // Strip numeric prefix for cleaner TOC display
-    a.textContent = h.textContent.replace(/^\d+\.\s*/, '');
+    a.textContent = h.textContent.replace(sectionNumber, '');
     tocNav.appendChild(a);
   });
 

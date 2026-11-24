@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="When the randomizing gates of cycle benchmarking have gate-dependent errors, its estimates fall far below their targets. A self-consistent gauge, built from the leading Kraus operator of an averaged channel, closes much of the gap.">
+  <title>Self-Consistent Gauges for Cycle Benchmarking — Danesh Morales Hashemi</title>
+  <link rel="icon" type="image/svg+xml" href="../../icon.svg?v=4">
+  <meta name="author" content="Danesh Morales Hashemi">
+  <link rel="canonical" href="https://daneshmorales.github.io/blog/posts/self-consistent-gauge-cycle-benchmarking.html">
+  <link rel="alternate" type="application/rss+xml" title="Danesh Morales Hashemi — Blog" href="../../feed.xml">
+  <!-- Link previews (LinkedIn, X, Slack, ...): text only -->
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Danesh Morales Hashemi">
+  <meta property="og:title" content="Self-Consistent Gauges for Cycle Benchmarking under Gate-Dependent Noise">
+  <meta property="og:description" content="When the randomizing gates of cycle benchmarking have gate-dependent errors, its estimates fall far below their targets. A self-consistent gauge, built from the leading Kraus operator of an averaged channel, closes much of the gap.">
+  <meta property="og:url" content="https://daneshmorales.github.io/blog/posts/self-consistent-gauge-cycle-benchmarking.html">
+  <meta name="twitter:card" content="summary">
+  <meta property="article:published_time" content="2025-11">
+  <meta property="article:author" content="https://daneshmorales.github.io/">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "Self-Consistent Gauges for Cycle Benchmarking under Gate-Dependent Noise",
+    "description": "When the randomizing gates of cycle benchmarking have gate-dependent errors, its estimates fall far below their targets. A self-consistent gauge, built from the leading Kraus operator of an averaged channel, closes much of the gap.",
+    "datePublished": "2025-11",
+    "author": {
+      "@type": "Person",
+      "name": "Danesh Morales Hashemi",
+      "url": "https://daneshmorales.github.io/"
+    },
+    "mainEntityOfPage": "https://daneshmorales.github.io/blog/posts/self-consistent-gauge-cycle-benchmarking.html"
+  }
+  </script>
+  <script src="../../script.js?v=20261124"></script>
+  <link rel="stylesheet" href="../../styles.css?v=20261124">
+
+  <!-- MathJax: shared blog configuration + post-specific macros -->
+  <script src="../mathjax-config.js?v=20261121"></script>
+  <script>
+    Object.assign(MathJax.tex.macros, {
+      C: '{\\mathcal{C}}',
+      cA: '{\\mathcal{A}}',
+      cE: '{\\mathcal{E}}',
+      cI: '{\\mathcal{I}}',
+      cP: '{\\mathcal{P}}',
+      bE: '{\\mathbf{E}}',
+      bH: '{\\mathbf{H}}',
+      bR: '{\\mathbf{R}}',
+      bL: '{\\boldsymbol{\\Lambda}}',
+      vect: ['{\\operatorname{vec}(#1)}', 1],
+      adj: '{\\mathrm{adj}}',
+      eff: '{\\mathrm{eff}}',
+    });
+    // Break displayed equations that are wider than the screen instead of scrolling them sideways.
+    MathJax.output.displayOverflow = 'linebreak';
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@4.1.3/tex-chtml-nofont.js" async></script>
+</head>
+<body>
+
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="identity">
+      <p class="site-title">Danesh Morales Hashemi</p>
+      <p class="profile-links header-profiles">
+        <a href="https://scholar.google.com/citations?hl=en&amp;user=f_ltr8oAAAAJ">Google Scholar</a>
+        <a href="https://github.com/DaneshMorales">GitHub</a>
+        <a href="https://www.linkedin.com/in/daneshmh/">LinkedIn</a>
+      </p>
+    </div>
+    <nav aria-label="Main navigation">
+      <a href="../../">About</a>
+      <a href="../../publications.html">Publications</a>
+      <a href="../" aria-current="location">Blog</a>
+      <a href="../../#contact">Contact</a>
+      <a href="../../files/Danesh_Resume-1.pdf" target="_blank" rel="noopener" aria-label="CV (PDF, opens in a new tab)">CV</a>
+    </nav>
+  </header>
+
+  <main id="main">
+    <header class="post-hero">
+      <h1>Self-Consistent Gauges for Cycle Benchmarking under Gate-Dependent Noise</h1>
+      <p class="post-meta-line"><time datetime="2025-11">November 2025</time> · Error Characterization</p>
+    </header>
+
+    <details class="post-toc" id="post-toc" hidden>
+      <summary>Contents</summary>
+      <nav id="toc-nav" aria-label="Table of contents"></nav>
+    </details>
+
+    <article class="post-body">
+
+      <h2>1. Introduction</h2>
+
+      <p>
+        Cycle benchmarking (CB)<span class="cite" data-key="erhard_characterizing_2019"></span> estimates
+        the process fidelity of a cycle of gates, and multiplying such estimates gives a quick estimate
+        of the fidelity of a whole circuit. CB randomizes each cycle with random gates that twirl its
+        noise into a Pauli channel, and its guarantees assume that the errors on these randomizing gates
+        do not depend on which gate is applied. Real errors often do. In my simulations, over-rotation
+        errors on the randomizing gates pushed the fidelities that CB reports far below the fidelities
+        they are meant to estimate.
+      </p>
+
+      <p>
+        This post looks at that gap through gauge freedom. Noisy gates are only defined up to a gauge
+        transformation, and the fidelity to a fixed ideal gate is not gauge invariant. Comparing the noisy
+        gates to a <em>gauge-rotated</em> target, computed from the leading Kraus operator of an averaged
+        channel, closes much of the gap. Section 2 sets up the notation of the cycle error reconstruction
+        (CER) paper<span class="cite" data-key="carignan-dugas_error_2023"></span> and recalls cycle
+        benchmarking and randomized compiling (RC)<span class="cite" data-key="wallman_noise_2016"></span>.
+        Section 3 describes the problem and the self-consistent gauge, with numerical results. Section 4
+        turns to the analytical side: it shows why RC still tailors gate-dependent noise on the easy gates
+        into Pauli channels, and rewrites the corresponding bound of the RC paper in the language of the
+        CER paper.
+      </p>
+
+      <h2>2. Setup</h2>
+
+      <h3>2.1 Circuits of Easy and Hard Cycles</h3>
+
+      <p>
+        Following the CER paper<span class="cite" data-key="carignan-dugas_error_2023"></span>, we write a
+        circuit as alternating <em>easy</em> and <em>hard</em> cycles,
+      </p>
+
+      \begin{equation}
+        \C = E_m H_{m-1} E_{m-1} \cdots H_1 E_1 H_0 E_0,
+        \label{eq:circuit}
+      \end{equation}
+
+      <p>
+        composed from right to left, so $E_0$ is applied first. Each easy cycle $E_i$ is a tensor product
+        of single-qubit gates from the group $\bE = \langle \cP, S \rangle$ generated by the Pauli gates
+        and the phase gate $S = \sqrt{Z}$, which acts on the Bloch sphere as the dihedral group of order 8.
+        Each hard cycle $H_i$ is a tensor product of gates from $\bH = \{\mathrm{CNOT}, H, T\}$. Because
+        the easy gates form a group, random easy gates can be merged into neighbouring easy cycles without
+        making the circuit longer.
+      </p>
+
+      <p>
+        <strong>Definition 1 (dressed cycle).</strong> A dressed cycle $D_l = H_l E_l$ is an easy cycle
+        followed by a hard cycle. Setting $H_m = \mathds{1}$, the circuit is a product of dressed cycles,
+      </p>
+
+      \begin{equation}
+        \C = D_m D_{m-1} \cdots D_1 D_0,
+        \label{eq:dressed}
+      \end{equation}
+
+      <p>where the last one, $D_m = E_m$, is an easy cycle dressed with an identity cycle.</p>
+
+      <h3>2.2 Noise and Fidelities</h3>
+
+      <p>
+        For a gate or cycle $G$, write $\phi(G)$ for its ideal unitary channel and $\nu(G)$ for its noisy
+        implementation. In Sections 2 and 3 we abbreviate $\tilde G = \nu(G)$ and write $G$ for $\phi(G)$.
+        If $\tilde G$ has Kraus operators $\{A_k\}$ and acts on $d$ dimensions, its process fidelity to
+        the ideal gate is
+      </p>
+
+      \begin{equation}
+        F(\tilde G, G) = \frac{1}{d^2}\sum_k \left|\Tr\left(G^\dagger A_k\right)\right|^2.
+        \label{eq:fidelity}
+      \end{equation}
+
+      <p>
+        (Kraus operators, Choi matrices and vectorization are reviewed in my
+        <a href="superoperator-representations.html">post on superoperator representations</a>.) Process
+        fidelity is multiplicative under tensor products. So if a cycle $G = \bigotimes_j G_j$ is
+        implemented without crosstalk, $\tilde G = \bigotimes_j \tilde G_j$, its fidelity is the product
+        of the fidelities of its gates:
+      </p>
+
+      \begin{equation}
+        F(\tilde G, G) = \prod_j F(\tilde G_j, G_j).
+        \label{eq:product}
+      \end{equation}
+
+      <h3>2.3 Cycle Benchmarking</h3>
+
+      <p>
+        For a gate of interest $G$, CB<span class="cite" data-key="erhard_characterizing_2019"></span>
+        estimates
+      </p>
+
+      \begin{equation}
+        F_{\text{CB}}(G) = \frac{1}{|\bR|}\sum_{R \in \bR} F\big(\tilde G \tilde R, GR\big),
+        \label{eq:fcb}
+      \end{equation}
+
+      <p>
+        the process fidelity of $G$ dressed with a randomizing gate $R$, averaged over a set $\bR$ of
+        randomizing gates that twirls the noise into a stochastic Pauli channel. The set depends on the
+        gate:
+      </p>
+
+      \begin{equation}
+        G = H \Rightarrow \bR = \cP, \qquad
+        G = T \Rightarrow \bR = \bE, \qquad
+        G = \mathrm{CNOT} \Rightarrow \bR = \cP^{\otimes 2}.
+        \label{eq:randomizing-sets}
+      \end{equation}
+
+      <p>
+        The Hadamard and CNOT gates are Clifford gates, so Pauli gates suffice for them, while the $T$
+        gate is randomized with the dihedral easy group instead<span class="cite" data-key="wallman_noise_2016"></span>.
+        Let $\hat F_{\text{CB}}(G)$ be the estimate that CB returns. If the randomizing gates have
+        gate-independent noise, $\tilde R = \Lambda \circ R$ for all $R \in \bR$, then Theorem 3
+        of<span class="cite" data-key="erhard_characterizing_2019"></span> guarantees that
+      </p>
+
+      \begin{equation}
+        \hat F_{\text{CB}}(G) \leq F_{\text{CB}}(G),
+        \qquad
+        F_{\text{CB}} - \hat F_{\text{CB}} = \mathcal{O}\big((1 - F_{\text{CB}})^2\big):
+        \label{eq:cb-theorem}
+      \end{equation}
+
+      <p>CB slightly underestimates its target, by an amount of second order in the infidelity.</p>
+
+      <h3>2.4 From Cycles to Circuits</h3>
+
+      <p>
+        If there is no crosstalk, $\eqref{eq:product}$ suggests estimating the fidelity of a whole circuit
+        by multiplying CB estimates of its dressed gates; running CB on single dressed gates rather than
+        on whole cycles also saves time. Write $(D_i)_j$ for the $j$-th dressed gate of the dressed cycle
+        $D_i$, that is, the $j$-th gate of $H_i$ together with the easy gates on the same qubits just
+        before it. We compare
+      </p>
+
+      \begin{equation}
+        \hat F_{\C} = \prod_{i=0}^{m}\prod_j \hat F_{\text{CB}}\big((D_i)_j\big)
+        \qquad\text{and}\qquad
+        F_{\text{naive}}(\tilde\C, \C) = \prod_{i=0}^{m}\prod_j F_{\text{CB}}\big((D_i)_j\big).
+        \label{eq:composed}
+      \end{equation}
+
+      <p>
+        The first multiplies the CB estimates, and the second, which we call the naive circuit fidelity,
+        multiplies their targets. Written out with $\eqref{eq:fcb}$,
+      </p>
+
+      $$
+        F_{\text{naive}}(\tilde\C, \C)
+        = \prod_{i=0}^{m}\prod_j \frac{1}{|\bR|}\sum_{R \in \bR}
+          F\big((\tilde H_i)_j \tilde R,\ (H_i)_j R\big).
+      $$
+
+      <p>
+        Under gate-independent noise on the randomizing gates, applying $\eqref{eq:cb-theorem}$ to each
+        factor gives
+      </p>
+
+      \begin{equation}
+        \hat F_{\C} \leq F_{\text{naive}}(\tilde\C, \C).
+        \label{eq:composed-inequality}
+      \end{equation}
+
+      <p>
+        In my simulations, gate-dependent noise strains this picture. With an over-rotation error model on
+        the easy gates, which are also the randomizing gates, inequality
+        $\eqref{eq:composed-inequality}$ still held, but the CB estimates were far below their targets,
+        $\hat F_{\text{CB}} \ll F_{\text{CB}}$, and therefore $\hat F_{\C} \ll F_{\text{naive}}$. Whether
+        some other error model violates the inequality outright, rather than just loosening it, is still
+        open.
+      </p>
+
+      <h3>2.5 Randomized Compiling</h3>
+
+      <p>
+        Randomized compiling<span class="cite" data-key="wallman_noise_2016"></span> is the other
+        ingredient. Suppose first that the easy gates have gate-independent noise, $\tilde E = \Lambda\circ E$
+        for all $E \in \bE$, and write each noisy hard cycle as $\tilde H = H \circ \Lambda_H$. A noisy
+        dressed cycle is then
+      </p>
+
+      \begin{equation}
+        \tilde H \circ \tilde E = H \circ (\Lambda_H \circ \Lambda) \circ E = H \circ \bL_H \circ E,
+        \qquad \bL_H = \Lambda_H \circ \Lambda,
+      \end{equation}
+
+      <p>so the noisy circuit is</p>
+
+      \begin{equation}
+        \tilde\C = \Lambda E_m H_{m-1} \bL_{H_{m-1}} E_{m-1} \cdots H_1 \bL_{H_1} E_1 H_0 \bL_{H_0} E_0.
+      \end{equation}
+
+      <p>
+        RC replaces each easy cycle by a random, ideally equivalent one and averages over many such
+        compilations. In the limit of infinitely many randomizations, each composite error $\bL_{H_i}$
+        between an easy and a hard cycle is tailored into a Pauli channel
+        $\bL^{P}_{H_i}$<span class="cite" data-key="wallman_noise_2016"></span>:
+      </p>
+
+      \begin{equation}
+        \tilde\C_{\text{RC}} = \Lambda E_m H_{m-1} \bL^{P}_{H_{m-1}} E_{m-1} \cdots H_1 \bL^{P}_{H_1} E_1 H_0 \bL^{P}_{H_0} E_0.
+        \label{eq:rc}
+      \end{equation}
+
+      <p>Section 4 revisits this when the noise on the easy gates is gate-dependent.</p>
+
+      <h2>3. Gauge Freedom and Self-Consistent Gauges</h2>
+
+      <h3>3.1 The Problem</h3>
+
+      <p>
+        CB targets the average fidelity $\eqref{eq:fcb}$ of the noisy dressed gate $\tilde G\tilde R$ to
+        the ideal $GR$. When the randomizing gates have gate-dependent errors, the gap between this target
+        and the CB estimate becomes large, $\hat F_{\text{CB}} \ll F_{\text{CB}}$, and so does the gap
+        between $\hat F_{\C}$ and $F_{\text{naive}}$.
+      </p>
+
+      <p>
+        Part of the reason is gauge freedom. Experiments see noisy gates only through circuits that start
+        with a state preparation and end with a measurement. Those outcomes do not change if every noisy
+        operation is conjugated by the same invertible map, $\tilde G \mapsto \mathcal{U}\tilde G\,\mathcal{U}^{-1}$,
+        with the preparation and measurement transformed to match. The fidelity to a fixed target gate,
+        however, does change. Carignan-Dugas et al.<span class="cite" data-key="carignan-dugas_randomized_2018"></span>
+        used this freedom to interpret randomized benchmarking decay rates under gate-dependent noise,
+        relating them to fidelities with respect to a target gate set rotated by a suitable unitary.
+        Following that idea, we compare the noisy dressed gates to the rotated targets $U(GR)U^\dagger$ for
+        a well-chosen unitary $U$.
+      </p>
+
+      <h3>3.2 Computing the Gauge</h3>
+
+      <p>For a gate of interest $G$ with randomizing set $\bR$, the self-consistent gauge (SCG) $U$ is computed as follows.</p>
+
+      <ol>
+        <li>
+          Average the error of random sequences of four dressed gates. With
+          $(GR)_{4:1} = (GR_4)(GR_3)(GR_2)(GR_1)$ for independent random $R_1, \dots, R_4 \in \bR$, let
+          \begin{equation}
+            \cA = \mathbb{E}\left[\phi\big((GR)_{4:1}\big)^\dagger \circ \nu\big((GR)_{4:1}\big)\right].
+            \label{eq:average-channel}
+          \end{equation}
+          This channel is the identity when the gates are noiseless.
+        </li>
+        <li>Compute the Choi matrix $\Phi_\cA$ of $\cA$.</li>
+        <li>
+          Find the eigenvector $\ket{a_1}$ of $\Phi_\cA$ with the largest eigenvalue. Since $\cA$ is close
+          to the identity, this eigenvalue dominates: it is close to $1$ once $\Phi_\cA$ is normalized to
+          unit trace.
+        </li>
+        <li>
+          Un-vectorize it, $\vect{A_1} = \ket{a_1}$, to obtain the leading Kraus operator $A_1$ of
+          $\cA$<span class="cite" data-key="carignan-dugas_polar_2019"></span>.
+        </li>
+        <li>Take the polar decomposition $A_1 = UP$, with $U$ unitary and $P \geq 0$. The unitary $U$ is the gauge.</li>
+        <li>
+          Compute the fidelity to the rotated targets,
+          \begin{equation}
+            F^{U}_{\text{CB}}(G) = \frac{1}{|\bR|}\sum_{R \in \bR} F\big(\tilde G\tilde R,\ U(GR)U^\dagger\big).
+            \label{eq:fcb-gauge}
+          \end{equation}
+        </li>
+      </ol>
+
+      <h3>3.3 Results</h3>
+
+      <p>
+        In my simulations, the rotated targets explain the CB estimates much better: the gap
+        $|\hat F_{\text{CB}} - F^{U}_{\text{CB}}|$ is smaller than $|\hat F_{\text{CB}} - F_{\text{CB}}|$.
+        At the circuit level, giving each dressed gate its own gauge $U_{ij}$, define
+      </p>
+
+      \begin{equation}
+        F^{U}_{\text{naive}}(\tilde\C, \C) = \prod_{i=0}^{m}\prod_j F^{U_{ij}}_{\text{CB}}\big((D_i)_j\big).
+      \end{equation}
+
+      <p>For every error model I tried,</p>
+
+      \begin{equation}
+        \hat F_{\C} \leq F^{U}_{\text{naive}} \leq F_{\text{naive}},
+        \label{eq:chain}
+      \end{equation}
+
+      <p>
+        although I have no proof that this holds in general. When the randomizing gates have
+        gate-independent errors, the computed gauge is $U = \mathds{1}$, in line with
+        $\eqref{eq:cb-theorem}$, and the closer $U$ is to the identity, the smaller the gap between
+        $\hat F_{\C}$ and $F_{\text{naive}}$.
+      </p>
+
+      <p>
+        To see how much the gauge matters, I computed $F_{\text{naive}} - F^{U}_{\text{naive}}$ for random
+        circuits of 15 to 50 dressed cycles, with over-rotation strengths on the easy gates between $0$
+        and $2.27 \times 10^{-2}$. The difference is zero without over-rotations, and it grows steadily
+        with both the number of dressed cycles and the over-rotation strength. At the largest strength it
+        is about $0.03$ for 15 dressed cycles and about $0.07$ for 50.
+      </p>
+
+      <p>
+        I expect a one-to-one relation between the size of this gap and how far the gauge is from the
+        identity. Measuring that distance by the process infidelity
+        $1 - F(U, \mathds{1}) = 1 - |\Tr U|^2/d^2$ gives the following.
+      </p>
+
+      <div class="table-scroll">
+        <table>
+          <caption>Process infidelity $1 - F(U, \mathds{1})$ of the self-consistent gauge for each hard gate, in units of $10^{-5}$. Strength is the over-rotation strength of the easy gates, in units of $10^{-3}$.</caption>
+          <thead>
+            <tr>
+              <th scope="col">Strength</th>
+              <th scope="col"><i>H</i></th>
+              <th scope="col"><i>T</i></th>
+              <th scope="col">Identity</th>
+              <th scope="col">CNOT</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><th scope="row">0</th><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+            <tr><th scope="row">5.68</th><td>1.49</td><td>0.270</td><td>1.49</td><td>2.98</td></tr>
+            <tr><th scope="row">11.4</th><td>5.97</td><td>1.08</td><td>5.96</td><td>11.9</td></tr>
+            <tr><th scope="row">17.0</th><td>13.4</td><td>2.43</td><td>13.4</td><td>26.9</td></tr>
+            <tr><th scope="row">22.7</th><td>23.9</td><td>4.32</td><td>23.9</td><td>47.8</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>
+        The stronger the over-rotation, the further the gauge is from the identity. The growth is
+        quadratic: doubling the strength multiplies the infidelity by about four, as expected if $U$ is a
+        rotation by an angle proportional to the strength. The CNOT gauge is twice as far from the
+        identity as the gauges of the single-qubit Hadamard and identity gates, consistent with one such
+        rotation on each of its qubits, and the $T$ gauge is the closest.
+      </p>
+
+      <p>
+        The way the single-qubit gates are compiled matters. In earlier simulations that compiled them
+        with a ZXZXZ decomposition, the estimates matched their targets very well, and at comparable error
+        strengths the gauges were much closer to the identity: process infidelities of
+        $1.43 \times 10^{-8}$ for the Hadamard gate, $1.04 \times 10^{-7}$ for CNOT and exactly $0$ for the
+        identity, with $3.13 \times 10^{-5}$ for the $T$ gate. This is probably why the estimates were so
+        accurate there.
+      </p>
+
+      <h2>4. Randomized Compiling with Gate-Dependent Easy Gates</h2>
+
+      <p>
+        So far we have looked at gate-dependent noise on the easy gates numerically. This section looks at
+        it analytically, by translating the bound of the RC paper<span class="cite" data-key="wallman_noise_2016"></span>
+        into the effective dressed cycles of the CER paper<span class="cite" data-key="carignan-dugas_error_2023"></span>.
+        Here the hard cycles are Clifford, so that every twirling and correction cycle is a Pauli cycle.
+        The argument should extend to circuits with $T$ gates, but we do not pursue that here.
+      </p>
+
+      <h3>4.1 Notation</h3>
+
+      <p>
+        We write $H_i$, $E_i$ and $R_i$ for hard, easy and twirling cycles, with ideal and noisy channels
+        $\phi(\cdot)$ and $\nu(\cdot)$ as before. The noise of a cycle is defined by
+      </p>
+
+      \begin{equation}
+        \nu(H_i) = \phi(H_i)\,\Lambda(H_i),
+        \qquad
+        \nu(E) = \Lambda(E)\,\phi(E),
+      \end{equation}
+
+      <p>
+        so the noise of a hard cycle acts just before it and the noise of an easy cycle just after it, as
+        in Section 2.5. We measure errors with the diamond distance from the identity channel $\cI$,
+      </p>
+
+      \begin{equation}
+        \epsilon(\cE) = \frac{1}{2}\left\|\cE - \cI\right\|_\diamond
+        = \frac{1}{2}\sup_\rho \left\|\left[(\cE - \cI) \otimes \cI_d\right](\rho)\right\|_1,
+      \end{equation}
+
+      <p>
+        where the supremum is over density matrices on the system and a $d$-dimensional copy of it. The
+        diamond distance is related to the process infidelity $r(\cE) = 1 - F(\cE, \cI)$, not the average
+        gate infidelity, by<span class="cite" data-key="wallman_noise_2016"></span>
+      </p>
+
+      \begin{equation}
+        r(\cE) \leq \epsilon(\cE) \leq d\sqrt{r(\cE)}.
+      \end{equation}
+
+      <p>
+        For Pauli channels the lower bound is attained, $\epsilon = r$, while for coherent errors
+        $\epsilon$ grows like $\sqrt{r}$. This is why tailoring noise into Pauli channels matters.
+      </p>
+
+      <h3>4.2 Compiled Easy Cycles</h3>
+
+      <p>RC replaces each easy cycle $E_i$ by</p>
+
+      \begin{equation}
+        E_i' = R_i^{c} E_i R_{i-1},
+        \qquad R_i^{c} = H_i^\dagger R_i^\dagger H_i,
+        \label{eq:compiled}
+      \end{equation}
+
+      <p>
+        where $R_0, \dots, R_{m-1}$ are independent, uniformly random Pauli cycles and
+        $R_{-1} = R_m = \mathds{1}$. Since $H_i R_i^{c} = R_i^\dagger H_i$, each dressed cycle becomes
+        $H_i E_i' = R_i^\dagger (H_i E_i) R_{i-1}$; the random cycles cancel between neighbours, so the
+        compiled circuit is ideally equal to $\C$. (The RC paper writes circuits in time order, from left
+        to right, which is why its correction cycles appear as $H_i R_i^\dagger H_i^\dagger$.)
+      </p>
+
+      <p>
+        With gate-dependent noise, the error $\Lambda(E_i')$ of a compiled easy cycle depends on the twirls
+        that were drawn. The correction $R_i^{c}$ is a Pauli cycle, because $H_i$ is Clifford, and so is
+        $E_i^\dagger R_i^{c} E_i$, because easy gates are Clifford too. As $R_{i-1}$ runs over all Pauli
+        cycles, $E_i'$ therefore runs over the same set of compiled versions of $E_i$ (up to phases) for
+        every $R_i$, and their average error
+      </p>
+
+      \begin{equation}
+        \bar\Lambda_i = \left\langle \Lambda(E_i') \right\rangle_{R_{i-1}}
+        \label{eq:average-noise}
+      \end{equation}
+
+      <p>does not depend on $R_i$. It defines the gate-independent noise model that we compare against.</p>
+
+      <h3>4.3 Effective Dressed Cycles</h3>
+
+      <p>Undoing the random cycles of a noisy dressed cycle with their ideal versions defines the adjusted dressed cycle</p>
+
+      \begin{equation}
+        \nu^{\adj}_i = \phi(R_i)\,\nu(H_i)\,\nu(E_i')\,\phi(R_{i-1})^\dagger,
+      \end{equation}
+
+      <p>
+        and its average over the twirls is the effective dressed
+        cycle<span class="cite" data-key="carignan-dugas_error_2023"></span>
+      </p>
+
+      \begin{equation}
+        \nu^{\eff}_i = \left\langle \nu^{\adj}_i \right\rangle_{R_i, R_{i-1}}.
+        \label{eq:effective}
+      \end{equation}
+
+      <p>
+        Even when the easy-gate noise is gate-dependent, the effective dressed cycle is an ideal dressed
+        cycle with a Pauli channel in the middle. Using $\phi(R_i)\phi(H_i) = \phi(H_i)\phi(R_i^{c})^\dagger$
+        and $\phi(E_i')\phi(R_{i-1})^\dagger = \phi(R_i^{c})\phi(E_i)$,
+      </p>
+
+      \begin{align}
+        \nu^{\adj}_i
+        &= \phi(R_i)\,\phi(H_i)\,\Lambda(H_i)\,\Lambda(E_i')\,\phi(E_i')\,\phi(R_{i-1})^\dagger \nonumber \\
+        &= \phi(H_i)\,\phi(R_i^{c})^\dagger\,\Lambda(H_i)\,\Lambda(E_i')\,\phi(R_i^{c})\,\phi(E_i).
+        \label{eq:adjusted}
+      \end{align}
+
+      <p>
+        Only $\Lambda(E_i')$ depends on $R_{i-1}$, so averaging over $R_{i-1}$ replaces it by
+        $\bar\Lambda_i$, and averaging over $R_i$ then twirls the rest:
+      </p>
+
+      \begin{equation}
+        \nu^{\eff}_i = \phi(H_i)\,S_i\,\phi(E_i),
+        \qquad
+        S_i = \left\langle \phi(R_i^{c})^\dagger\,\Lambda(H_i)\,\bar\Lambda_i\,\phi(R_i^{c}) \right\rangle_{R_i}.
+        \label{eq:effective-pauli}
+      \end{equation}
+
+      <p>
+        As $R_i$ runs over all Pauli cycles, so does $R_i^{c}$, so $S_i$ is the Pauli twirl of
+        $\Lambda(H_i)\bar\Lambda_i$: a stochastic Pauli channel. On average, each dressed cycle behaves as
+        if the easy gates had the gate-independent noise $\bar\Lambda_i$.
+      </p>
+
+      <h3>4.4 Gate-Dependent versus Gate-Independent Noise</h3>
+
+      <p>
+        Let $\C_{\text{GD}} = \langle \C_{\text{RC}}(\Vec{R}) \rangle_{\Vec{R}}$ be the average over
+        compilations of the circuit with the actual, gate-dependent easy-gate noise, and let
+        $\C_{\text{GI}}$ be the same average when every $\Lambda(E_i')$ is replaced by $\bar\Lambda_i$.
+        These are the gate-dependent and gate-independent circuits of the RC paper; in the CER paper,
+        $\C_{\text{GD}}$ is the averaged randomized circuit. The random cycles telescope, so a single
+        randomized circuit is a product of adjusted dressed cycles,
+      </p>
+
+      \begin{equation}
+        \C_{\text{RC}}(\Vec{R}) = \nu^{\adj}_{m:0} = \nu^{\adj}_m \cdots \nu^{\adj}_1 \nu^{\adj}_0,
+      \end{equation}
+
+      <p>
+        and we use the same $a\!:\!b$ notation for other products of cycles, with an empty product equal to
+        the identity. With gate-independent noise, $\nu^{\adj}_i$ in $\eqref{eq:adjusted}$ depends only
+        on $R_i$, so the adjusted cycles are independent and the average factorizes exactly, as in the
+        proof of Lemma 1 of the CER paper<span class="cite" data-key="carignan-dugas_error_2023"></span>:
+      </p>
+
+      \begin{equation}
+        \C_{\text{GI}} = \nu^{\eff}_{m:0} = \nu^{\eff}_m \cdots \nu^{\eff}_1 \nu^{\eff}_0.
+      \end{equation}
+
+      <p>
+        By $\eqref{eq:effective-pauli}$, both models have the same effective dressed cycles. With
+        gate-dependent noise, however, neighbouring adjusted cycles share the twirl $R_{i-1}$ and are
+        correlated. Write $\delta_i = \nu^{\adj}_i - \nu^{\eff}_i$ for the fluctuation of the $i$-th cycle.
+        The telescoping identity
+      </p>
+
+      $$
+        \nu^{\adj}_{m:0} - \nu^{\eff}_{m:0}
+        = \sum_{i=0}^{m} \nu^{\eff}_{m:i+1}\,\delta_i\,\nu^{\adj}_{i-1:0},
+      $$
+
+      <p>together with the substitution $\nu^{\adj}_{i-1} = \nu^{\eff}_{i-1} + \delta_{i-1}$, gives</p>
+
+      \begin{equation}
+        \C_{\text{GD}} - \C_{\text{GI}}
+        = \left\langle \nu^{\adj}_{m:0} \right\rangle - \nu^{\eff}_{m:0}
+        = \sum_{i=1}^{m} \nu^{\eff}_{m:i+1} \left\langle \delta_i\,\delta_{i-1}\,\nu^{\adj}_{i-2:0} \right\rangle.
+        \label{eq:gd-gi}
+      \end{equation}
+
+      <p>
+        The terms containing $\nu^{\eff}_{i-1}$ vanish on average, because $\delta_i$ has zero mean and
+        shares no twirl with $\nu^{\adj}_{i-2:0}$, and the $i = 0$ term vanishes for the same reason. What
+        remains are correlations between neighbouring dressed cycles, and these vanish when the easy-gate
+        noise is gate-independent, since $\delta_i$ then depends only on $R_i$.
+      </p>
+
+      <p>
+        Theorem 2 of the RC paper<span class="cite" data-key="wallman_noise_2016"></span> bounds this
+        difference by how far the easy-gate noise strays from its average:
+      </p>
+
+      \begin{equation}
+        \left\|\C_{\text{GD}} - \C_{\text{GI}}\right\|_\diamond
+        \leq \sum_{i=1}^{m} \left\langle \left\|\Lambda(E_i') - \bar\Lambda_i\right\|_\diamond \right\rangle_{\Vec{R}}.
+        \label{eq:rc-bound}
+      \end{equation}
+
+      <p>
+        Alternatively, the triangle inequality applied to $\eqref{eq:gd-gi}$, together with the fact that
+        composing with a channel cannot increase the diamond norm, gives
+      </p>
+
+      \begin{equation}
+        \left\|\C_{\text{GD}} - \C_{\text{GI}}\right\|_\diamond
+        \leq \sum_{i=1}^{m} \left\| \left\langle \delta_i\,\delta_{i-1}\,\nu^{\adj}_{i-2:0} \right\rangle \right\|_\diamond.
+        \label{eq:triangle-bound}
+      \end{equation}
+
+      <p>
+        In this sense, Theorem 2 of the RC paper bounds the perturbation terms of the CER expansion. Both
+        bounds say the same thing: the more the errors of the easy gates vary from gate to gate, the
+        further the compiled circuit can be from the gate-independent model, and the looser the bounds
+        become.
+      </p>
+
+      <h2>5. Summary</h2>
+
+      <ul>
+        <li>
+          The guarantees of CB assume gate-independent errors on the randomizing gates. Under
+          gate-dependent over-rotations, my simulations showed CB estimates far below their targets.
+        </li>
+        <li>
+          Comparing against the gauge-rotated targets $U(GR)U^\dagger$, where $U$ is the unitary part of
+          the leading Kraus operator of an averaged channel, closes much of this gap. The gap between the
+          naive and gauge-corrected circuit fidelities grows with the distance of $U$ from the identity.
+        </li>
+        <li>
+          Randomized compiling still tailors gate-dependent easy-gate noise into effective Pauli channels,
+          built from the averaged noise $\bar\Lambda_i$. The deviation from the gate-independent model
+          comes from correlations between neighbouring dressed cycles, and it is bounded by the spread of
+          the easy-gate errors.
+        </li>
+      </ul>
+
+      <p>
+        Two questions remain open: whether the chain $\eqref{eq:chain}$ holds for every error model, and
+        how to make the relation between the distance of the gauge from the identity and the size of the
+        gap precise.
+      </p>
+
+      <section class="references-section">
+        <h2>References</h2>
+        <div id="post-references"></div>
+      </section>
+
+      <footer class="post-footer">
+        <nav aria-label="More from the blog">
+          <a href="../">All posts</a>
+        </nav>
+      </footer>
+
+    </article>
+  </main>
+
+  <!--
+    ============================================================
+    CITATION DATA
+    ============================================================
+  -->
+  <script type="application/json" id="post-citations">
+  {
+    "erhard_characterizing_2019": {
+      "authors": "A. Erhard, J.J. Wallman, L. Postler, M. Meth, R. Stricker, E.A. Martinez, P. Schindler, T. Monz, J. Emerson, R. Blatt",
+      "title": "Characterizing large-scale quantum computers via cycle benchmarking",
+      "venue": "Nature Communications",
+      "volume": "10",
+      "pages": "5347",
+      "year": 2019,
+      "url": "https://doi.org/10.1038/s41467-019-13068-7",
+      "note": "arXiv:1902.08543 [quant-ph]"
+    },
+    "carignan-dugas_error_2023": {
+      "authors": "A. Carignan-Dugas, D. Dahlen, I. Hincks, E. Ospadov, S.J. Beale, S. Ferracin, J. Skanes-Norman, J. Emerson, J.J. Wallman",
+      "title": "The error reconstruction and compiled calibration of quantum computing cycles",
+      "venue": "arXiv",
+      "year": 2023,
+      "url": "https://doi.org/10.48550/arXiv.2303.17714",
+      "note": "arXiv:2303.17714 [quant-ph]"
+    },
+    "wallman_noise_2016": {
+      "authors": "J.J. Wallman, J. Emerson",
+      "title": "Noise tailoring for scalable quantum computation via randomized compiling",
+      "venue": "Physical Review A",
+      "volume": "94",
+      "pages": "052325",
+      "year": 2016,
+      "url": "https://doi.org/10.1103/PhysRevA.94.052325",
+      "note": "arXiv:1512.01098 [quant-ph]"
+    },
+    "carignan-dugas_randomized_2018": {
+      "authors": "A. Carignan-Dugas, K. Boone, J.J. Wallman, J. Emerson",
+      "title": "From randomized benchmarking experiments to gateset circuit fidelity: how to interpret randomized benchmarking decay parameters",
+      "venue": "New Journal of Physics",
+      "volume": "20",
+      "pages": "092001",
+      "year": 2018,
+      "url": "https://doi.org/10.1088/1367-2630/aadcc7",
+      "note": "arXiv:1804.01122 [quant-ph]"
+    },
+    "carignan-dugas_polar_2019": {
+      "authors": "A. Carignan-Dugas, M. Alexander, J. Emerson",
+      "title": "A polar decomposition for quantum channels (with applications to bounding error propagation in quantum circuits)",
+      "venue": "arXiv",
+      "year": 2019,
+      "url": "https://doi.org/10.48550/arXiv.1904.08897",
+      "note": "arXiv:1904.08897 [quant-ph]"
+    }
+  }
+  </script>
+
+  <footer class="site-footer">
+    <span>&copy; 2026 Danesh Morales Hashemi</span>
+  </footer>
+
+</body>
+</html>

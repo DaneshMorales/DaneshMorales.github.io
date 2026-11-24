@@ -1,0 +1,1260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Six ways to write a quantum channel (Kraus, Stinespring, Liouville, Pauli transfer matrix, Choi and χ-matrix), how to convert between them, and how complete positivity and trace preservation look in each.">
+  <title>Superoperator Representations — Danesh Morales Hashemi</title>
+  <link rel="icon" type="image/svg+xml" href="../../icon.svg?v=4">
+  <meta name="author" content="Danesh Morales Hashemi">
+  <link rel="canonical" href="https://daneshmorales.github.io/blog/posts/superoperator-representations.html">
+  <link rel="alternate" type="application/rss+xml" title="Danesh Morales Hashemi — Blog" href="../../feed.xml">
+  <!-- Link previews (LinkedIn, X, Slack, ...): text only -->
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Danesh Morales Hashemi">
+  <meta property="og:title" content="Superoperator Representations and the Characterization of Completely Positive Maps">
+  <meta property="og:description" content="Six ways to write a quantum channel (Kraus, Stinespring, Liouville, Pauli transfer matrix, Choi and χ-matrix), how to convert between them, and how complete positivity and trace preservation look in each.">
+  <meta property="og:url" content="https://daneshmorales.github.io/blog/posts/superoperator-representations.html">
+  <meta name="twitter:card" content="summary">
+  <meta property="article:published_time" content="2024-08">
+  <meta property="article:author" content="https://daneshmorales.github.io/">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "Superoperator Representations and the Characterization of Completely Positive Maps",
+    "description": "Six ways to write a quantum channel (Kraus, Stinespring, Liouville, Pauli transfer matrix, Choi and χ-matrix), how to convert between them, and how complete positivity and trace preservation look in each.",
+    "datePublished": "2024-08",
+    "author": {
+      "@type": "Person",
+      "name": "Danesh Morales Hashemi",
+      "url": "https://daneshmorales.github.io/"
+    },
+    "mainEntityOfPage": "https://daneshmorales.github.io/blog/posts/superoperator-representations.html"
+  }
+  </script>
+  <script src="../../script.js?v=20261124"></script>
+  <link rel="stylesheet" href="../../styles.css?v=20261124">
+
+  <!-- MathJax: shared blog configuration + post-specific macros -->
+  <script src="../mathjax-config.js?v=20261121"></script>
+  <script>
+    Object.assign(MathJax.tex.macros, {
+      cE: '{\\mathcal{E}}',
+      cH: '{\\mathcal{H}}',
+      cI: '{\\mathcal{I}}',
+      cP: '{\\mathcal{P}}',
+      cT: '{\\mathcal{T}}',
+      PTM: '{\\mathrm{PTM}}',
+      vect: ['{\\operatorname{vec}(#1)}', 1],
+      op: ['{\\left|#1\\right\\rangle\\!\\left\\langle #2\\right|}', 2],
+    });
+    // Break displayed equations that are wider than the screen instead of scrolling them sideways.
+    MathJax.output.displayOverflow = 'linebreak';
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@4.1.3/tex-chtml-nofont.js" async></script>
+</head>
+<body>
+
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="identity">
+      <p class="site-title">Danesh Morales Hashemi</p>
+      <p class="profile-links header-profiles">
+        <a href="https://scholar.google.com/citations?hl=en&amp;user=f_ltr8oAAAAJ">Google Scholar</a>
+        <a href="https://github.com/DaneshMorales">GitHub</a>
+        <a href="https://www.linkedin.com/in/daneshmh/">LinkedIn</a>
+      </p>
+    </div>
+    <nav aria-label="Main navigation">
+      <a href="../../">About</a>
+      <a href="../../publications.html">Publications</a>
+      <a href="../" aria-current="location">Blog</a>
+      <a href="../../#contact">Contact</a>
+      <a href="../../files/Danesh_Resume-1.pdf" target="_blank" rel="noopener" aria-label="CV (PDF, opens in a new tab)">CV</a>
+    </nav>
+  </header>
+
+  <main id="main">
+    <header class="post-hero">
+      <h1>Superoperator Representations and the Characterization of Completely Positive Maps</h1>
+      <p class="post-meta-line"><time datetime="2024-08">August 2024</time> · Quantum Channels</p>
+    </header>
+
+    <details class="post-toc" id="post-toc" hidden>
+      <summary>Contents</summary>
+      <nav id="toc-nav" aria-label="Table of contents"></nav>
+    </details>
+
+    <article class="post-body">
+
+      <h2>1. Introduction</h2>
+
+      <p>
+        A quantum channel is the most general way a quantum state can change: unitary evolution,
+        decoherence, the noise in an imperfect gate, or a measurement whose outcome is forgotten.
+        Mathematically, it is a linear map acting on operators, a <em>superoperator</em>, that is
+        completely positive and trace preserving. The same channel can be written in many ways, and
+        each representation makes a different property easy to see. Kraus operators break a channel
+        into simple pieces. A Stinespring dilation shows it as a unitary acting on a larger system.
+        Liouville matrices and Pauli transfer matrices turn the composition of channels into matrix
+        multiplication. The Choi matrix reduces complete positivity to positive semidefiniteness, and
+        the χ-matrix makes Pauli channels diagonal.
+      </p>
+
+      <p>
+        This post summarizes my final project for AMATH 900 at the University of Waterloo (Spring
+        2024). Many of the definitions follow the course notes<span class="cite" data-key="emerson_theory_2021"></span>
+        and Watrous's book<span class="cite" data-key="watrous_theory_2018"></span>. We define each
+        representation and prove its main properties, show how to convert between all of them, and
+        use them to characterize completely positive and CPTP maps. We finish by writing a few common
+        single-qubit channels in every representation.
+      </p>
+
+      <h2>2. Superoperators and Quantum Channels</h2>
+
+      <p>
+        Let $\cH_A$ and $\cH_B$ be finite-dimensional Hilbert spaces, and write $L(\cH)$ for the
+        linear operators on $\cH$. A <strong>superoperator</strong> is a linear map
+        $\cE : L(\cH_A) \to L(\cH_B)$<span class="cite" data-key="watrous_quantum_channels"></span>.
+        Density matrices are operators, so a superoperator acts on states, but linearity alone does
+        not guarantee that states are mapped to states. That requires the following
+        properties<span class="cite" data-key="emerson_theory_2021"></span>.
+      </p>
+
+      <p><strong>Definition 1.</strong> A superoperator $\cE : L(\cH_A) \to L(\cH_B)$ is</p>
+      <ol>
+        <li><em>positive</em> if $\cE(X) \geq 0$ whenever $X \geq 0$;</li>
+        <li>
+          <em>completely positive</em> (CP) if $\cI_R \otimes \cE$ is positive for every
+          finite-dimensional Hilbert space $\cH_R$, where $\cI_R$ is the identity map on $L(\cH_R)$;
+        </li>
+        <li><em>trace preserving</em> (TP) if $\Tr\cE(X) = \Tr X$ for every operator $X$;</li>
+        <li><em>unital</em> if $\cE(\mathds{1}_A) = \mathds{1}_B$.</li>
+      </ol>
+      <p>A <strong>quantum channel</strong> is a completely positive, trace-preserving (CPTP) map.</p>
+
+      <p>
+        The course notes also require <em>convex linearity</em>,
+        $\cE(p_1\rho_1 + p_2\rho_2) = p_1\cE(\rho_1) + p_2\cE(\rho_2)$ for $p_1, p_2 \geq 0$: a
+        channel must respect probabilistic mixtures of states. For a linear map this holds
+        automatically.
+      </p>
+
+      <p>
+        Complete positivity is stronger than positivity. It asks that the output remain a valid state
+        even when the input is entangled with a reference system $R$ that the channel does not touch.
+        The transpose map $\cT(X) = X^{T}$ is the standard example of a positive map that is not
+        completely positive. Applied to half of the unnormalized maximally entangled vector
+        $\ket{\Omega} = \sum_i \ket{i}\otimes\ket{i}$, it gives the swap operator, which has
+        eigenvalue $-1$:
+      </p>
+
+      $$
+        (\cI \otimes \cT)\left(\op{\Omega}{\Omega}\right) = \sum_{i,j} \op{i}{j} \otimes \op{j}{i}.
+      $$
+
+      <p>
+        Superoperators between different spaces are useful too<span class="cite" data-key="watrous_theory_2018"></span>,
+        but from now on we only consider maps $\cE : L(\cH_A) \to L(\cH_A)$, and write
+        $d = \dim\cH_A$. For $n$ qubits, $d = 2^n$.
+      </p>
+
+      <h3>2.1 Examples</h3>
+
+      <p>
+        A few channels will come back throughout the post<span class="cite" data-key="emerson_theory_2021"></span>.
+        For a $d$-dimensional system, the <strong>depolarizing channel</strong> is
+      </p>
+
+      \begin{equation}
+        \cE_{\mathrm{dep}}(X) = (1-p)\,X + p\,\Tr(X)\,\frac{\mathds{1}}{d},
+        \qquad 0 \leq p \leq \frac{d^2}{d^2-1}.
+        \label{eq:depolarizing}
+      \end{equation}
+
+      <p>
+        For $p \leq 1$ it mixes the state with the maximally mixed state; above $d^2/(d^2-1)$ it is
+        no longer completely positive. The next three channels act on a qubit and are written in the
+        operator-sum (Kraus) form $\cE(\rho) = \sum_k A_k\rho A_k^\dagger$ of Section 3.1. The
+        <strong>amplitude damping channel</strong> models energy relaxation, in which $\ket{1}$ decays
+        to $\ket{0}$ with probability $\gamma$:
+      </p>
+
+      \begin{equation}
+        A_0 = \begin{pmatrix} 1 & 0 \\ 0 & \sqrt{1-\gamma} \end{pmatrix}, \qquad
+        A_1 = \begin{pmatrix} 0 & \sqrt{\gamma} \\ 0 & 0 \end{pmatrix}, \qquad
+        0 \leq \gamma \leq 1.
+        \label{eq:ad}
+      \end{equation}
+
+      <p>
+        The <strong>phase damping channel</strong> destroys the coherence between $\ket{0}$ and
+        $\ket{1}$ without exchanging energy:
+      </p>
+
+      \begin{equation}
+        A_0 = \begin{pmatrix} 1 & 0 \\ 0 & \sqrt{1-\lambda} \end{pmatrix}, \qquad
+        A_1 = \begin{pmatrix} 0 & 0 \\ 0 & \sqrt{\lambda} \end{pmatrix}, \qquad
+        0 \leq \lambda \leq 1.
+        \label{eq:pd}
+      \end{equation}
+
+      <p>
+        Applying amplitude damping and then phase damping gives a single channel with three Kraus
+        operators<span class="cite" data-key="ghosh_surface_2012"></span>:
+      </p>
+
+      \begin{equation}
+        A_0 = \begin{pmatrix} 1 & 0 \\ 0 & \sqrt{1-\gamma-\lambda'} \end{pmatrix}, \quad
+        A_1 = \begin{pmatrix} 0 & 0 \\ 0 & \sqrt{\lambda'} \end{pmatrix}, \quad
+        A_2 = \begin{pmatrix} 0 & \sqrt{\gamma} \\ 0 & 0 \end{pmatrix}, \qquad
+        \lambda' = \lambda(1-\gamma).
+        \label{eq:apd}
+      \end{equation}
+
+      <h3>2.2 Pauli Channels</h3>
+
+      <p>
+        The $n$-qubit Pauli basis is $\cP_n = \{\mathds{1}, X, Y, Z\}^{\otimes n}$, which has
+        $4^n = d^2$ elements. We order it so that $P_1 = \mathds{1}^{\otimes n}$, followed by
+        $\mathds{1}^{\otimes(n-1)}\otimes X$, $\mathds{1}^{\otimes(n-1)}\otimes Y$,
+        $\mathds{1}^{\otimes(n-1)}\otimes Z$, $\mathds{1}^{\otimes(n-2)}\otimes X\otimes\mathds{1}$,
+        and so on up to $P_{d^2} = Z^{\otimes n}$. Pauli operators are Hermitian and unitary, they are
+        orthogonal, $\Tr(P_\alpha P_\beta) = d\,\delta_{\alpha\beta}$, and any two of them either
+        commute or anticommute<span class="cite" data-key="emerson_theory_2021"></span>.
+      </p>
+
+      <p><strong>Definition 2.</strong> A <em>Pauli channel</em> is a channel of the form</p>
+
+      \begin{equation}
+        \cE(X) = \sum_{\alpha=1}^{d^2} p_\alpha\, P_\alpha X P_\alpha,
+        \qquad p_\alpha \geq 0, \quad \sum_\alpha p_\alpha = 1.
+        \label{eq:pauli-channel}
+      \end{equation}
+
+      <p>
+        It applies the Pauli error $P_\alpha$ with probability $p_\alpha$, so $p_1$ is the
+        probability that no error occurs. For a qubit it is easy to see what a Pauli channel does to
+        a state. Write
+      </p>
+
+      \begin{equation}
+        \rho = \frac{1}{2}\left(\mathds{1} + r_x X + r_y Y + r_z Z\right)
+        = \frac{1}{2}\sum_{\gamma=1}^{4} r_\gamma P_\gamma,
+      \end{equation}
+
+      <p>
+        where $\Vec{r} = (r_x, r_y, r_z)$ is the Bloch vector, with $\|\Vec{r}\| \leq 1$ and equality
+        exactly for pure states, and $(r_1, r_2, r_3, r_4) = (1, r_x, r_y, r_z)$. Since two Pauli
+        operators either commute or anticommute, $P_\alpha P_\gamma P_\alpha = s_{\gamma\alpha}P_\gamma$
+        with signs<span class="cite" data-key="basile_quantum_2024"></span>
+      </p>
+
+      $$
+        s = \begin{pmatrix}
+          1 & 1 & 1 & 1 \\
+          1 & 1 & -1 & -1 \\
+          1 & -1 & 1 & -1 \\
+          1 & -1 & -1 & 1
+        \end{pmatrix},
+      $$
+
+      <p>
+        whose rows (index $\gamma$) and columns (index $\alpha$) both follow the order
+        $\mathds{1}, X, Y, Z$. Substituting into $\eqref{eq:pauli-channel}$,
+      </p>
+
+      \begin{equation}
+        \cE(\rho) = \frac{1}{2}\sum_{\gamma=1}^{4} f_\gamma\, r_\gamma P_\gamma,
+        \qquad f_\gamma = \sum_{\alpha=1}^{4} s_{\gamma\alpha}\, p_\alpha.
+      \end{equation}
+
+      <p>
+        A Pauli channel therefore rescales each component of the Bloch vector by its own factor. If
+        $p_x, p_y, p_z$ are the probabilities of the errors $X, Y, Z$, so that
+        $p_1 = 1 - p_x - p_y - p_z$, then $f_1 = 1$ and
+      </p>
+
+      \begin{equation}
+        f_x = 1 - 2(p_y + p_z), \qquad f_y = 1 - 2(p_x + p_z), \qquad f_z = 1 - 2(p_x + p_y).
+        \label{eq:pauli-factors}
+      \end{equation}
+
+      <p>
+        The depolarizing channel $\eqref{eq:depolarizing}$ is a Pauli channel with
+        $p_1 = 1 - p + p/d^2$ and $p_\alpha = p/d^2$ for $\alpha \neq 1$, because averaging an operator
+        over all Pauli conjugations gives $\frac{1}{d^2}\sum_\alpha P_\alpha X P_\alpha = \Tr(X)\,\mathds{1}/d$<span class="cite" data-key="emerson_theory_2021"></span>.
+        For a qubit,
+      </p>
+
+      $$
+        \cE_{\mathrm{dep}}(\rho) = \left(1 - \tfrac{3p}{4}\right)\rho
+          + \tfrac{p}{4}\left(X\rho X + Y\rho Y + Z\rho Z\right),
+      $$
+
+      <p>and $f_x = f_y = f_z = 1 - p$: the Bloch ball shrinks uniformly.</p>
+
+      <h2>3. Six Representations</h2>
+
+      <h3>3.1 Kraus Representation</h3>
+
+      <p>Every superoperator can be written as</p>
+
+      \begin{equation}
+        \cE(X) = \sum_k A_k X B_k^\dagger
+        \label{eq:kraus-general}
+      \end{equation}
+
+      <p>
+        for some operators $\{A_k\}$ and $\{B_k\}$ on $\cH_A$; we prove this in Section 3.5
+        (Corollary 2)<span class="cite" data-key="watrous_theory_2018"></span>. For completely positive
+        maps one can take $B_k = A_k$ (Theorem 5):
+      </p>
+
+      \begin{equation}
+        \cE(X) = \sum_k A_k X A_k^\dagger,
+        \label{eq:kraus}
+      \end{equation}
+
+      <p>
+        and the $A_k$ are called <strong>Kraus operators</strong>. Such a map is trace preserving
+        exactly when $\sum_k A_k^\dagger A_k = \mathds{1}$, because cyclicity of the trace gives
+        $\Tr\cE(X) = \Tr\big(\sum_k A_k^\dagger A_k X\big)$.
+      </p>
+
+      <p>
+        <strong>Theorem 1 (Kraus representation).</strong>
+        <em>A superoperator $\cE$ is CPTP if and only if it can be written as in
+        $\eqref{eq:kraus}$ with $\sum_k A_k^\dagger A_k = \mathds{1}$.</em>
+      </p>
+
+      <p>
+        <em>Proof.</em> Suppose $\cE$ has this form. Trace preservation was shown above. For complete
+        positivity, let $Y \geq 0$ be an operator on $\cH_R \otimes \cH_A$ and write
+        $Y = \sum_i \op{\psi_i}{\psi_i}$. Then
+      </p>
+
+      $$
+        (\cI_R \otimes \cE)(Y)
+        = \sum_{i,k} (\mathds{1}_R \otimes A_k)\op{\psi_i}{\psi_i}(\mathds{1}_R \otimes A_k)^\dagger
+        = \sum_{i,k} \op{\phi_{ik}}{\phi_{ik}} \geq 0,
+        \qquad \ket{\phi_{ik}} = (\mathds{1}_R \otimes A_k)\ket{\psi_i}.
+      $$
+
+      <p>
+        The converse, that every CPTP map has such Kraus operators, follows from Choi's theorem and
+        Proposition 3 in Section 3.5. Proving it there avoids a circular argument through the
+        Stinespring dilation, whose proof below uses Kraus operators. ∎
+      </p>
+
+      <p>Kraus operators are not unique.</p>
+
+      <p>
+        <strong>Theorem 2 (unitary freedom).</strong>
+        <em>Let $\{A_k\}_{k=1}^{N}$ and $\{B_l\}_{l=1}^{N}$ be two sets of operators, padding the
+        shorter one with zeros. They define the same map, $\sum_k A_k X A_k^\dagger = \sum_l B_l X B_l^\dagger$
+        for all $X$, if and only if $A_k = \sum_l U_{kl} B_l$ for some unitary matrix
+        $U$</em><span class="cite" data-key="nielsen_quantum_2010"></span>.
+      </p>
+
+      <p><em>Proof.</em> If $A_k = \sum_l U_{kl} B_l$, then</p>
+
+      $$
+        \sum_k A_k X A_k^\dagger
+        = \sum_{l,l'} \Big(\sum_k U_{kl}\overline{U_{kl'}}\Big) B_l X B_{l'}^\dagger
+        = \sum_l B_l X B_l^\dagger,
+      $$
+
+      <p>
+        since $\sum_k U_{kl}\overline{U_{kl'}} = (U^\dagger U)_{l'l} = \delta_{ll'}$. Conversely, if
+        the two sets define the same map, they have the same Choi matrix,
+        $\sum_k \vect{A_k}\vect{A_k}^\dagger = \sum_l \vect{B_l}\vect{B_l}^\dagger$ (Section 3.5), and
+        any two ways of writing a positive semidefinite matrix as a sum of rank-one terms are related
+        by a unitary in exactly this way<span class="cite" data-key="nielsen_quantum_2010"></span>. ∎
+      </p>
+
+      <p>
+        Every channel on a $d$-dimensional system has Kraus operators with at most $d^2$
+        elements<span class="cite" data-key="nielsen_quantum_2010"></span>: their number can be taken to
+        be the rank of the Choi matrix, a $d^2 \times d^2$ matrix (Section 3.5).
+      </p>
+
+      <p>
+        Trace preservation also has a dual description. With the Hilbert–Schmidt inner product
+        $\langle X, Y\rangle = \Tr(X^\dagger Y)$, the adjoint $\cE^\dagger$ of $\cE$ is defined by
+        $\langle X, \cE(Y)\rangle = \langle \cE^\dagger(X), Y\rangle$. For $\eqref{eq:kraus}$ it is
+        $\cE^\dagger(X) = \sum_k A_k^\dagger X A_k$.
+      </p>
+
+      <p>
+        <strong>Proposition 1.</strong>
+        <em>$\cE$ is trace preserving if and only if $\cE^\dagger$ is
+        unital</em><span class="cite" data-key="watrous_theory_2018"></span>.
+      </p>
+
+      <p>
+        <em>Proof.</em> For every $Y$, $\Tr\cE(Y) = \langle \mathds{1}, \cE(Y)\rangle = \langle \cE^\dagger(\mathds{1}), Y\rangle$,
+        while $\Tr Y = \langle \mathds{1}, Y\rangle$. These agree for all $Y$ exactly when
+        $\cE^\dagger(\mathds{1}) = \mathds{1}$. ∎
+      </p>
+
+      <p>
+        For a map in Kraus form, $\cE^\dagger(\mathds{1}) = \sum_k A_k^\dagger A_k$, so this is the
+        condition of Theorem 1 again.
+      </p>
+
+      <h3>3.2 Stinespring Representation</h3>
+
+      <p>
+        Let $\cH_E$ be an auxiliary Hilbert space, the <em>environment</em>. A Stinespring
+        representation of $\cE$ is<span class="cite" data-key="watrous_theory_2018"></span>
+      </p>
+
+      \begin{equation}
+        \cE(X) = \Tr_E\left(V X W^\dagger\right),
+        \qquad V, W : \cH_A \to \cH_E \otimes \cH_A.
+        \label{eq:stinespring}
+      \end{equation}
+
+      <p>
+        For a channel one can take $W = V$ with $V$ an isometry, $V^\dagger V = \mathds{1}$.
+        Physically, the system interacts unitarily with an environment that starts in a fixed state,
+        and the environment is then discarded.
+      </p>
+
+      <p>
+        <strong>Theorem 3 (Stinespring dilation).</strong>
+        <em>$\cE$ is CPTP if and only if there are an environment $\cH_E$, a state $\ket{0}_E$ and a
+        unitary $U$ on $\cH_E \otimes \cH_A$ such that</em><span class="cite" data-key="emerson_theory_2021 watrous_quantum_channels"></span>
+      </p>
+
+      \begin{equation}
+        \cE(\rho) = \Tr_E\left[U\left(\op{0}{0}_E \otimes \rho\right)U^\dagger\right].
+        \label{eq:dilation}
+      \end{equation}
+
+      <p>
+        <em>Proof.</em> Let $\cE$ be CPTP with Kraus operators $A_0, \dots, A_{N-1}$ (Theorem 1). Take
+        $\cH_E = \mathbb{C}^N$ with orthonormal basis $\{\ket{k}\}$ and define
+      </p>
+
+      \begin{equation}
+        V = \sum_{k=0}^{N-1} \ket{k}_E \otimes A_k
+        = \begin{pmatrix} A_0 \\ A_1 \\ \vdots \\ A_{N-1} \end{pmatrix}.
+        \label{eq:isometry}
+      \end{equation}
+
+      <p>
+        As a matrix, $V$ simply stacks the Kraus operators. It is an isometry,
+        $V^\dagger V = \sum_k A_k^\dagger A_k = \mathds{1}$, and
+      </p>
+
+      $$
+        \Tr_E\left(V\rho V^\dagger\right)
+        = \sum_{k,l} \Tr\left(\op{k}{l}\right) A_k \rho A_l^\dagger
+        = \sum_k A_k \rho A_k^\dagger = \cE(\rho).
+      $$
+
+      <p>
+        The $d$ columns of $V$ are orthonormal, so they can be completed (for example by Gram–Schmidt)
+        to an orthonormal basis of $\cH_E \otimes \cH_A$. Using the new vectors as the remaining
+        columns gives a unitary $U = \begin{pmatrix} V & \ast \end{pmatrix}$ whose first block column
+        is $V$, so $U(\ket{0}_E \otimes \ket{\psi}) = V\ket{\psi}$, which is $\eqref{eq:dilation}$.
+        Conversely, given $\eqref{eq:dilation}$, the operators
+        $A_k = (\bra{k}_E \otimes \mathds{1})\,U\,(\ket{0}_E \otimes \mathds{1})$ satisfy
+        $\cE(\rho) = \sum_k A_k\rho A_k^\dagger$ and
+        $\sum_k A_k^\dagger A_k = (\bra{0}_E \otimes \mathds{1})\,U^\dagger U\,(\ket{0}_E \otimes \mathds{1}) = \mathds{1}$,
+        so $\cE$ is CPTP by Theorem 1. ∎
+      </p>
+
+      <p>
+        Since $N \leq d^2$ Kraus operators always suffice, an environment of dimension $d^2$ is always
+        enough, and $U$ then acts on a space of dimension at most $d^3$.
+      </p>
+
+      <p>
+        The unitary freedom of Theorem 2 has a natural meaning here. The partial trace in
+        $\eqref{eq:stinespring}$ can be computed in any orthonormal basis of the environment, and
+        changing that basis by a unitary replaces the Kraus operators $(\bra{k}_E \otimes \mathds{1})V$
+        by unitary combinations of them. The channel is the same; only our description of the
+        environment has changed.
+      </p>
+
+      <h3>3.3 Liouville Matrix Representation</h3>
+
+      <p>
+        A superoperator is linear, so it can be written as a $d^2 \times d^2$ matrix acting on
+        vectorized operators. We use column stacking: $\vect{X}$ stacks the columns of $X$ into a vector
+        of length $d^2$, so that $\vect{\op{i}{j}} = \ket{j} \otimes \ket{i}$. Two identities do most of
+        the work<span class="cite" data-key="watrous_theory_2018 wood_tensor_2015"></span>:
+      </p>
+
+      \begin{equation}
+        \vect{AXB} = \left(B^{T} \otimes A\right)\vect{X},
+        \qquad
+        \vect{A} = (\mathds{1} \otimes A)\ket{\Omega},
+        \label{eq:roth}
+      \end{equation}
+
+      <p>
+        where $\ket{\Omega} = \vect{\mathds{1}} = \sum_i \ket{i}\otimes\ket{i}$. The first is Roth's
+        lemma, and the second is its special case $X = B = \mathds{1}$.
+      </p>
+
+      <p>
+        <strong>Definition 3.</strong> The <em>Liouville matrix</em> of $\cE$ is the unique matrix
+        $[\cE]$ such that $[\cE]\,\vect{X} = \vect{\cE(X)}$ for all $X$.
+      </p>
+
+      <p>
+        More generally, let $\{G_\alpha\}_{\alpha=1}^{d^2}$ be an orthonormal basis of $L(\cH_A)$ for the
+        Hilbert–Schmidt inner product, $\Tr(G_\alpha^\dagger G_\beta) = \delta_{\alpha\beta}$. The
+        matrix of $\cE$ in this basis has entries<span class="cite" data-key="emerson_theory_2021 lin_freedom_2019"></span>
+      </p>
+
+      \begin{equation}
+        [\cE]_{\alpha\beta} = \Tr\left(G_\alpha^\dagger\, \cE(G_\beta)\right),
+        \label{eq:liouville-basis}
+      \end{equation}
+
+      <p>
+        so that $\cE(G_\beta) = \sum_\alpha [\cE]_{\alpha\beta}\, G_\alpha$. Taking the matrix units
+        $G_\alpha = \op{i}{j}$, ordered as in $\vect{\cdot}$, gives back Definition 3; with this basis
+        $[\cE]$ is also called the superoperator representation. Unlike Kraus operators and
+        Stinespring dilations, the matrix is unique once the basis is fixed.
+      </p>
+
+      <p>
+        Applying Roth's lemma to the Kraus form $\eqref{eq:kraus-general}$, with
+        $(B_k^\dagger)^{T} = \overline{B_k}$, gives
+      </p>
+
+      \begin{equation}
+        [\cE] = \sum_k \overline{B_k} \otimes A_k.
+        \label{eq:liouville-kraus}
+      \end{equation}
+
+      <p>
+        With row stacking, used for example in Watrous's
+        book<span class="cite" data-key="watrous_theory_2018"></span>, the two factors appear in the
+        opposite order, $\sum_k A_k \otimes \overline{B_k}$. The main advantage of this representation
+        is that composition becomes matrix multiplication<span class="cite" data-key="emerson_theory_2021"></span>:
+      </p>
+
+      $$
+        [\cE_2 \circ \cE_1]\,\vect{X} = [\cE_2]\,\vect{\cE_1(X)} = [\cE_2][\cE_1]\,\vect{X}.
+      $$
+
+      <h3>3.4 Pauli Transfer Matrix</h3>
+
+      <p>
+        The <strong>Pauli transfer matrix</strong> (PTM) is the matrix $\eqref{eq:liouville-basis}$ in
+        the normalized Pauli basis $\hat P_\alpha = P_\alpha/\sqrt{d}$<span class="cite" data-key="greenbaum_introduction_2015"></span>:
+      </p>
+
+      \begin{equation}
+        [\cE]^{\PTM}_{\alpha\beta} = \Tr\left(\hat P_\alpha\, \cE(\hat P_\beta)\right).
+      \end{equation}
+
+      <p>
+        Completely positive maps send Hermitian operators to Hermitian operators, so the PTM of a
+        channel is a real matrix, and its entries say a lot about the
+        map<span class="cite" data-key="emerson_theory_2021"></span>. Split it as
+      </p>
+
+      \begin{equation}
+        [\cE]^{\PTM} = \begin{pmatrix} \tau & \Vec{m}^{T} \\ \Vec{n} & R \end{pmatrix},
+        \label{eq:ptm-blocks}
+      \end{equation}
+
+      <p>
+        where $\tau$ is a number, $\Vec{m}$ and $\Vec{n}$ are vectors of length $d^2 - 1$, and $R$ is
+        a $(d^2-1) \times (d^2-1)$ matrix.
+      </p>
+
+      <p>
+        <strong>Proposition 2.</strong>
+        <em>$\cE$ is trace preserving if and only if the first row of its PTM is $(1, 0, \dots, 0)$,
+        that is, $\tau = 1$ and $\Vec{m} = 0$. It is unital if and only if the first column is
+        $(1, 0, \dots, 0)^{T}$, that is, $\tau = 1$ and $\Vec{n} = 0$.</em>
+      </p>
+
+      <p>
+        <em>Proof.</em> The first row has entries $[\cE]^{\PTM}_{1\beta} = \Tr\cE(\hat P_\beta)/\sqrt{d}$.
+        If $\cE$ is TP, these equal $\Tr(\hat P_\beta)/\sqrt{d} = \delta_{1\beta}$, because only
+        $P_1 = \mathds{1}$ has nonzero trace. Conversely, if they equal $\delta_{1\beta}$, then
+        $\Tr\cE(\hat P_\beta) = \Tr\hat P_\beta$ for every basis element, and $\cE$ is TP by
+        linearity. For the first column, $\cE(\hat P_1) = \sum_\alpha [\cE]^{\PTM}_{\alpha 1}\hat P_\alpha$,
+        and $\cE(\hat P_1) = \hat P_1$, that is $\cE(\mathds{1}) = \mathds{1}$, exactly when
+        $[\cE]^{\PTM}_{\alpha 1} = \delta_{\alpha 1}$. ∎
+      </p>
+
+      <p>
+        For a qubit, the coordinates of $\rho$ in the normalized Pauli basis are
+        $\Tr(\hat P_\alpha\rho) = (1, r_x, r_y, r_z)/\sqrt{2}$. A trace-preserving map therefore acts
+        on the Bloch vector as an affine map:
+      </p>
+
+      \begin{equation}
+        \begin{pmatrix} 1 & \Vec{0}^{T} \\ \Vec{n} & R \end{pmatrix}
+        \begin{pmatrix} 1 \\ \Vec{r} \end{pmatrix}
+        = \begin{pmatrix} 1 \\ R\Vec{r} + \Vec{n} \end{pmatrix},
+        \qquad \Vec{r} \mapsto R\Vec{r} + \Vec{n}.
+        \label{eq:bloch-map}
+      \end{equation}
+
+      <p>
+        Unital channels are the ones that keep the center of the Bloch ball fixed. The image of the
+        Bloch ball is an ellipsoid centered at $\Vec{n}$ whose semi-axes are the singular values of
+        $R$, and this ellipsoid must fit inside the ball.
+      </p>
+
+      <p>
+        This picture separates coherent errors from incoherent ones. A unitary channel
+        $\rho \mapsto U\rho U^\dagger$ preserves the Hilbert–Schmidt inner product, so its PTM is an
+        orthogonal matrix with $\Vec{n} = 0$. For one qubit, $R$ is then a rotation in $SO(3)$, and
+        pure states stay on the surface of the ball. Incoherent noise, such as depolarizing,
+        dephasing or amplitude damping, shrinks the Bloch vector: pure states become mixed, and $R$
+        is no longer a rotation. Quantitatively, the eigenvalues of the PTM of a channel satisfy
+        $|\lambda| \leq 1$<span class="cite" data-key="helsen_spectral_2019"></span>, so
+        $|\det R| \leq 1$. For a qubit, equality holds exactly for unitary channels. If
+        $|\det R| = 1$, every singular value of $R$ equals $1$, so the ellipsoid is the whole ball,
+        $\Vec{n} = 0$ and $R$ is orthogonal. An orthogonal $R$ with determinant $-1$ would describe a
+        unitary composed with the transpose map, which is not completely positive, so $R$ is a
+        rotation.
+      </p>
+
+      <p>
+        The 24 single-qubit Clifford gates are exactly the unitaries whose $R$ permutes the axes
+        $\pm x, \pm y, \pm z$. They are the 24 rotational symmetries of an octahedron, and their $R$
+        are signed permutation matrices with determinant $1$. For example,
+      </p>
+
+      $$
+        R_X = \begin{pmatrix} 1 & 0 & 0 \\ 0 & -1 & 0 \\ 0 & 0 & -1 \end{pmatrix}, \quad
+        R_S = \begin{pmatrix} 0 & -1 & 0 \\ 1 & 0 & 0 \\ 0 & 0 & 1 \end{pmatrix}, \quad
+        R_H = \begin{pmatrix} 0 & 0 & 1 \\ 0 & -1 & 0 \\ 1 & 0 & 0 \end{pmatrix},
+      $$
+
+      <p>
+        and $R_Y = \operatorname{diag}(-1, 1, -1)$, $R_Z = \operatorname{diag}(-1, -1, 1)$. The phase
+        gate $S$ is a quarter turn about $z$, and the Hadamard gate is a half turn about the axis
+        $(x + z)/\sqrt{2}$. The noisy channels of Section 2 all have diagonal $R$:
+      </p>
+
+      <ul>
+        <li>depolarizing: $R = (1-p)\,\mathds{1}_3$ and $\Vec{n} = 0$;</li>
+        <li>Pauli: $R = \operatorname{diag}(f_x, f_y, f_z)$, with the factors $\eqref{eq:pauli-factors}$, and $\Vec{n} = 0$;</li>
+        <li>phase damping: $R = \operatorname{diag}\big(\sqrt{1-\lambda}, \sqrt{1-\lambda}, 1\big)$ and $\Vec{n} = 0$;</li>
+        <li>amplitude damping: $R = \operatorname{diag}\big(\sqrt{1-\gamma}, \sqrt{1-\gamma}, 1-\gamma\big)$ and $\Vec{n} = (0, 0, \gamma)$;</li>
+        <li>amplitude and phase damping: $R = \operatorname{diag}\big(\sqrt{1-\gamma-\lambda'}, \sqrt{1-\gamma-\lambda'}, 1-\gamma\big)$ and $\Vec{n} = (0, 0, \gamma)$.</li>
+      </ul>
+
+      <p>
+        Only the last two are non-unital: they pull every state towards $\ket{0}$. Except for trivial
+        parameter values, none of these $R$ is a rotation.
+      </p>
+
+      <h3>3.5 Choi Matrix Representation</h3>
+
+      <p>
+        <strong>Definition 4.</strong> Let $\cH_R$ be a copy of $\cH_A$ and
+        $\ket{\Omega} = \sum_i \ket{i}_R\ket{i}_A$. The <em>Choi matrix</em> of $\cE$
+        is<span class="cite" data-key="wood_tensor_2015 rodriguez-ramos_convex_2023"></span>
+      </p>
+
+      \begin{equation}
+        \Phi_\cE = (\cI_R \otimes \cE)\left(\op{\Omega}{\Omega}\right)
+        = \sum_{i,j} \op{i}{j} \otimes \cE\left(\op{i}{j}\right)
+        \in L(\cH_R \otimes \cH_A).
+        \label{eq:choi}
+      \end{equation}
+
+      <p>
+        It is a $d \times d$ block matrix whose $(i, j)$ block is
+        $\cE(\op{i}{j})$<span class="cite" data-key="emerson_theory_2021"></span>. When $\cE$ is a
+        channel, $\Phi_\cE/d$ is a density matrix, sometimes called the Jamiołkowski state.
+      </p>
+
+      <p>
+        <strong>Theorem 4 (Choi–Jamiołkowski isomorphism).</strong>
+        <em>The map $\cE \mapsto \Phi_\cE$ is a linear bijection from superoperators on $L(\cH_A)$ to
+        operators on $\cH_R \otimes \cH_A$, with inverse</em><span class="cite" data-key="watrous_theory_2018"></span>
+      </p>
+
+      \begin{equation}
+        \cE(X) = \Tr_R\left[\Phi_\cE\left(X^{T} \otimes \mathds{1}_A\right)\right].
+        \label{eq:choi-inverse}
+      \end{equation}
+
+      <p><em>Proof.</em> Substituting $\eqref{eq:choi}$,</p>
+
+      $$
+        \Tr_R\left[\Phi_\cE\left(X^{T} \otimes \mathds{1}_A\right)\right]
+        = \sum_{i,j} \Tr\left(\op{i}{j} X^{T}\right) \cE\left(\op{i}{j}\right)
+        = \sum_{i,j} X_{ij}\, \cE\left(\op{i}{j}\right)
+        = \cE(X),
+      $$
+
+      <p>
+        using $\Tr(\op{i}{j}X^{T}) = \bra{j}X^{T}\ket{i} = X_{ij}$. So $\cE$ can be recovered from
+        $\Phi_\cE$, and the map is injective. Both spaces have dimension $d^4$, so it is a
+        bijection. ∎
+      </p>
+
+      <p>For a map in Kraus form, the identities $\eqref{eq:roth}$ give its Choi matrix:</p>
+
+      \begin{equation}
+        \Phi_\cE
+        = \sum_k (\mathds{1} \otimes A_k)\op{\Omega}{\Omega}(\mathds{1} \otimes B_k)^\dagger
+        = \sum_k \vect{A_k}\vect{B_k}^\dagger.
+        \label{eq:choi-kraus}
+      \end{equation}
+
+      <p>
+        <strong>Theorem 5 (Choi).</strong>
+        <em>$\cE$ is completely positive if and only if
+        $\Phi_\cE \geq 0$</em><span class="cite" data-key="homa_choi_2024"></span>.
+      </p>
+
+      <p>
+        <em>Proof.</em> If $\cE$ is CP, then $\Phi_\cE = (\cI_R \otimes \cE)(\op{\Omega}{\Omega}) \geq 0$
+        because $\op{\Omega}{\Omega} \geq 0$. Conversely, suppose $\Phi_\cE \geq 0$, with spectral
+        decomposition $\Phi_\cE = \sum_k \lambda_k \op{v_k}{v_k}$ and all $\lambda_k \geq 0$. Define
+        operators $A_k$ by $\vect{A_k} = \sqrt{\lambda_k}\,\ket{v_k}$. Then
+        $\Phi_\cE = \sum_k \vect{A_k}\vect{A_k}^\dagger$, which by $\eqref{eq:choi-kraus}$ is the Choi
+        matrix of $X \mapsto \sum_k A_k X A_k^\dagger$. By Theorem 4 this map is $\cE$, and it is CP by
+        the argument in the proof of Theorem 1. ∎
+      </p>
+
+      <p>
+        So every CP map has Kraus operators with $B_k = A_k$, and their number can be taken to be
+        $\operatorname{rank}\Phi_\cE \leq d^2$. Trace preservation is just as easy to read off.
+      </p>
+
+      <p>
+        <strong>Proposition 3.</strong>
+        <em>$\cE$ is trace preserving if and only if $\Tr_A\Phi_\cE = \mathds{1}_R$. For a map in Kraus
+        form $\eqref{eq:kraus-general}$,
+        $\Tr_A\Phi_\cE = \big(\sum_k B_k^\dagger A_k\big)^{T}$</em><span class="cite" data-key="gour_introduction_2016"></span>.
+      </p>
+
+      <p>
+        <em>Proof.</em> By $\eqref{eq:choi}$,
+        $\Tr_A\Phi_\cE = \sum_{i,j} \Tr\cE\left(\op{i}{j}\right)\op{i}{j}$. If $\cE$ is TP, then
+        $\Tr\cE(\op{i}{j}) = \delta_{ij}$, and this is $\mathds{1}_R$. Conversely, if
+        $\Tr_A\Phi_\cE = \mathds{1}_R$, then
+        $\Tr\cE(X) = \sum_{i,j} X_{ij}\Tr\cE(\op{i}{j}) = \sum_i X_{ii} = \Tr X$. For the Kraus form,
+        $\Tr_A\big[\vect{A}\vect{B}^\dagger\big] = \sum_{i,j}\bra{j}B^\dagger A\ket{i}\,\op{i}{j} = (B^\dagger A)^{T}$. ∎
+      </p>
+
+      <p>
+        <strong>Corollary 1.</strong>
+        <em>$\cE$ is CPTP if and only if $\Phi_\cE \geq 0$ and
+        $\Tr_A\Phi_\cE = \mathds{1}_R$</em><span class="cite" data-key="gour_introduction_2016"></span>.
+        Together with Theorem 5, this completes the proof of Theorem 1: a CPTP map has Kraus operators
+        $A_k$, and Proposition 3 gives $\big(\sum_k A_k^\dagger A_k\big)^{T} = \mathds{1}$.
+      </p>
+
+      <p>The same idea works for maps that are not CP, using a rank decomposition instead of the spectral one.</p>
+
+      <p>
+        <strong>Corollary 2.</strong>
+        <em>Let $r = \operatorname{rank}\Phi_\cE$. Then $\cE(X) = \sum_{k=1}^{r} A_k X B_k^\dagger$ for some
+        operators $A_k, B_k$, and $\cE(X) = \Tr_E(VXW^\dagger)$ for an environment of dimension
+        $r$</em><span class="cite" data-key="watrous_theory_2018"></span>.
+      </p>
+
+      <p>
+        <em>Proof.</em> Write $\Phi_\cE = \sum_{k=1}^{r} \ket{u_k}\!\bra{w_k}$, for example from a
+        singular value decomposition, and define $A_k, B_k$ by $\vect{A_k} = \ket{u_k}$ and
+        $\vect{B_k} = \ket{w_k}$. By $\eqref{eq:choi-kraus}$ and Theorem 4,
+        $\cE(X) = \sum_k A_k X B_k^\dagger$. Then $V = \sum_k \ket{k}_E \otimes A_k$ and
+        $W = \sum_k \ket{k}_E \otimes B_k$ give the Stinespring form, by the same computation as in the
+        proof of Theorem 3. ∎
+      </p>
+
+      <h3>3.6 χ-Matrix Representation</h3>
+
+      <p>
+        Expanding the Kraus operators in the Pauli basis, $A_k = \sum_\alpha a_{k\alpha} P_\alpha$ and
+        $B_k = \sum_\beta b_{k\beta} P_\beta$, gives<span class="cite" data-key="emerson_theory_2021"></span>
+      </p>
+
+      \begin{equation}
+        \cE(X) = \sum_{\alpha,\beta} \chi_{\alpha\beta}\, P_\alpha X P_\beta,
+        \qquad \chi_{\alpha\beta} = \sum_k a_{k\alpha}\overline{b_{k\beta}},
+        \label{eq:chi}
+      \end{equation}
+
+      <p>
+        where we used that Pauli operators are Hermitian, $P_\beta^\dagger = P_\beta$. The
+        $d^2 \times d^2$ matrix $\chi$ is the <strong>χ-matrix</strong> (or process matrix) of $\cE$.
+        Any orthonormal operator basis would do, but the Pauli basis is the usual
+        choice<span class="cite" data-key="greenbaum_introduction_2015"></span>.
+      </p>
+
+      <p>
+        The χ-matrix is the Choi matrix written in the Pauli basis. By $\eqref{eq:choi-kraus}$, the
+        Choi matrix of $X \mapsto P_\alpha X P_\beta$ is $\vect{P_\alpha}\vect{P_\beta}^\dagger$, and
+        $\vect{P_\alpha} = \sqrt{d}\,\vect{\hat P_\alpha}$, so
+      </p>
+
+      \begin{equation}
+        \Phi_\cE = d\, Q\chi Q^\dagger,
+        \qquad Q = \sum_\alpha \vect{\hat P_\alpha}\bra{\alpha},
+        \label{eq:chi-choi}
+      \end{equation}
+
+      <p>where $Q$ is unitary because the vectors $\vect{\hat P_\alpha}$ are orthonormal. Two consequences:</p>
+
+      <ul>
+        <li>
+          $\chi \geq 0$ if and only if $\Phi_\cE \geq 0$, that is, if and only if $\cE$ is CP. In
+          particular, the χ-matrix of a CP map is Hermitian and positive semidefinite, which can also
+          be checked directly from $\eqref{eq:chi}$ with $b_k = a_k$.
+        </li>
+        <li>
+          $\Tr\chi = \Tr\Phi_\cE/d = \Tr\cE(\mathds{1})/d$, so $\Tr\chi = 1$ whenever $\cE$ is trace
+          preserving or unital.
+        </li>
+      </ul>
+
+      <p>
+        For a Pauli channel $\eqref{eq:pauli-channel}$, $\chi = \operatorname{diag}(p_1, \dots, p_{d^2})$:
+        the χ-matrix is diagonal, with the error probabilities on the diagonal.
+      </p>
+
+      <h2>4. Converting Between Representations</h2>
+
+      <p>
+        All six representations carry the same information. Given Kraus operators, the others follow
+        directly<span class="cite" data-key="watrous_theory_2018"></span>.
+      </p>
+
+      <p>
+        <strong>Proposition 4.</strong>
+        <em>Let $\{A_k\}$ and $\{B_k\}$ be operators on $\cH_A$, with coordinate vectors $\Vec{a}_k$
+        and $\Vec{b}_k$ in the Pauli basis. The following all describe the same superoperator
+        $\cE$:</em>
+      </p>
+      <ol>
+        <li><em>Kraus: $\cE(X) = \sum_k A_k X B_k^\dagger$;</em></li>
+        <li><em>Liouville: $[\cE] = \sum_k \overline{B_k} \otimes A_k$;</em></li>
+        <li>
+          <em>Stinespring: $\cE(X) = \Tr_E(VXW^\dagger)$ with $V = \sum_k \ket{k}_E \otimes A_k$ and
+          $W = \sum_k \ket{k}_E \otimes B_k$;</em>
+        </li>
+        <li><em>Choi: $\Phi_\cE = \sum_k \vect{A_k}\vect{B_k}^\dagger$;</em></li>
+        <li><em>χ-matrix: $\chi = \sum_k \Vec{a}_k \Vec{b}_k^{\,\dagger}$, that is, $\chi_{\alpha\beta} = \sum_k a_{k\alpha}\overline{b_{k\beta}}$.</em></li>
+      </ol>
+
+      <p>
+        <em>Proof.</em> We showed 1 ⇔ 2 in $\eqref{eq:liouville-kraus}$, 1 ⇔ 4 in
+        $\eqref{eq:choi-kraus}$, and 1 ⇔ 5 in $\eqref{eq:chi}$. For 1 ⇔ 3,
+      </p>
+
+      $$
+        \Tr_E\left(VXW^\dagger\right)
+        = \sum_{k,l} \Tr\left(\op{k}{l}\right) A_k X B_l^\dagger
+        = \sum_k A_k X B_k^\dagger. \qquad \blacksquare
+      $$
+
+      <p>
+        Since every representation converts to and from the Kraus form, we can move between any two of
+        them through it. There are also direct shortcuts.
+      </p>
+
+      <p>
+        <em>Liouville and Choi.</em> The two matrices contain the same numbers
+        $\bra{a}\cE(\op{c}{e})\ket{b}$, arranged differently. In the Liouville matrix this number is
+        in row $\ket{b}\ket{a}$ and column $\ket{e}\ket{c}$; in the Choi matrix it is in row
+        $\ket{c}\ket{a}$ and column $\ket{e}\ket{b}$<span class="cite" data-key="wood_tensor_2015"></span>.
+        So the Choi matrix is obtained by exchanging the first factor of the row index with the second
+        factor of the column index. For a qubit, labelling the entries of $[\cE]$ from $1$ to $16$,
+      </p>
+
+      \begin{equation}
+        [\cE] = \begin{pmatrix}
+          1 & 2 & 3 & 4 \\
+          5 & 6 & 7 & 8 \\
+          9 & 10 & 11 & 12 \\
+          13 & 14 & 15 & 16
+        \end{pmatrix}
+        \quad\Longrightarrow\quad
+        \Phi_\cE = \begin{pmatrix}
+          1 & 9 & 3 & 11 \\
+          5 & 13 & 7 & 15 \\
+          2 & 10 & 4 & 12 \\
+          6 & 14 & 8 & 16
+        \end{pmatrix}.
+        \label{eq:reshuffle}
+      \end{equation}
+
+      <p>
+        <em>Liouville and PTM.</em> These are the same map written in two orthonormal bases,
+        so<span class="cite" data-key="forest_superoperator"></span>
+      </p>
+
+      \begin{equation}
+        [\cE]^{\PTM} = Q^\dagger [\cE]\, Q,
+      \end{equation}
+
+      <p>with the unitary $Q$ of $\eqref{eq:chi-choi}$.</p>
+
+      <p>
+        <em>PTM and χ-matrix.</em> Both use the Pauli basis. Substituting $\eqref{eq:chi}$ into the
+        definition of the PTM gives
+      </p>
+
+      \begin{equation}
+        [\cE]^{\PTM}_{\alpha\beta}
+        = \frac{1}{d}\sum_{\mu,\nu} \chi_{\mu\nu} \Tr\left(P_\alpha P_\mu P_\beta P_\nu\right).
+      \end{equation}
+
+      <p>
+        The trace of a product of four Pauli operators is $0$, $\pm d$ or $\pm i d$, so every entry of
+        the PTM is a combination of entries of $\chi$ with coefficients in $\{0, \pm 1, \pm i\}$. In
+        particular, $\Tr(P_\mu P_\nu) = d\,\delta_{\mu\nu}$ gives $[\cE]^{\PTM}_{11} = \Tr\chi$, which
+        equals $1$ for trace-preserving maps, as in Proposition 2.
+      </p>
+
+      <h2>5. Characterizing CP and CPTP Maps</h2>
+
+      <p>
+        Complete positivity amounts to setting $B_k = A_k$ in Proposition 4. Collecting the results so
+        far gives a list of equivalent characterizations<span class="cite" data-key="watrous_theory_2018"></span>.
+      </p>
+
+      <p>
+        <strong>Theorem 6 (CP maps).</strong>
+        <em>For a nonzero superoperator $\cE$ on $L(\cH_A)$, the following are equivalent:</em>
+      </p>
+      <ol>
+        <li><em>$\cE$ is completely positive;</em></li>
+        <li><em>$\cI_R \otimes \cE$ is positive for a reference system of the same dimension, $\cH_R \cong \cH_A$;</em></li>
+        <li><em>$\Phi_\cE \geq 0$;</em></li>
+        <li><em>$\cE(X) = \sum_k A_k X A_k^\dagger$ for some operators $A_k$;</em></li>
+        <li><em>statement 4 holds with exactly $\operatorname{rank}\Phi_\cE$ operators;</em></li>
+        <li><em>$[\cE] = \sum_k \overline{A_k} \otimes A_k$ for some operators $A_k$;</em></li>
+        <li><em>$\cE(X) = \Tr_E(VXV^\dagger)$ for some $V : \cH_A \to \cH_E \otimes \cH_A$;</em></li>
+        <li><em>statement 7 holds with $\dim\cH_E = \operatorname{rank}\Phi_\cE$;</em></li>
+        <li><em>$\Phi_\cE = \sum_k \vect{A_k}\vect{A_k}^\dagger$ for some operators $A_k$;</em></li>
+        <li><em>$\chi \geq 0$, that is, $\chi = \sum_k \Vec{a}_k \Vec{a}_k^{\,\dagger}$ for some vectors $\Vec{a}_k$.</em></li>
+      </ol>
+
+      <p>
+        <em>Proof.</em> 1 ⇒ 2 is the definition. 2 ⇒ 3 because
+        $\Phi_\cE = (\cI_R \otimes \cE)(\op{\Omega}{\Omega})$ with $\op{\Omega}{\Omega} \geq 0$. 3 ⇒ 5 is
+        the proof of Choi's theorem, 5 ⇒ 4 is immediate, and 4 ⇒ 1 is the argument of Theorem 1.
+        5 ⇒ 8 by the construction $\eqref{eq:isometry}$, 8 ⇒ 7 is immediate, and 7 ⇒ 4 by taking
+        $A_k = (\bra{k}_E \otimes \mathds{1})V$. Finally, 4, 6 and 9 are equivalent by Proposition 4
+        with $B_k = A_k$, and 3 ⇔ 10 by $\eqref{eq:chi-choi}$. ∎
+      </p>
+
+      <p>Adding trace preservation gives the corresponding statement for channels.</p>
+
+      <p>
+        <strong>Theorem 7 (CPTP maps).</strong>
+        <em>For a superoperator $\cE$ on $L(\cH_A)$, the following are
+        equivalent</em><span class="cite" data-key="watrous_theory_2018"></span>:
+      </p>
+      <ol>
+        <li><em>$\cE$ is CPTP;</em></li>
+        <li><em>$\Phi_\cE \geq 0$ and $\Tr_A\Phi_\cE = \mathds{1}_R$;</em></li>
+        <li><em>$\cE(X) = \sum_k A_k X A_k^\dagger$ with $\sum_k A_k^\dagger A_k = \mathds{1}$;</em></li>
+        <li><em>statement 3 holds with exactly $\operatorname{rank}\Phi_\cE$ operators;</em></li>
+        <li><em>$\cE(X) = \Tr_E(VXV^\dagger)$ for an isometry $V : \cH_A \to \cH_E \otimes \cH_A$;</em></li>
+        <li><em>statement 5 holds with $\dim\cH_E = \operatorname{rank}\Phi_\cE$;</em></li>
+        <li><em>$\cE(\rho) = \Tr_E\big[U(\op{0}{0}_E \otimes \rho)U^\dagger\big]$ for a unitary $U$ on $\cH_E \otimes \cH_A$.</em></li>
+      </ol>
+
+      <p>
+        <em>Proof.</em> 1 ⇔ 2 is Corollary 1, and 1 ⇔ 3 is Theorem 1. 2 ⇒ 4 by Choi's theorem and
+        Proposition 3, and 4 ⇒ 3 is immediate. 3 ⇒ 5 because $V = \sum_k \ket{k}_E \otimes A_k$ satisfies
+        $V^\dagger V = \sum_k A_k^\dagger A_k = \mathds{1}$; in the same way 4 ⇒ 6, and 6 ⇒ 5 is
+        immediate. 5 ⇒ 7 by extending $V$ to a unitary as in the proof of Theorem 3, and 7 ⇒ 1 is
+        Theorem 3. ∎
+      </p>
+
+      <h2>6. Examples</h2>
+
+      <p>We now write some of the channels of Section 2 in every representation, all for a single qubit.</p>
+
+      <h3>6.1 Amplitude Damping</h3>
+
+      <p>
+        Start from the Kraus operators $\eqref{eq:ad}$. Stacking them gives the Stinespring isometry,
+        and Proposition 4 gives the Liouville and Choi matrices:
+      </p>
+
+      $$
+        V = \begin{pmatrix} 1 & 0 \\ 0 & \sqrt{1-\gamma} \\ 0 & \sqrt{\gamma} \\ 0 & 0 \end{pmatrix},
+        \qquad
+        [\cE] = \begin{pmatrix}
+          1 & 0 & 0 & \gamma \\
+          0 & \sqrt{1-\gamma} & 0 & 0 \\
+          0 & 0 & \sqrt{1-\gamma} & 0 \\
+          0 & 0 & 0 & 1-\gamma
+        \end{pmatrix},
+      $$
+
+      $$
+        \Phi_\cE = \begin{pmatrix}
+          1 & 0 & 0 & \sqrt{1-\gamma} \\
+          0 & 0 & 0 & 0 \\
+          0 & 0 & \gamma & 0 \\
+          \sqrt{1-\gamma} & 0 & 0 & 1-\gamma
+        \end{pmatrix}.
+      $$
+
+      <p>
+        To compute the PTM, apply the channel to the Pauli operators:
+        $\cE(\mathds{1}) = \mathds{1} + \gamma Z$, $\cE(X) = \sqrt{1-\gamma}\,X$,
+        $\cE(Y) = \sqrt{1-\gamma}\,Y$ and $\cE(Z) = (1-\gamma)Z$. Each image gives one column:
+      </p>
+
+      $$
+        [\cE]^{\PTM} = \begin{pmatrix}
+          1 & 0 & 0 & 0 \\
+          0 & \sqrt{1-\gamma} & 0 & 0 \\
+          0 & 0 & \sqrt{1-\gamma} & 0 \\
+          \gamma & 0 & 0 & 1-\gamma
+        \end{pmatrix}.
+      $$
+
+      <p>
+        Finally, $A_0 = \tfrac{1+\sqrt{1-\gamma}}{2}\mathds{1} + \tfrac{1-\sqrt{1-\gamma}}{2}Z$ and
+        $A_1 = \tfrac{\sqrt{\gamma}}{2}(X + iY)$, so $\eqref{eq:chi}$ gives
+      </p>
+
+      $$
+        \chi = \frac{1}{4}\begin{pmatrix}
+          \left(1+\sqrt{1-\gamma}\right)^2 & 0 & 0 & \gamma \\
+          0 & \gamma & -i\gamma & 0 \\
+          0 & i\gamma & \gamma & 0 \\
+          \gamma & 0 & 0 & \left(1-\sqrt{1-\gamma}\right)^2
+        \end{pmatrix}.
+      $$
+
+      <p>
+        The entries of $[\cE]$ and $\Phi_\cE$ are the same, rearranged as in $\eqref{eq:reshuffle}$.
+        The first row of the PTM shows that the channel is trace preserving and the first column that
+        it is not unital, and $[\cE]^{\PTM}_{11} = 1 = \Tr\chi$.
+      </p>
+
+      <h3>6.2 Pauli and Depolarizing Channels</h3>
+
+      <p>
+        For the qubit Pauli channel with error probabilities $p_x, p_y, p_z$ and
+        $q = 1 - p_x - p_y - p_z$, the Kraus operators are $\sqrt{q}\,\mathds{1}$, $\sqrt{p_x}\,X$,
+        $\sqrt{p_y}\,Y$ and $\sqrt{p_z}\,Z$; $V$ stacks them. Then
+      </p>
+
+      $$
+        [\cE] = \begin{pmatrix}
+          q + p_z & 0 & 0 & p_x + p_y \\
+          0 & q - p_z & p_x - p_y & 0 \\
+          0 & p_x - p_y & q - p_z & 0 \\
+          p_x + p_y & 0 & 0 & q + p_z
+        \end{pmatrix},
+      $$
+
+      $$
+        \Phi_\cE = \begin{pmatrix}
+          q + p_z & 0 & 0 & q - p_z \\
+          0 & p_x + p_y & p_x - p_y & 0 \\
+          0 & p_x - p_y & p_x + p_y & 0 \\
+          q - p_z & 0 & 0 & q + p_z
+        \end{pmatrix},
+      $$
+
+      $$
+        [\cE]^{\PTM} = \operatorname{diag}\left(1, f_x, f_y, f_z\right),
+        \qquad
+        \chi = \operatorname{diag}\left(q, p_x, p_y, p_z\right),
+      $$
+
+      <p>
+        with $f_x, f_y, f_z$ from $\eqref{eq:pauli-factors}$. The depolarizing channel is the case
+        $p_x = p_y = p_z = p/4$: its PTM is $\operatorname{diag}(1, 1-p, 1-p, 1-p)$ and its χ-matrix is
+        $\operatorname{diag}(1 - 3p/4, p/4, p/4, p/4)$.
+      </p>
+
+      <h3>6.3 Phase Damping</h3>
+
+      <p>For the Kraus operators $\eqref{eq:pd}$, the Liouville matrix and the PTM coincide,</p>
+
+      $$
+        [\cE] = [\cE]^{\PTM} = \operatorname{diag}\left(1, \sqrt{1-\lambda}, \sqrt{1-\lambda}, 1\right),
+        \qquad
+        \chi = \frac{1}{2}\operatorname{diag}\left(1 + \sqrt{1-\lambda}, 0, 0, 1 - \sqrt{1-\lambda}\right),
+      $$
+
+      <p>
+        and the Choi matrix differs from that of amplitude damping only in its lower diagonal block,
+        because phase damping moves no population from $\ket{1}$ to $\ket{0}$:
+      </p>
+
+      $$
+        \Phi_\cE = \begin{pmatrix}
+          1 & 0 & 0 & \sqrt{1-\lambda} \\
+          0 & 0 & 0 & 0 \\
+          0 & 0 & 0 & 0 \\
+          \sqrt{1-\lambda} & 0 & 0 & 1
+        \end{pmatrix}.
+      $$
+
+      <h2>7. Which Representation to Use</h2>
+
+      <ul>
+        <li><strong>Kraus operators</strong> are the natural way to write down and simulate a channel, and to see it as a sum of simple processes.</li>
+        <li>A <strong>Stinespring dilation</strong> shows a channel as a unitary interaction with an environment, which is how noise arises physically.</li>
+        <li>The <strong>Liouville matrix</strong> turns composition into matrix multiplication.</li>
+        <li>The <strong>Pauli transfer matrix</strong> shows what a channel does to the Bloch vector, and its first row and column show whether the map is trace preserving and unital.</li>
+        <li>The <strong>Choi matrix</strong> tests complete positivity (it is positive semidefinite) and trace preservation (its partial trace is the identity) directly.</li>
+        <li>The <strong>χ-matrix</strong> is the Choi matrix in the Pauli basis, and it makes Pauli channels diagonal.</li>
+      </ul>
+
+      <section class="references-section">
+        <h2>References</h2>
+        <div id="post-references"></div>
+      </section>
+
+      <footer class="post-footer">
+        <nav aria-label="More from the blog">
+          <a href="../">All posts</a>
+        </nav>
+      </footer>
+
+    </article>
+  </main>
+
+  <!--
+    ============================================================
+    CITATION DATA
+    ============================================================
+  -->
+  <script type="application/json" id="post-citations">
+  {
+    "emerson_theory_2021": {
+      "authors": "J. Emerson",
+      "title": "Theory of Quantum Systems: From Mathematical Foundations to Experimental Methods with Applications to Quantum Computing",
+      "venue": "AMATH 900 course notes, University of Waterloo",
+      "year": 2021
+    },
+    "watrous_theory_2018": {
+      "authors": "J. Watrous",
+      "title": "The Theory of Quantum Information",
+      "venue": "Cambridge University Press",
+      "year": 2018,
+      "url": "https://doi.org/10.1017/9781316848142"
+    },
+    "watrous_quantum_channels": {
+      "authors": "J. Watrous",
+      "title": "Quantum channels",
+      "venue": "General Formulation of Quantum Information, IBM Quantum Learning",
+      "note": "Accessed June 13, 2024.",
+      "url": "https://learning.quantum.ibm.com/course/general-formulation-of-quantum-information/quantum-channels"
+    },
+    "ghosh_surface_2012": {
+      "authors": "J. Ghosh, A.G. Fowler, M.R. Geller",
+      "title": "Surface code with decoherence: An analysis of three superconducting architectures",
+      "venue": "Physical Review A",
+      "volume": "86",
+      "pages": "062318",
+      "year": 2012,
+      "url": "https://doi.org/10.1103/PhysRevA.86.062318",
+      "note": "arXiv:1210.5799 [cond-mat]"
+    },
+    "basile_quantum_2024": {
+      "authors": "T. Basile, C. Pineda",
+      "title": "Quantum simulation of Pauli channels and dynamical maps: Algorithm and implementation",
+      "venue": "PLOS ONE",
+      "volume": "19",
+      "pages": "e0297210",
+      "year": 2024,
+      "url": "https://doi.org/10.1371/journal.pone.0297210"
+    },
+    "nielsen_quantum_2010": {
+      "authors": "M.A. Nielsen, I.L. Chuang",
+      "title": "Quantum Computation and Quantum Information: 10th Anniversary Edition",
+      "venue": "Cambridge University Press",
+      "year": 2010,
+      "url": "https://doi.org/10.1017/CBO9780511976667"
+    },
+    "wood_tensor_2015": {
+      "authors": "C.J. Wood, J.D. Biamonte, D.G. Cory",
+      "title": "Tensor networks and graphical calculus for open quantum systems",
+      "venue": "arXiv",
+      "year": 2015,
+      "url": "https://doi.org/10.48550/arXiv.1111.6950",
+      "note": "arXiv:1111.6950 [quant-ph]"
+    },
+    "lin_freedom_2019": {
+      "authors": "J. Lin, B. Buonacorsi, R. Laflamme, J.J. Wallman",
+      "title": "On the freedom in representing quantum operations",
+      "venue": "New Journal of Physics",
+      "volume": "21",
+      "pages": "023006",
+      "year": 2019,
+      "url": "https://doi.org/10.1088/1367-2630/ab075a"
+    },
+    "greenbaum_introduction_2015": {
+      "authors": "D. Greenbaum",
+      "title": "Introduction to quantum gate set tomography",
+      "venue": "arXiv",
+      "year": 2015,
+      "url": "https://doi.org/10.48550/arXiv.1509.02921",
+      "note": "arXiv:1509.02921 [quant-ph]"
+    },
+    "helsen_spectral_2019": {
+      "authors": "J. Helsen, F. Battistel, B.M. Terhal",
+      "title": "Spectral quantum tomography",
+      "venue": "npj Quantum Information",
+      "volume": "5",
+      "pages": "74",
+      "year": 2019,
+      "url": "https://doi.org/10.1038/s41534-019-0189-0"
+    },
+    "rodriguez-ramos_convex_2023": {
+      "authors": "C. Rodriguez-Ramos, C.M. Wilmott",
+      "title": "On the convex characterisation of the set of unital quantum channels",
+      "venue": "Journal of Physics A: Mathematical and Theoretical",
+      "volume": "56",
+      "pages": "455308",
+      "year": 2023,
+      "url": "https://doi.org/10.1088/1751-8121/acfddb"
+    },
+    "homa_choi_2024": {
+      "authors": "G. Homa, A. Ortega, M. Koniorczyk",
+      "title": "Choi representation of completely positive maps: a technical introduction",
+      "venue": "arXiv",
+      "year": 2024,
+      "url": "https://doi.org/10.48550/arXiv.2402.12944",
+      "note": "arXiv:2402.12944 [quant-ph]"
+    },
+    "gour_introduction_2016": {
+      "authors": "G. Gour",
+      "title": "Introduction to Quantum Information",
+      "venue": "MATH 667 course notes, University of Calgary",
+      "year": 2016,
+      "url": "https://markwgirard.github.io/coursework/QI/QI_main.pdf"
+    },
+    "forest_superoperator": {
+      "authors": "Forest Benchmarking",
+      "title": "Superoperator representations",
+      "venue": "Forest Benchmarking documentation",
+      "note": "Accessed July 4, 2024.",
+      "url": "https://forest-benchmarking.readthedocs.io/en/latest/superoperator_representations.html"
+    }
+  }
+  </script>
+
+  <footer class="site-footer">
+    <span>&copy; 2026 Danesh Morales Hashemi</span>
+  </footer>
+
+</body>
+</html>

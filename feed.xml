@@ -8,7 +8,7 @@
     <atom:link href="https://daneshmorales.github.io/feed.xml" rel="self" type="application/rss+xml"/>
     <description>Notes on quantum information, mathematics, and research.</description>
     <language>en</language>
-    <lastBuildDate>Sun, 04 Oct 2026 12:00:00 -0400</lastBuildDate>
+    <lastBuildDate>Tue, 24 Nov 2026 12:00:00 -0500</lastBuildDate>
     <item>
       <title>Constructing Qubit Channels with Arbitrary Fixed Points</title>
       <link>https://daneshmorales.github.io/blog/posts/fixed-point-qubit-channels.html</link>
@@ -24,6 +24,22 @@
       <pubDate>Mon, 01 Dec 2025 12:00:00 -0500</pubDate>
       <category>Error Characterization</category>
       <description>A scalable, SPAM-robust protocol for estimating the process fidelity of a fixed cycle of parallel gates. We introduce the CB protocol, explain how randomized compiling tailors noise into Pauli channels, and analyze when the gate-independence assumption can be relaxed.</description>
+    </item>
+    <item>
+      <title>Self-Consistent Gauges for Cycle Benchmarking under Gate-Dependent Noise</title>
+      <link>https://daneshmorales.github.io/blog/posts/self-consistent-gauge-cycle-benchmarking.html</link>
+      <guid isPermaLink="true">https://daneshmorales.github.io/blog/posts/self-consistent-gauge-cycle-benchmarking.html</guid>
+      <pubDate>Sat, 01 Nov 2025 12:00:00 -0400</pubDate>
+      <category>Error Characterization</category>
+      <description>When the randomizing gates of cycle benchmarking have gate-dependent errors, its estimates fall far below their targets. Comparing against a gauge-rotated target, built from the leading Kraus operator of an averaged channel, closes much of the gap. We also show why randomized compiling still tailors gate-dependent easy-gate noise into Pauli channels.</description>
+    </item>
+    <item>
+      <title>Superoperator Representations and the Characterization of Completely Positive Maps</title>
+      <link>https://daneshmorales.github.io/blog/posts/superoperator-representations.html</link>
+      <guid isPermaLink="true">https://daneshmorales.github.io/blog/posts/superoperator-representations.html</guid>
+      <pubDate>Thu, 01 Aug 2024 12:00:00 -0400</pubDate>
+      <category>Quantum Channels</category>
+      <description>Six ways to write a quantum channel (Kraus operators, Stinespring dilations, Liouville and Pauli transfer matrices, Choi matrices and χ-matrices), how to convert between them, and how complete positivity and trace preservation look in each. Based on my AMATH 900 project at the University of Waterloo.</description>
     </item>
   </channel>
 </rss>
