@@ -45,8 +45,9 @@
 * { box-sizing: border-box; }
 [hidden] { display: none !important; }
 
+/* A 38rem column keeps lines near 70 characters on wide screens. */
 body {
-  width: min(52rem, calc(100% - 2 * var(--gutter)));
+  width: min(38rem, calc(100% - 2 * var(--gutter)));
   margin: 0 auto;
   font-size: 1.075rem;
   line-height: 1.55;
@@ -91,10 +92,10 @@ summary { cursor: pointer; }
   padding-bottom: .5rem;
 }
 .identity { grid-area: name; }
-/* The name looks the same on every page. */
+/* The name looks the same on every page, a step below page and post titles so they lead. */
 .site-title {
   margin: 0 0 .4rem;
-  font-size: clamp(2rem, 5.3vw, 2.75rem);
+  font-size: 2rem;
   font-weight: 500;
   line-height: 1.18;
   text-wrap: pretty;
@@ -209,16 +210,9 @@ summary { cursor: pointer; }
   margin-bottom: .65rem;
 }
 .list-heading h2 { margin: 0; }
-.list-heading > a {
-  display: inline-flex;
-  align-items: center;
-  font-size: 1rem;
-  padding: .2rem .7rem;
-  border: 1px solid var(--rule);
-  border-radius: .2rem;
-  text-decoration: none;
-}
-.list-heading > a:is(:hover, :focus-visible) { background: var(--tint); }
+/* "All news" and the like are plain links; the arrow is hidden from screen readers. */
+.list-heading > a { font-size: 1rem; }
+.list-heading > a::after { content: "\a0\2192" / ""; }
 .entry-list {
   margin: 1.2rem 0 0;
   padding-inline-start: 2.35rem;
@@ -249,14 +243,10 @@ summary { cursor: pointer; }
 }
 .publication-year > h3 { margin: 0; }
 .publication-year .entry-list { margin: 0; }
-.entry-title { margin: 0; font-size: 1.15rem; line-height: 1.35; }
-:is(#publications, #projects) .entry-title {
-  font-size: 1.05rem;
-  font-weight: normal;
-  line-height: 1.4;
-}
+.entry-title { margin: 0; font-size: 1.15rem; font-weight: normal; line-height: 1.35; }
+:is(#publications, #projects) .entry-title { font-size: 1.05rem; line-height: 1.4; }
 .compact-list .entry + .entry { margin-top: .5rem; }
-.compact-list .entry-title { font-size: 1.05rem; font-weight: normal; }
+.compact-list .entry-title { font-size: 1.05rem; }
 .entry p { margin: .23rem 0 0; }
 .entry-authors { font-size: .97rem; color: var(--muted); }
 .entry-authors strong { font-weight: normal; color: var(--text); }
@@ -279,6 +269,9 @@ summary { cursor: pointer; }
 :is(.home-content > section, .work-group):not(:has(.entry ~ .entry, .publication-year ~ .publication-year)) .entry {
   padding-inline-start: 0;
 }
+/* Posts and projects are listed by date, so they carry no numbers and line up with the text. */
+.entry-list.unnumbered { padding-inline-start: 0; list-style: none; }
+.entry-list.unnumbered .entry { padding-inline-start: 0; }
 
 @media (max-width: 35rem) {
   .entry-heading, .publication-year { grid-template-columns: minmax(0, 1fr); }
@@ -411,7 +404,7 @@ summary { cursor: pointer; }
   .site-header nav { justify-content: space-between; margin-inline: -.5rem; }
   .site-header nav a, .site-header nav a:first-child { min-width: 0; min-height: 2.5rem; padding-inline: .5rem; }
   .site-header nav a + a::before { content: none; }
-  .list-heading > a { min-height: 2.25rem; padding-block: 0; }
+  .list-heading > a { min-height: 2.25rem; }
 }
 
 @keyframes header-edge { from { border-bottom-color: transparent; } }

@@ -31,7 +31,10 @@ window.MathJax = {
     }
   },
   /* Palatino-style math (TeX Gyre Pagella) to match the Palatino text. The -nofont
-     MathJax build loads it from the CDN at MathJax's own version, so it is pinned too. */
-  output: { font: 'mathjax-pagella' },
+     MathJax build loads it from the CDN at MathJax's own version, so it is pinned too.
+     A displayed equation wider than the column is broken across lines instead of
+     scrolling sideways. Lines break at 94% of the column because MathJax slightly
+     underestimates the room an equation number needs. */
+  output: { font: 'mathjax-pagella', displayOverflow: 'linebreak', linebreaks: { width: '94%' } },
   options: { skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre'] }
 };

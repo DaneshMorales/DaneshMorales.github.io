@@ -34,10 +34,10 @@
   }
   </script>
   <script src="../../script.js?v=20261124"></script>
-  <link rel="stylesheet" href="../../styles.css?v=20261124">
+  <link rel="stylesheet" href="../../styles.css?v=20261125">
 
   <!-- MathJax: shared blog configuration + post-specific macros -->
-  <script src="../mathjax-config.js?v=20261121"></script>
+  <script src="../mathjax-config.js?v=20261124"></script>
   <script>
     Object.assign(MathJax.tex.macros, {
       C: '{\\mathcal{C}}',
@@ -52,8 +52,6 @@
       adj: '{\\mathrm{adj}}',
       eff: '{\\mathrm{eff}}',
     });
-    // Break displayed equations that are wider than the screen instead of scrolling them sideways.
-    MathJax.output.displayOverflow = 'linebreak';
   </script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@4.1.3/tex-chtml-nofont.js" async></script>
 </head>
@@ -552,7 +550,7 @@
 
       \begin{equation}
         \left\|\C_{\text{GD}} - \C_{\text{GI}}\right\|_\diamond
-        \leq \sum_{i=1}^{m} \left\langle \left\|\Lambda(E_i') - \bar\Lambda_i\right\|_\diamond \right\rangle_{\Vec{R}}.
+        \leq \sum_{i=1}^{m} \left\langle \left\|\Lambda(E_i') - \bar\Lambda_i\right\|_\diamond \right\rangle.
         \label{eq:rc-bound}
       \end{equation}
 
