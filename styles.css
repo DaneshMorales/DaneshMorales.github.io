@@ -45,9 +45,8 @@
 * { box-sizing: border-box; }
 [hidden] { display: none !important; }
 
-/* A 38rem column keeps lines near 70 characters on wide screens. */
 body {
-  width: min(38rem, calc(100% - 2 * var(--gutter)));
+  width: min(52rem, calc(100% - 2 * var(--gutter)));
   margin: 0 auto;
   font-size: 1.075rem;
   line-height: 1.55;
