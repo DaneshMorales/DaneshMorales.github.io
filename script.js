@@ -54,15 +54,16 @@ themeControl.addEventListener('change', event => {
 
 /* =============================================
    Home page tabs
-   About, Publications, Blog and Contact scroll to their sections without
-   writing #top, #blog, … into the address bar or the history. Arriving from
+   About, Publications, Blog and Contact (and the name, like About) scroll to
+   their sections without writing #top, #blog, … into the address bar or the
+   history. Arriving from
    another page's Contact tab (…/#contact) still lands on the section, and the
    #contact leaves the address once the page has loaded.
    ============================================= */
 const sectionTabs = () => [...document.querySelectorAll('.site-header nav a[href^="#"]')];
 
 document.addEventListener('click', event => {
-  const link = event.target.closest?.('.site-header nav a[href^="#"]');
+  const link = event.target.closest?.('.site-header a[href^="#"]');
   if (!link || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
   const hash = link.getAttribute('href');
   if (hash === '#top') {
