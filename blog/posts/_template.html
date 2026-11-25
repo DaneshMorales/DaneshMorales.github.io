@@ -23,6 +23,8 @@
     - add the announcement to news.html, and keep the three newest items on index.html;
     - optionally make a 1200x630 link-preview image at assets/social/og-SLUG.png
       (for a text-only preview, omit the og:image tags and JSON-LD image field and use twitter:card="summary").
+  Addresses never end in .html: write blog/posts/SLUG, publications, news, ... in links, the
+  canonical URL, the feed and the sitemap. GitHub Pages serves SLUG.html at blog/posts/SLUG.
 
   Shared assets carry a version (?v=YYYYMMDD). When you change styles.css, script.js or
   blog/mathjax-config.js, bump it on the post pages (and embedded figures): GitHub Pages lets
@@ -36,14 +38,14 @@
   <title>POST TITLE — Danesh Morales Hashemi</title>
   <link rel="icon" type="image/svg+xml" href="../../icon.svg?v=4">
   <meta name="author" content="Danesh Morales Hashemi">
-  <link rel="canonical" href="https://daneshmorales.github.io/blog/posts/SLUG.html">
+  <link rel="canonical" href="https://daneshmorales.github.io/blog/posts/SLUG">
   <link rel="alternate" type="application/rss+xml" title="Danesh Morales Hashemi — Blog" href="../../feed.xml">
   <!-- Link previews (LinkedIn, X, Slack, ...) -->
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="Danesh Morales Hashemi">
   <meta property="og:title" content="POST TITLE">
   <meta property="og:description" content="DESCRIPTION (one or two sentences)">
-  <meta property="og:url" content="https://daneshmorales.github.io/blog/posts/SLUG.html">
+  <meta property="og:url" content="https://daneshmorales.github.io/blog/posts/SLUG">
   <meta property="og:image" content="https://daneshmorales.github.io/assets/social/og-SLUG.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
@@ -64,11 +66,11 @@
       "name": "Danesh Morales Hashemi",
       "url": "https://daneshmorales.github.io/"
     },
-    "mainEntityOfPage": "https://daneshmorales.github.io/blog/posts/SLUG.html"
+    "mainEntityOfPage": "https://daneshmorales.github.io/blog/posts/SLUG"
   }
   </script>
-  <script src="../../script.js?v=20261125c"></script>
-  <link rel="stylesheet" href="../../styles.css?v=20261125c">
+  <script src="../../script.js?v=20261125d"></script>
+  <link rel="stylesheet" href="../../styles.css?v=20261125d">
 
   <!-- MathJax: shared blog configuration (+ optional post-specific macros) -->
   <script src="../mathjax-config.js?v=20261124"></script>
@@ -89,7 +91,7 @@
     </div>
     <nav aria-label="Main navigation">
       <a href="../../">About</a>
-      <a href="../../publications.html">Publications</a>
+      <a href="../../publications">Publications</a>
       <a href="../" aria-current="location">Blog</a>
       <a href="../../#contact">Contact</a>
       <a href="../../files/Danesh_Resume-1.pdf" target="_blank" rel="noopener" aria-label="CV (PDF, opens in a new tab)">CV</a>

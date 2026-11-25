@@ -11,7 +11,7 @@
     <lastBuildDate>Tue, 24 Nov 2026 12:00:00 -0500</lastBuildDate>
     <item>
       <title>Constructing Qubit Channels with Arbitrary Fixed Points</title>
-      <link>https://daneshmorales.github.io/blog/posts/fixed-point-qubit-channels.html</link>
+      <link>https://daneshmorales.github.io/blog/posts/fixed-point-qubit-channels</link>
       <guid isPermaLink="true">https://daneshmorales.github.io/blog/posts/fixed-point-qubit-channels.html</guid>
       <pubDate>Fri, 25 Sep 2026 16:30:00 -0400</pubDate>
       <category>Quantum Channels</category>
@@ -19,7 +19,7 @@
     </item>
     <item>
       <title>Self-Consistent Gauges for Cycle Benchmarking under Gate-Dependent Noise</title>
-      <link>https://daneshmorales.github.io/blog/posts/self-consistent-gauge-cycle-benchmarking.html</link>
+      <link>https://daneshmorales.github.io/blog/posts/self-consistent-gauge-cycle-benchmarking</link>
       <guid isPermaLink="true">https://daneshmorales.github.io/blog/posts/self-consistent-gauge-cycle-benchmarking.html</guid>
       <pubDate>Wed, 31 Dec 2025 12:00:00 -0500</pubDate>
       <category>Error Characterization</category>
@@ -27,7 +27,7 @@
     </item>
     <item>
       <title>Introduction to Cycle Benchmarking for Quantum Error Diagnostics</title>
-      <link>https://daneshmorales.github.io/blog/posts/cycle-benchmarking-intro.html</link>
+      <link>https://daneshmorales.github.io/blog/posts/cycle-benchmarking-intro</link>
       <guid isPermaLink="true">https://daneshmorales.github.io/blog/posts/cycle-benchmarking-intro.html</guid>
       <pubDate>Mon, 01 Dec 2025 12:00:00 -0500</pubDate>
       <category>Error Characterization</category>
@@ -35,7 +35,7 @@
     </item>
     <item>
       <title>Superoperator Representations and the Characterization of Completely Positive Maps</title>
-      <link>https://daneshmorales.github.io/blog/posts/superoperator-representations.html</link>
+      <link>https://daneshmorales.github.io/blog/posts/superoperator-representations</link>
       <guid isPermaLink="true">https://daneshmorales.github.io/blog/posts/superoperator-representations.html</guid>
       <pubDate>Thu, 01 Aug 2024 12:00:00 -0400</pubDate>
       <category>Quantum Channels</category>

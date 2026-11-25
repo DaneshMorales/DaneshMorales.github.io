@@ -53,6 +53,17 @@ themeControl.addEventListener('change', event => {
 });
 
 /* =============================================
+   Addresses without .html
+   Pages are linked as /news, /blog/posts/<slug>, …, which GitHub Pages serves from
+   news.html and so on. A visitor who arrives through an old …/news.html link gets
+   the same clean address. Only on the live site: a plain local server has no /news.
+   ============================================= */
+if (location.hostname === 'daneshmorales.github.io' && location.pathname.endsWith('.html')) {
+  const cleanPath = location.pathname.replace(/(^|\/)index\.html$/, '$1').replace(/\.html$/, '');
+  history.replaceState(history.state, '', cleanPath + location.search + location.hash);
+}
+
+/* =============================================
    Home page tabs
    About, Publications, Blog and Contact (and the name, like About) scroll to
    their sections without writing #top, #blog, … into the address bar or the
